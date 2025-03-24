@@ -1,12 +1,18 @@
 import React from 'react';
+import { BrowserRouter } from 'react-router-dom';
+import Routes from './routes/Router';
+
 
 function App() {
 
   return (
-
-      <div className='text-bold text-4xl'>
-        hi
-      </div>
+    
+    <div className='w-full'>
+      <BrowserRouter>
+        <Routes/>
+      </BrowserRouter>
+    </div>
+      
 
   )
 }

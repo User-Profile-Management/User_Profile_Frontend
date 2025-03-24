@@ -1,0 +1,13 @@
+# Ignore Node.js dependencies
+node_modules/
+
+# Ignore compiled files
+*.class
+*.pyc
+
+# Ignore environment files
+.env
+
+# Ignore logs
+logs/
+*.log
