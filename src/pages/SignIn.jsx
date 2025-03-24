@@ -6,8 +6,8 @@ function SignIn() {
         <div className="image bg-zinc-300 rounded-2xl">
             image
         </div>
-        <div className="signin px-14 ">
-            <div className='border-1 border-zinc-300 px-4 py-8 rounded-2xl'>
+        <div className="signin px-14 flex items-center justify-center ">
+            <div className='border-1 border-zinc-300 px-4 py-8 rounded-2xl min-w-xl'>
                 <div className="title mb-10">
                     <div className="heading text-4xl">Welcome Back</div>
                     <div className="subheading text-sm text-zinc-400">Enter your credentials to access your account</div>
@@ -36,7 +36,7 @@ function SignIn() {
                                     />
                             </div>
                         </div>
-                        <div  className='grid grid-rows-4 gap-y-4'>
+                        <div  className='grid grid-rows-3 gap-y-4'>
                             <div className="forgotpassword text-sm flex justify-between">
                                 <div className="remember">Remember Me</div>
                                 <div className="forgotpassword">Forgot Password?</div>
