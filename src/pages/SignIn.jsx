@@ -1,11 +1,18 @@
 import React from 'react'
+import GoogleLogo from "../assets/google.png";
+import BackgroundImage from "/src/assets/frontimage.png";
+
+
 
 function SignIn() {
   return (
     <div className='signinpage bg-white h-screen p-10 grid grid-cols-2'>
-        <div className="image bg-zinc-300 rounded-2xl">
-            image
-        </div>
+       <div
+  className="image bg-zinc-300 rounded-2xl bg-cover bg-center"
+  style={{ backgroundImage: `url(${BackgroundImage})`, backgroundSize: "cover", backgroundPosition: "center", backgroundRepeat: "no-repeat" }}
+>
+</div>
+
         <div className="signin px-14 ">
             <div className='border-1 border-zinc-300 px-4 py-8 rounded-2xl'>
                 <div className="title mb-10">
@@ -16,13 +23,13 @@ function SignIn() {
                     <form>
                         <div className="form-signin flex flex-col gap-y-3">
                             <div className="email flex flex-col gap-y-1">
-                                <label>Email Address</label>
+                                <label>Email</label>
                                 <input
                                     className='email-input border border-zinc-200 p-2 rounded text-sm'
                                     type='text'
                                     // id='email'
                                     name='email'
-                                    placeholder='Enter Email Address'
+                                    placeholder='Enter your Email address'
                                     />
                             </div>
                             <div className="password flex flex-col gap-y-1">
@@ -46,7 +53,9 @@ function SignIn() {
                                     Sign in 
                                 </button>
                             </div>
-                            <div className="signinwithGoogle flex justify-center border border-zinc-300 py-3 rounded text-black">
+                            <div className="signinwithGoogle flex justify-center border border-zinc-300 py-3 rounded text-black gap-2">
+                            <img src={GoogleLogo} alt="Google Logo" className="w-5 h-5" />
+
                                 <button className=''>
                                     Sign in with Google
                                 </button>
