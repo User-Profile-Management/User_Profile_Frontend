@@ -1,13 +1,19 @@
 import React from 'react'
+import GoogleLogo from "../assets/google.png";
+import BackgroundImage from "/src/assets/frontimage.png";
+
+
 
 function SignIn() {
   return (
     <div className='signinpage bg-white h-screen p-10 grid grid-cols-2'>
-        <div className="image bg-zinc-300 rounded-2xl">
-            image
+       <div
+            className="image bg-zinc-300 rounded-2xl bg-cover bg-center"
+            style={{ backgroundImage: `url(${BackgroundImage})`, backgroundSize: "cover", backgroundPosition: "center", backgroundRepeat: "no-repeat" }}
+            >
         </div>
         <div className="signin px-14 flex items-center justify-center ">
-            <div className='border-1 border-zinc-300 px-4 py-8 rounded-2xl min-w-xl'>
+            <div className='border-1 border-zinc-300 px-4 py-8 rounded-2xl min-w-lg'>
                 <div className="title mb-10">
                     <div className="heading text-4xl">Welcome Back</div>
                     <div className="subheading text-sm text-zinc-400">Enter your credentials to access your account</div>
@@ -46,7 +52,9 @@ function SignIn() {
                                     Sign in 
                                 </button>
                             </div>
-                            <div className="signinwithGoogle flex justify-center border border-zinc-300 py-3 rounded text-black">
+                            <div className="signinwithGoogle flex justify-center border border-zinc-300 py-3 rounded text-black gap-2">
+                            <img src={GoogleLogo} alt="Google Logo" className="w-5 h-5" />
+
                                 <button className=''>
                                     Sign in with Google
                                 </button>
