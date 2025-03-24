@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from "react-router-dom";
 import BackgroundImage from "/src/assets/frontimage.png";
 
 function SignUp1() {
@@ -12,7 +13,7 @@ function SignUp1() {
             <div className="signup px-14 flex items-center justify-center ">
                 <div className='border-1 border-zinc-300 px-4 py-8 rounded-2xl min-w-lg'>
                     <div className="title mb-10">
-                        <div className="heading text-4xl">Hi</div>
+                        <div className="heading text-4xl font-semibold">Hi</div>
                         <div className="subheading text-md text-zinc-400">Enter your details to register.</div>
                     </div>
                     <div className="signup form ">
@@ -56,14 +57,18 @@ function SignUp1() {
                                 </div>
                             </div>
                             <div  className='grid grid-rows-1 gap-y-4'>
-                                <div className="signupbutton flex justify-center bg-blue-800 py-3 rounded text-white">
-                                    <button className=''>
+                            <Link to="/signup2" className="text-blue-600 hover:underline">
+                                <div className="signupbutton flex justify-center bg-blue-800 py-3 rounded-xl text-white cursor-pointer">
+                                    <button className='font-semibold'>
                                         Next
                                     </button>
                                 </div>
+                            </Link>    
                                 <div className="signup flex justify-center gap-2 text-sm">
                                     <div className='text-zinc-500'>Already have an account?</div>
-                                    <div>Sign in</div>
+                                    <Link to="/" className="text-blue-600 hover:underline">
+                                        Sign In
+                                    </Link>
                                 </div>
                             </div>
                         </form>
