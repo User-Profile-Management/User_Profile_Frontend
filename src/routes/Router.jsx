@@ -14,7 +14,7 @@ function Router() {
        <Route path="/signup" element= {<SignUp1/>} />
        <Route path="/signup2" element= {<SignUp2/>} />
        
-       <Route path="/admin-dashboard" element={<AdminDashboard />} />
+       <Route path="/admin/dashboard" element={<AdminDashboard />} />
    </Routes>
   );
 }

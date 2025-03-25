@@ -1,13 +1,33 @@
 
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link,useNavigate } from "react-router-dom";
 import GoogleLogo from "../assets/google.png";
+import authService from "../service/authService";
 import BackgroundImage from "/src/assets/frontimage.png";
 
 
 
 function SignIn() {
-    const [showPassword, setShowPassword] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();  // Prevent page refresh
+    setError("");       
+
+    try {
+      /* const response = await authService.login(email, password);    //to display response
+       console.log("Login response:", response);*/
+       await authService.login(email, password); 
+      navigate("/admin/dashboard"); 
+    } catch (err) {
+      setError(err); 
+    }
+  };
+
 
   return (
     <div className='signinpage bg-white h-screen p-10 grid grid-cols-2'>
@@ -24,16 +44,19 @@ function SignIn() {
                     <div className="subheading text-md text-zinc-400">Enter your credentials to access your account</div>
                 </div>
                 <div className="credentials ">
-                    <form>
+                    <form onSubmit={handleSubmit}>
                         <div className="form-signin flex flex-col gap-y-3">
                             <div className="email flex flex-col gap-y-1">
                                 <label>Email</label>
                                 <input
                                     className='email-input border border-zinc-100 bg-zinc-100 p-2 rounded text-sm'
                                     type='text'
-                                    // id='email'
+                                   
                                     name='email'
                                     placeholder='Enter your Email address'
+                                    value={email}
+                                    onChange={(e)=>setEmail(e.target.value)}
+                                    required
                                     />
                             </div>
                            
@@ -45,6 +68,9 @@ function SignIn() {
                       type={showPassword ? "text" : "password"}
                       name="password"
                       placeholder="Enter Password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      required
                     />
                    
                     <button
@@ -76,7 +102,7 @@ function SignIn() {
                                         </div>
 
                             <div className="signinbutton flex justify-center bg-blue-800 py-3 rounded-xl text-white">
-                                <button className=''>
+                                <button type="submit">
                                     Sign in 
                                 </button>
                             </div>
