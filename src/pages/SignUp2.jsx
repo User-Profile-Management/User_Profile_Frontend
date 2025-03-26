@@ -33,7 +33,7 @@ function SignUp2() {
             return;
         }
         const { confirmedpassword, ...userData } = formData;
-        console.log("Request Payload:", userData);
+        
         try {
             const response = await authService.signup(userData);
             if(response.statusCode===200)

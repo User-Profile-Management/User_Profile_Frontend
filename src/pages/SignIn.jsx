@@ -20,7 +20,7 @@ function SignIn() {
 
     try {
        const response = await authService.login(email, password);    //to display response
-       console.log("Login response:", response);
+       
       
        if(response?.response?.token){
        

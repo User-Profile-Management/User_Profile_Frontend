@@ -16,7 +16,7 @@ function SignUp1() {
 
     };
     const handleNext = () => {
-        console.log("Navigating with data:", formData);
+        
         navigate("/signup2", { state: formData });
     };
 

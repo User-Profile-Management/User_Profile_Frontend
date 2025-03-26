@@ -19,7 +19,7 @@ const authService = {
     
             if (token) {
                 localStorage.setItem("token", token);
-                console.log("Token Stored:", localStorage.getItem("token"));
+                
                 return response.data;
             } else {
                 throw new Error("Login failed, no token received.");
