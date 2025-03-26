@@ -28,6 +28,9 @@ const authService = {
             console.error("Login Error:", error);
             throw error.response?.data?.message || "Login failed. Please check your credentials.";
         }
+    },
+    logout: () => {
+        localStorage.removeItem("token"); 
     }
     
     

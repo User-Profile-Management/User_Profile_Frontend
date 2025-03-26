@@ -3,8 +3,16 @@ import Home from '../assets/home.svg'
 import Profile from "../assets/profile.svg"
 import Approval from "../assets/approve.svg"
 import Logout from "../assets/logout.svg"
+import authService from "../service/authService";
+import { useNavigate } from "react-router-dom";
+
 
 const Sidebar = () => {
+    const navigate = useNavigate(); 
+    const handleLogout = () => {
+        authService.logout();
+        navigate("/");  
+    };
     return (
       <div className="p-4 justify-between border-r-1 border-zinc-200 grid grid-rows-10">
         <div className="p-3 cursor-pointer flex flex-row items-center gap-3">
@@ -22,7 +30,10 @@ const Sidebar = () => {
         <div className="row-span-6"></div>
         <div className="p-3 text-gray-500 cursor-pointer flex items-center gap-3">
             <img className="w-7 h-7" src={Logout} alt="Home" />
-            <div>Logout</div>
+            <div>
+                <button onClick={handleLogout} className="bg-red-500 text-white p-2 rounded">Logout</button>
+                
+                </div>
         </div>
       </div>
     );
