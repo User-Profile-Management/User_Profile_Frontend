@@ -19,11 +19,18 @@ function SignIn() {
     setError("");       
 
     try {
-      /* const response = await authService.login(email, password);    //to display response
-       console.log("Login response:", response);*/
-       await authService.login(email, password); 
-      navigate("/admin/dashboard"); 
+       const response = await authService.login(email, password);    //to display response
+       console.log("Login response:", response);
+      
+       if(response?.response?.token){
+       
+        navigate("/admin/dashboard"); 
+       }else{
+        setError("Login failed as token is missing.")
+       }
+      
     } catch (err) {
+     
       setError(err); 
     }
   };

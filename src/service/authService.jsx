@@ -1,4 +1,3 @@
-
 import axios from "axios";
 
 
@@ -8,24 +7,32 @@ const authService = {
     signup: async (userData) =>{
         return await axios.post(`${BASE_URL}/users/register`,userData)
     },
-    login: async (email,password) =>{
-        try{
+    login: async (email, password) => {
+        try {
             const response = await axios.post(`${BASE_URL}/auth/login`, { email, password });
-            if (response.data?.token) {
-                localStorage.setItem("token", response.data.token); // Store token
+    
+            
+           
+    
+            
+            const token = response.data?.response?.token;
+    
+            if (token) {
+                localStorage.setItem("token", token);
+                console.log("Token Stored:", localStorage.getItem("token"));
                 return response.data;
-            }
-            else {
+            } else {
                 throw new Error("Login failed, no token received.");
             }
-        }
-        catch (error) {
+        } catch (error) {
+            console.error("Login Error:", error);
             throw error.response?.data?.message || "Login failed. Please check your credentials.";
         }
-    },
-    logout: () => {
-        localStorage.removeItem("token");
     }
+    
+    
+    
+    
 };
 
 export default authService;
