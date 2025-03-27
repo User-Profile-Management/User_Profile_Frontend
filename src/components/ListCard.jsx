@@ -17,9 +17,11 @@ const ListCard = ({ title, items ,showDelete}) => {
                 {!showDelete && <img src={item.image} alt="Profile" className="w-10 h-10 " />}
                     <div className='flex flex-col items-start justify-center'>
                         <div className='font-semibold'>{item.name}</div>
+                        {title !== "Project List" && <div className="text-sm text-gray-500">ID: {item.userId}</div>}
                         {!showDelete && <div className="text-sm">{item.subtitle}</div>}
                     </div>
                 </div>
+                
                     {showDelete && <img src={DeleteButton} alt="Profile"/>}
                
             </div>
