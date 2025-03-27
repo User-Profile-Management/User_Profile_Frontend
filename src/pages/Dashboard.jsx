@@ -5,6 +5,8 @@ import AddProjectModal from "../components/modals/AddProjectModal.jsx";
 import DeleteProjectModal from "../components/modals/DeleteProjectModal.jsx";
 import EditProfileModal from "../components/modals/EditProfileModal.jsx";
 import AddStudentModal from "../components/modals/AddStudentModal.jsx";  
+import AddMentorModal from "../components/modals/AddMentorModal.jsx";
+
 
 const Dashboard = () => {
     const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
@@ -18,6 +20,15 @@ const Dashboard = () => {
 
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [projectToDelete, setProjectToDelete] = useState(null);
+
+    const [isAddMentorModalOpen, setIsAddMentorModalOpen] = useState(false);
+    const [mentors, setMentors] = useState([]);
+
+    const handleSaveMentor = (newMentor) => {
+        setMentors([...mentors, newMentor]);
+        console.log("Added Mentor:", newMentor);
+    };
+
 
     const [isEditProfileModalOpen, setIsEditProfileModalOpen] = useState(false);
     const [profile, setProfile] = useState({
@@ -75,6 +86,13 @@ const Dashboard = () => {
                 Add Student
             </button>
 
+            <button onClick={() => setIsAddMentorModalOpen(true)}
+                className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-purple-600">
+                Add Mentor
+            </button>
+
+
+
             <button onClick={() => setIsUploadModalOpen(true)}
                 className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 mr-4">
                 Upload Certificate
@@ -121,6 +139,13 @@ const Dashboard = () => {
                 onClose={() => setIsAddStudentModalOpen(false)}
                 onSave={handleSaveStudent}
             />
+
+            <AddMentorModal
+                isOpen={isAddMentorModalOpen}
+                onClose={() => setIsAddMentorModalOpen(false)}
+                onSave={handleSaveMentor}
+            />
+
 
             <UploadCertificateModal 
                 isOpen={isUploadModalOpen} 
