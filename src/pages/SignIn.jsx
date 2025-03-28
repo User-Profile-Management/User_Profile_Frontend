@@ -1,6 +1,8 @@
 
 import React, { useState } from "react";
 import { Link,useNavigate } from "react-router-dom";
+
+import { auth, provider, signInWithPopup } from "../firebaseConfig";
 import GoogleLogo from "../assets/google.png";
 import authService from "../service/authService";
 import BackgroundImage from "/src/assets/frontimage.png";
@@ -12,7 +14,7 @@ function SignIn() {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
-  const navigate = useNavigate();
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();  // Prevent page refresh
@@ -35,6 +37,17 @@ function SignIn() {
     }
   };
 
+    const navigate = useNavigate();
+// Function to handle Google Sign-In
+const handleGoogleSignIn = async () => {
+    try {
+      const result = await signInWithPopup(auth, provider);
+      console.log("User Info:", result.user);
+      navigate("/Dashboard"); // Redirect to dashboard or home after login
+    } catch (error) {
+      console.error("Google Sign-In Error:", error);
+    }
+  };
 
   return (
     <div className='signinpage bg-white h-screen p-10 grid grid-cols-2'>
@@ -47,8 +60,8 @@ function SignIn() {
         <div className="signin px-14 flex items-center justify-center">
             <div className='border-1 border-zinc-300 px-4 py-8 rounded-2xl min-w-lg'>
                 <div className="title mb-10">
-                    <div className="heading text-4xl">Welcome Back</div>
-                    <div className="subheading text-md text-zinc-400">Enter your credentials to access your account</div>
+                    <div className="heading text-4xl font-semibold">Welcome Back</div>
+                    <div className="subheading text-md  text-zinc-400">Enter your credentials to access your account</div>
                 </div>
                 <div className="credentials ">
                     <form onSubmit={handleSubmit}>
@@ -109,17 +122,20 @@ function SignIn() {
                                         </div>
 
                             <div className="signinbutton flex justify-center bg-blue-800 py-3 rounded-xl text-white">
-                                <button type="submit">
+                                <button className=''>
                                     Sign in 
                                 </button>
                             </div>
-                            <div className="signinwithGoogle flex justify-center border border-zinc-100 bg-zinc-100 py-3 rounded-xl text-black gap-2">
-                            <img src={GoogleLogo} alt="Google Logo" className="w-5 h-5" />
-
-                                <button className=''>
-                                    Sign in with Google
-                                </button>
+                            <div 
+                                className="signinwithGoogle flex justify-center border border-zinc-100 bg-zinc-100 py-3 font-semibold rounded-xl text-black gap-2 cursor-pointer"
+                                onClick={handleGoogleSignIn}
+                            >
+                                <img src={GoogleLogo} alt="Google Logo" className="w-5 h-5" />
+                                Sign in with Google
                             </div>
+
+
+
                             <div className="signup flex justify-center gap-2 text-sm">
                                 <div className='text-zinc-500'>Dont have an account?</div>
                                 <Link to="/signup" className="text-blue-600 hover:underline">

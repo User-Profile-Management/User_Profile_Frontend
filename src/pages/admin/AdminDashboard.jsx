@@ -1,105 +1,139 @@
-import React,{useEffect,useState} from 'react';
-import DashboardLayout from '../../layout/DashboardLayout'
-import StatCard from '../../components/StatCard'
-import AddButton from "../../assets/add-button.svg"
-import Profile from "../../assets/profile-ListCard.svg"
-import ListCard from '../../components/ListCard'
-import authService from '../../service/authService'
+import React, { useEffect, useState } from 'react';
+import DashboardLayout from '../../layout/DashboardLayout';
+import StatCard from '../../components/StatCard';
+import ListCard from '../../components/ListCard';
+import AddButton from "../../assets/add-button.svg";
+import Profile from "../../assets/profile-ListCard.svg";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { studentsCountState, mentorsCountState, projectsCountState } from "../../state/recoilState";
+import userService from "../../service/userService.jsx";
+import projectService from "../../service/projectService.jsx";
 
 function AdminDashboard() {
-    const [StudentsCount, setStudentsCount] = useState(0);
-    useEffect(() => {
-        const fetchStudentsCount = async () => {
-            const count = await authService.getStudentsCount();
-            setStudentsCount(count);
-        };
-    fetchStudentsCount();
-    }, []);
+  
+  const studentsCount = useRecoilValue(studentsCountState);
+  const mentorsCount = useRecoilValue(mentorsCountState);
+  const projectsCount = useRecoilValue(projectsCountState);
+  const setStudentsCount = useSetRecoilState(studentsCountState);
+  const setMentorsCount = useSetRecoilState(mentorsCountState);
+  const setProjectsCount = useSetRecoilState(projectsCountState);
 
-    const [MentorsCount, setMentorsCount] = useState(0);
-    useEffect(() => {
-        const fetchMentorsCount = async () => {
-            const count = await authService.getMentorsCount();
-            setMentorsCount(count);
-        };
-    fetchMentorsCount();
-    }, []);
 
-    const [ProjectsCount, setProjectsCount] = useState(0);
-    useEffect(() => {
-        const fetchProjectsCount = async () => {
-            const count = await authService.getProjectsCount();
-            setProjectsCount(count);
-        };
+  const [StudentsList, setStudentsList] = useState([]);
+  const [MentorsList, setMentorsList] = useState([]);
+  const [ProjectsList, setProjectsList] = useState([]);
+
+  
+  useEffect(() => {
+    const fetchCounts = async () => {
+      try {
+        const [students, mentors, projects] = await Promise.all([
+          userService.getStudentsCount(),
+          userService.getMentorsCount(),
+          projectService.getProjectsCount()
+        ]);
+        setStudentsCount(students);
+        setMentorsCount(mentors);
+        setProjectsCount(projects);
+      } catch (error) {
+        console.error("Error fetching counts:", error);
+      }
+    };
+    fetchCounts();
+  }, [setStudentsCount, setMentorsCount, setProjectsCount]);
+
+  
+  useEffect(() => {
+    const fetchStudents = async () => {
+      try {
+        const students = await userService.getStudentsList();
+        setStudentsList(students);
+      } catch (error) {
+        console.error("Error fetching students:", error);
+      }
+    };
+
+    const fetchMentors = async () => {
+      try {
+        const mentors = await userService.getMentorsList();
+        setMentorsList(mentors);
+      } catch (error) {
+        console.error("Error fetching mentors:", error);
+      }
+    };
+
+    const fetchProjects = async () => {
+      try {
+        const projects = await projectService.getProjectsList();
+        setProjectsList(projects);
+      } catch (error) {
+        console.error("Error fetching projects:", error);
+      }
+    };
+
+    fetchStudents();
+    fetchMentors();
+    fetchProjects();
+  }, []);
+  useEffect(() => {
+    const fetchProjectsCount = async () => {
+      try {
+        console.log("[DEBUG] Fetching projects count...");
+        const count = await projectService.getProjectsCount();
+        console.log("[DEBUG] Projects count raw:", count);
+        setProjectsCount(count);
+      } catch (error) {
+        console.error("Projects count error:", error);
+        setProjectsCount(0);
+      }
+    };
     fetchProjectsCount();
-    }, []);
+  }, [setProjectsCount]);
 
-    const [StudentsList, setStudentsList] = useState([]);
-    useEffect(() => {
-        const fetchStudentsList = async () => {
-            const students = await authService.getStudentsList();
-            console.log("Fetched Students List:", students);
-            setStudentsList(students);
-        };
-    fetchStudentsList();
-    }, []);
-
-    const [MentorsList, setMentorsList] = useState([]);
-    useEffect(() => {
-        const fetchMentorsList = async () => {
-            const mentors = await authService.getMentorsList();
-            console.log("Fetched Mentors List:", mentors);
-            setMentorsList(mentors);
-        };  
-    fetchMentorsList();
-    }, []);
-
-    const [ProjectsList, setProjectsList] = useState([]);
-    useEffect(() => {
-        const fetchProjectsList = async () => {
-            const projects = await authService.getProjectsList();
-            console.log("FetchedProjectss List:", projects);
-            setProjectsList(projects);
-        };
+  useEffect(() => {
+    const fetchProjectsList = async () => {
+      try {
+        console.log("[DEBUG] Fetching projects list...");
+        const projects = await projectService.getProjectsList();
+        console.log("[DEBUG] Projects list raw:", projects);
+        setProjectsList(projects);
+      } catch (error) {
+        console.error("Projects list error:", error);
+        setProjectsList([]);
+      }
+    };
     fetchProjectsList();
-    }, []);
+  }, []);
 
+  return (
+    <DashboardLayout>
+      <div className='grid grid-rows-10 h-full'>
+        <div>
+          <div className="text-2xl font-semibold">Home</div>
+          <div className='text-zinc-500'>Admin Dashboard</div>
+        </div>
+        <div className="row-span-9">
+          <div className="grid grid-cols-3 gap-6 h-full">
 
-
-   
-
-    return (
-
-        <DashboardLayout>
-            <div className='grid grid-rows-10 h-full'>
-                <div>
-                    <div className="text-2xl font-semibold">Home</div>
-                    <div className='text-zinc-500'>Admin Dashboard</div>
-                </div>
-                <div className="row-span-9">
-                    <div className="grid grid-cols-3 gap-6 h-full">
-
-                        <div className='grid grid-rows-5 gap-6 '>
-                            <StatCard number={StudentsCount} title="Total Students" color="bg-cyan-600" />
-                            <ListCard title="Student List" items={StudentsList} showDelete={false}/>
-                        </div>
-
-                        <div className='grid grid-rows-5 gap-6 '>
-                            <StatCard number={MentorsCount} title="Total Mentors" color="bg-cyan-700" />
-                            <ListCard title="Mentor List" items={MentorsList} showDelete={false}/>
-                        </div>
-                        <div className='grid grid-rows-5 gap-6 '>
-                            <StatCard number={ProjectsCount} title="Total Projects" color="bg-cyan-800" />
-                            <ListCard title="Project List" items={ProjectsList} showDelete={true}/>
-
-                            
-                        </div>
-                    </div>
-                </div>
+            <div className='grid grid-rows-5 gap-6 '>
+              <StatCard number={studentsCount} title="Total Students" color="bg-cyan-600" />
+              <ListCard title="Student List" items={StudentsList} showDelete={false} />
             </div>
-        </DashboardLayout>
-      )
-    
+
+            <div className='grid grid-rows-5 gap-6 '>
+              <StatCard number={mentorsCount} title="Total Mentors" color="bg-cyan-700" />
+              <ListCard title="Mentor List" items={MentorsList} showDelete={false} />
+            </div>
+
+            <div className='grid grid-rows-5 gap-6 '>
+              <StatCard number={projectsCount} title="Total Projects" color="bg-cyan-800" />
+              <ListCard title="Project List" items={ProjectsList} showDelete={true} />
+            </div>
+          </div>
+        </div>
+      </div>
+    </DashboardLayout>
+  );
 }
 
-export default AdminDashboard
+export default AdminDashboard;

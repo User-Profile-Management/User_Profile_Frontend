@@ -10,4 +10,4 @@ function StatCard({ number, title, color }) {
     )
 }
 
-export default StatCard
+export default StatCard;
