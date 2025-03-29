@@ -1,7 +1,7 @@
 
 import React, { useState } from "react";
 import { Link,useNavigate } from "react-router-dom";
-
+import {jwtDecode} from "jwt-decode";
 import { auth, provider, signInWithPopup } from "../firebaseConfig";
 import GoogleLogo from "../assets/google.png";
 import authService from "../service/authService";
@@ -15,29 +15,41 @@ function SignIn() {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   
-
+  const navigate = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();  // Prevent page refresh
     setError("");       
-
+  
     try {
-       const response = await authService.login(email, password);   
-       
+      const response = await authService.login(email, password);   
       
-       if(response?.response?.token){
-       
-        navigate("/admin/dashboard"); 
-       }else{
-        setError("Login failed as token is missing.")
-       }
-      
+      if (response?.response?.token) {
+        const decodedToken = jwtDecode(response.response.token); // ✅ Decode token
+        console.log("[DEBUG] Decoded Token:", decodedToken);
+  
+        const userRole = decodedToken.roles?.[0]; // Get first role
+  
+        if (userRole === "ADMIN") {
+          console.log("Redirecting to /admin/dashboard");
+          navigate("/admin/dashboard");
+        } else if (userRole === "MENTOR") {
+          console.log("Redirecting to /mentor/dashboard");
+          navigate("/mentor/dashboard");
+        } else {
+          console.error("Unauthorized role:", userRole);
+          setError("Unauthorized role");
+        }
+      } else {
+        setError("Login failed as token is missing.");
+      }
     } catch (err) {
-     
-      setError(err); 
+      setError("Invalid credentials. Please try again.");
     }
   };
+  
+  
 
-    const navigate = useNavigate();
+   
 // Function to handle Google Sign-In
 const handleGoogleSignIn = async () => {
     try {

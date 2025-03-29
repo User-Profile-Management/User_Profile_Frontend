@@ -20,9 +20,9 @@ function Router() {
        <Route path="/" element= {<SignIn/>} />
        <Route path="/signup" element= {<SignUp1/>} />
        <Route path="/signup2" element= {<SignUp2/>} />
-       <Route path="/mentor-dashboard" element={<MentorDashboard />} />
+      
        <Route element={<ProtectedRoute />}>
-       
+       <Route path="/mentor/dashboard" element={<MentorDashboard />} />
         <Route path="/admin/dashboard" element={<AdminDashboard />}/>
 
        </Route>

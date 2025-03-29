@@ -10,7 +10,7 @@ const Login = () => {
     e.preventDefault();
     try {
       await AuthService.login(email, password);
-      window.location.href = "/Dashboard"; // Redirect to dashboard
+      window.location.href = "/Dashboard"; 
     } catch (err) {
       setError(err.message);
     }
