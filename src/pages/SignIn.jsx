@@ -21,7 +21,7 @@ function SignIn() {
     setError("");       
 
     try {
-       const response = await authService.login(email, password);    //to display response
+       const response = await authService.login(email, password);   
        
       
        if(response?.response?.token){

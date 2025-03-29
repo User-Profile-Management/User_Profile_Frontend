@@ -1,35 +1,52 @@
 import React, { useState } from "react";
+import userService from "../../service/userService";
 
-const AddStudentModal = ({ isOpen, onClose, onSave }) => {
+const AddStudentModal = ({ isOpen, onClose }) => {
     const [studentData, setStudentData] = useState({
-        name: "",
-        dob: "",
-        mobileNumber: "",
+        fullName: "",
+        dateOfBirth: "",
+        contactNo: "",
         address: "",
         email: "",
         password: ""
+        
     });
 
     const handleChange = (e) => {
         const { name, value } = e.target;
         setStudentData({ ...studentData, [name]: value });
     };
-
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!studentData.name || !studentData.dob || !studentData.mobileNumber || 
+    
+        if (!studentData.fullName || !studentData.dateOfBirth || !studentData.contactNo || 
             !studentData.address || !studentData.email || !studentData.password) {
             alert("Please fill all the fields.");
             return;
         }
-        onSave(studentData);
-        onClose();
+        //because role is fixed for this pop up and it will only go with the payload
+        const payload = { ...studentData, roleName: "STUDENT" };
+
+    console.log("Submitting student data:", payload);
+    
+        try {
+            const response = await userService.signup(payload);
+            console.log("Student registered successfully:", response);
+            alert("Student registered successfully!");
+            onClose(); 
+        } catch (error) {
+            console.error("Registration error:", error);
+            alert("Failed to register student. Please try again.");
+        }
     };
+    
+    
+    
 
     if (!isOpen) return null;
 
     return (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+        <div className="fixed inset-0  bg-opacity-50 backdrop-blur-md flex items-center justify-center">
             <div className="bg-white p-6 rounded-lg w-full max-w-[600px]">
                 
                 <h2 className="text-xl font-semibold">Add a Student</h2>
@@ -42,8 +59,8 @@ const AddStudentModal = ({ isOpen, onClose, onSave }) => {
                         <label className="w-1/3 font-medium">Name</label>
                         <input 
                             type="text" 
-                            name="name" 
-                            value={studentData.name} 
+                            name="fullName" 
+                            value={studentData.fullName} 
                             onChange={handleChange}
                             placeholder="Enter name"
                             className="w-2/3 p-2  rounded-md focus:ring-2 focus:ring-gray-200 focus:outline-none"
@@ -55,8 +72,8 @@ const AddStudentModal = ({ isOpen, onClose, onSave }) => {
                         <label className="w-1/3 font-medium">DOB</label>
                         <input 
                             type="date" 
-                            name="dob" 
-                            value={studentData.dob} 
+                            name="dateOfBirth" 
+                            value={studentData.dateOfBirth} 
                             onChange={handleChange}
                             className="w-2/3 p-2  rounded-md text-gray-400 focus:ring-2 focus:ring-gray-200 focus:outline-none"
                            
@@ -69,8 +86,8 @@ const AddStudentModal = ({ isOpen, onClose, onSave }) => {
                         <label className="w-1/3 font-medium">Mobile Number</label>
                         <input 
                             type="tel" 
-                            name="mobileNumber" 
-                            value={studentData.mobileNumber} 
+                            name="contactNo" 
+                            value={studentData.contactNo} 
                             onChange={handleChange}
                             placeholder="Enter mobile number"
                             className="w-2/3 p-2  rounded-md focus:ring-2 focus:ring-gray-200 focus:outline-none"
@@ -116,7 +133,7 @@ const AddStudentModal = ({ isOpen, onClose, onSave }) => {
                         />
                     </div>
 
-                    
+                    <input type="hidden" name="role" value={studentData.role} />
                     <div className="flex justify-end gap-2 mt-4">
                         <button type="button" onClick={onClose}
                             className="bg-gray-200 text-black px-4 py-2 text-sm font-semibold rounded-md hover:bg-gray-300 ">

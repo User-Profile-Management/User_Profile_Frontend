@@ -1,10 +1,11 @@
 import React, { useState } from "react";
+import userService from "../../service/userService";
 
-const AddMentorModal = ({ isOpen, onClose, onSave }) => {
+const AddMentorModal = ({ isOpen, onClose }) => {
     const [mentorData, setMentorData] = useState({
-        name: "",
-        dob: "",
-        mobileNumber: "",
+        fullName: "",
+        dateOfBirth: "",
+        contactNo: "",
         address: "",
         email: "",
         password: ""
@@ -15,21 +16,34 @@ const AddMentorModal = ({ isOpen, onClose, onSave }) => {
         setMentorData({ ...mentorData, [name]: value });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!mentorData.name || !mentorData.dob || !mentorData.mobileNumber || 
+    
+        if (!mentorData.fullName || !mentorData.dateOfBirth || !mentorData.contactNo || 
             !mentorData.address || !mentorData.email || !mentorData.password) {
             alert("Please fill all the fields.");
             return;
         }
-        onSave(mentorData);
-        onClose();
+        //because role is fixed for this pop up and it will only go with the payload
+        const payload = { ...mentorData, roleName: "MENTOR" };
+
+    console.log("Submitting mentor data:", payload);
+    
+        try {
+            const response = await userService.signup(payload);
+            console.log("Mentor registered successfully:", response);
+            alert("Mentor registered successfully!");
+            onClose(); 
+        } catch (error) {
+            console.error("Registration error:", error);
+            alert("Failed to register mentor. Please try again.");
+        }
     };
 
     if (!isOpen) return null;
 
     return (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+        <div className="fixed inset-0  bg-opacity-50 backdrop-blur-md flex items-center justify-center">
             <div className="bg-white p-6 rounded-lg w-full max-w-[600px]">
                 
                 <h2 className="text-xl font-semibold">Add a Mentor</h2>
@@ -41,8 +55,8 @@ const AddMentorModal = ({ isOpen, onClose, onSave }) => {
                         <label className="w-1/3 font-medium">Name</label>
                         <input 
                             type="text" 
-                            name="name" 
-                            value={mentorData.name} 
+                            name="fullName" 
+                            value={mentorData.fullName} 
                             onChange={handleChange}
                             placeholder="Enter name"
                             className="w-2/3 p-2 rounded-md focus:ring-2 focus:ring-gray-200 focus:outline-none"
@@ -53,8 +67,8 @@ const AddMentorModal = ({ isOpen, onClose, onSave }) => {
                         <label className="w-1/3 font-medium">DOB</label>
                         <input 
                             type="date" 
-                            name="dob" 
-                            value={mentorData.dob} 
+                            name="dateOfBirth" 
+                            value={mentorData.dateOfBirth} 
                             onChange={handleChange}
                             className="w-2/3 p-2 rounded-md text-gray-400 focus:ring-2 focus:ring-gray-200 focus:outline-none"
                         />
@@ -64,8 +78,8 @@ const AddMentorModal = ({ isOpen, onClose, onSave }) => {
                         <label className="w-1/3 font-medium">Mobile Number</label>
                         <input 
                             type="tel" 
-                            name="mobileNumber" 
-                            value={mentorData.mobileNumber} 
+                            name="contactNo" 
+                            value={mentorData.contactNo} 
                             onChange={handleChange}
                             placeholder="Enter mobile number"
                             className="w-2/3 p-2 rounded-md focus:ring-2 focus:ring-gray-200 focus:outline-none"

@@ -7,8 +7,20 @@ const getToken = () => localStorage.getItem("token");
 
 const userService = {
   signup: async (userData) => {
-    return await axios.post(`${BASE_URL}/register`, userData);
-  },
+    try {
+        const response = await axios.post(`${BASE_URL}/register`, userData, {
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+
+        return response.data; 
+    } catch (error) {
+        console.error("Signup error:", error.response?.data || error.message);
+        throw error; 
+    }
+},
+
 
   getStudentsCount: async () => {
     try {
