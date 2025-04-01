@@ -31,7 +31,7 @@ deleteProject: async (projectId) => {
 
       const response = await axios.delete(`${BASE_URL}/${projectId}`, {
           headers: {
-              Authorization: `Bearer ${token}`,  // ✅ Ensure correct token format
+              Authorization: `Bearer ${token}`,  
               "Content-Type": "application/json",
           },
       });
@@ -42,6 +42,28 @@ deleteProject: async (projectId) => {
       throw error;
   }
 },
+updateProject: async (projectId, projectData) => {
+  try {
+      const token = getToken();
+      if (!token) {
+          console.error("Error: No authentication token found!");
+          return;
+      }
+
+      const response = await axios.put(`${BASE_URL}/${projectId}`, projectData, {
+          headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+          },
+      });
+
+      return response.data;
+  } catch (error) {
+      console.error("Error updating project:", error.response?.data || error);
+      throw error;
+  }
+},
+
 
 
 
