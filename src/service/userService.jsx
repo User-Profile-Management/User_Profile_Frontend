@@ -95,6 +95,22 @@ const userService = {
       return [];
     }
   },
+  getUserDetails: async () => {
+    try {
+      const response = await axios.get(`${BASE_URL}/profile`, {
+        
+        headers: {
+          Authorization: `Bearer ${getToken()}`,
+          "Content-Type": "application/json",
+        },
+      });
+      return response.data;
+     
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      return [];
+    }
+  },
 
   getMentorsList: async () => {
     try {
