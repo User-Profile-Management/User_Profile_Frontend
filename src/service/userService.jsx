@@ -1,5 +1,5 @@
 import axios from "axios";
-import Profile from "/home/sreevidyavijayan/Desktop/User_Profile_Frontend/src/assets/profile.png";
+import Profile from "../assets/profile.svg";
 
 const BASE_URL = "http://localhost:8080/api/users";
 
@@ -71,6 +71,27 @@ const userService = {
       }));
     } catch (error) {
       console.error("Error fetching students list:", error);
+      return [];
+    }
+  },
+
+  getApprovalList: async () => {
+    try {
+      const response = await axios.get(` ${BASE_URL}?status=PENDING`, {
+        headers: {
+          Authorization: `Bearer ${getToken()}`,
+          "Content-Type": "application/json",
+        },
+      });
+      return response.data.response.map((approval) => ({
+        name: approval.fullName,
+        userId: approval.userId,
+        image: approval.profilePicture
+          ? `data:image/png;base64,${approval.profilePicture}`
+          : Profile,
+      }));
+    } catch (error) {
+      console.error("Error fetching approval list:", error);
       return [];
     }
   },

@@ -90,7 +90,7 @@ updateProject: async (projectId, projectData) => {
             "Content-Type": "application/json",
           },
         });
-        console.log("API Response:", response.data);
+        // console.log("API Response:", response.data);
         return response.data.response.map(project => ({
           projectId: project.projectId,
             name: project.projectName,

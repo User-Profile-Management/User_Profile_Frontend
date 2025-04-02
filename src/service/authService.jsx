@@ -1,5 +1,5 @@
 import axios from "axios";
-import Profile from "/home/sreevidyavijayan/Desktop/User_Profile_Frontend/src/assets/profile.png";
+import Profile from "../assets/profile.svg";
 const BASE_URL = "http://localhost:8080/api";
 
 const authService = {

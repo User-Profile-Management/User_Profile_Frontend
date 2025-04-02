@@ -61,7 +61,7 @@ const EditProjectModal = ({ isOpen, onClose, project, onUpdate }) => {
     if (!isOpen) return null;
 
     return (
-        <div className="fixed inset-0 bg-opacity-50 backdrop-blur-md flex items-center justify-center">
+        <div className="fixed inset-0 bg-opacity-50 backdrop-brightness-50 flex items-center justify-center">
             <div className="bg-white p-6 rounded-lg w-full max-w-[700px] shadow-lg">
                 <h2 className="text-xl font-semibold text-left">Edit Project</h2>
                 <p className="text-sm text-gray-500 text-left mb-4">

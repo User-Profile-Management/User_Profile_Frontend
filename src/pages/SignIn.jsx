@@ -30,11 +30,14 @@ function SignIn() {
         const userRole = decodedToken.roles?.[0]; // Get first role
   
         if (userRole === "ADMIN") {
-          console.log("Redirecting to /admin/dashboard");
-          navigate("/admin/dashboard");
+          console.log("Redirecting to /admin-dashboard");
+          navigate("/admin-dashboard");
         } else if (userRole === "MENTOR") {
-          console.log("Redirecting to /mentor/dashboard");
-          navigate("/mentor/dashboard");
+          console.log("Redirecting to /mentor-dashboard");
+          navigate("/mentor-dashboard");
+        } else if (userRole === "STUDENT") {
+          console.log("Redirecting to /student-dashboard");
+          navigate("/student-dashboard");
         } else {
           console.error("Unauthorized role:", userRole);
           setError("Unauthorized role");
@@ -133,11 +136,11 @@ const handleGoogleSignIn = async () => {
                                         <div className="forgotpassword text-blue-600 cursor-pointer">Forgot Password?</div>
                                         </div>
 
-                            <div className="signinbutton flex justify-center bg-blue-800 py-3 rounded-xl text-white">
-                                <button className=''>
+                            <button className="signinbutton flex justify-center bg-blue-800 py-3 rounded-xl text-white cursor-pointer font-semibold" >
+                        
                                     Sign in 
-                                </button>
-                            </div>
+                                
+                            </button>
                             <div 
                                 className="signinwithGoogle flex justify-center border border-zinc-100 bg-zinc-100 py-3 font-semibold rounded-xl text-black gap-2 cursor-pointer"
                                 onClick={handleGoogleSignIn}

@@ -13,7 +13,7 @@ const ListCard = ({ title, items ,showDelete,onAddClick,onDelete,onEdit}) => {
         <div className="overflow-y-scroll scrollbar-hide row-span-6">
           {items.map((item, index) => (
             
-            <div key={index} className="flex border-b border-zinc-200 py-2 gap-4 justify-between min-h-16">
+            <div key={index} className="flex border-b border-zinc-200 py-2 gap-4 justify-between min-h-16 items-center">
                 <div className="flex gap-4">
                   
                 {!showDelete && <img src={item.image} alt="Profile" className="w-10 h-10 " />}

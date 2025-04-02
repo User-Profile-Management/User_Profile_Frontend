@@ -59,12 +59,12 @@ function MentorDashboard() {
                                         placeholder="Search by name or admission no" 
                                         value={searchQuery}
                                         onChange={(e) => setSearchQuery(e.target.value)}
-                                        className="w-full pl-10 pr-4 py-2 border-1 border-zinc-100 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-100"
+                                        className="w-full pl-10 pr-4 py-2 border-1 bg-white border-zinc-100 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-100"
                                     />
                                 </div>
-                                <div>
+                                {/* <div>
                                     <img className='w-6 h-6' src={FilterIcon} alt="Filter" />
-                                </div>
+                                </div> */}
                             </div>
                         </div>
                         <div className='grid grid-cols-6 items-center px-10 bg-zinc-100 justify-between'>

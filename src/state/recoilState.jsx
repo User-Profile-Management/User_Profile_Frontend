@@ -24,3 +24,13 @@ export const mentorsListState = atom({
   key: "mentorsListState",
   default: [],
 });
+
+export const userState = atom({
+  key: "userState",
+  default: {
+    userId: "",
+    fullName: "",
+    email: "",
+    roleName: "",
+  },
+});

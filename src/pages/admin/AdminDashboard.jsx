@@ -2,8 +2,6 @@ import React, { useEffect, useState } from 'react';
 import DashboardLayout from '../../layout/DashboardLayout';
 import StatCard from '../../components/StatCard';
 import ListCard from '../../components/ListCard';
-import AddButton from "../../assets/add-button.svg";
-import Profile from "../../assets/profile-ListCard.svg";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { studentsCountState, mentorsCountState, projectsCountState } from "../../state/recoilState";
 import userService from "../../service/userService.jsx";
