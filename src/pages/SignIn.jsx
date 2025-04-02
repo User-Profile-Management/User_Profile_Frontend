@@ -11,12 +11,12 @@ import BackgroundImage from "/src/assets/frontimage.png";
 function SignIn() {
     const [showPassword, setShowPassword] = useState(false);
     const navigate = useNavigate();
-// Function to handle Google Sign-In
+
 const handleGoogleSignIn = async () => {
     try {
       const result = await signInWithPopup(auth, provider);
       console.log("User Info:", result.user);
-      navigate("/Dashboard"); // Redirect to dashboard or home after login
+      navigate("/mentor-dashboard"); 
     } catch (error) {
       console.error("Google Sign-In Error:", error);
     }
@@ -44,7 +44,7 @@ const handleGoogleSignIn = async () => {
                                 <input
                                     className='email-input border border-zinc-100 bg-zinc-100 p-2 rounded text-sm'
                                     type='text'
-                                    // id='email'
+                                    
                                     name='email'
                                     placeholder='Enter your Email address'
                                     />
