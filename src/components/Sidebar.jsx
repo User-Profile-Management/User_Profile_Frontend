@@ -106,10 +106,10 @@ const Sidebar = () => {
             )}
 
         <div className="row-span-6"></div>
-        <div className="p-3 text-gray-500 cursor-pointer flex items-center gap-3">
+        <div className="p-3 text-gray-500 cursor-pointer flex items-center gap-3 m-3 hover:bg-red-200 rounded-xl">
             <img className="w-7 h-7" src={Logout} alt="Logout" />
             <div>
-                <button onClick={handleLogout} className=" text-red-600 font-semibold p-2 rounded">Logout</button>
+                <button onClick={handleLogout} className=" text-red-600 font-semibold p-2 rounded ">Logout</button>
                 
                 </div>
         </div>

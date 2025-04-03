@@ -129,7 +129,7 @@ function SignUp2() {
                                     </select>
                                 </div>
                             </div>
-                            {/* <div  className='grid grid-rows-1 gap-y-4'>
+                            <div  className='grid grid-rows-1 gap-y-4'>
                              <Link to="/" className="text-blue-600 hover:underline"> 
                                 <div className="signupbutton flex justify-center bg-blue-800 py-3 rounded-xl text-white cursor-pointer">
                                 <button type="submit" className='font-semibold'>
@@ -143,12 +143,12 @@ function SignUp2() {
                                         Sign In
                                     </Link>
                                 </div>
-                            </div> */}
+                            </div>
 
 
 
 
-                            <div className="grid grid-rows-1 gap-y-4">
+                            {/* <div className="grid grid-rows-1 gap-y-4">
                             <button 
                                 type="submit" 
                                 className="flex justify-center bg-blue-800 py-3 rounded-xl text-white font-semibold w-full"
@@ -162,7 +162,7 @@ function SignUp2() {
                                     Sign In
                                     </Link>
                                 </div>
-                            </div>
+                            </div> */}
 
                         </form>
                     </div>

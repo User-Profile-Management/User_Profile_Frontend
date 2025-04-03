@@ -2,6 +2,7 @@ import React,{useState,useEffect}from 'react'
 import DashboardLayout from '../../layout/DashboardLayout.jsx'
 import userService from '../../service/userService.jsx';
 import Profile from '../../assets/profile.svg'
+import { Link } from 'react-router-dom';
 
 function RequestApproval() {
     const [searchQuery, setSearchQuery] = useState('');
@@ -58,9 +59,9 @@ function RequestApproval() {
                                     </div>
                                     <div className='text-center'>{approval.userId}</div>
                                     <div className='flex justify-center'>
-                                        <div className="bg-gray-200 hover:bg-gray-300 text-gray-700 px-3 py-1 rounded-md">
+                                        <Link to="/admin-accept" className="bg-gray-200 hover:bg-gray-300 text-gray-700 px-3 py-1 rounded-md">
                                                           View More
-                                            </div>
+                                            </Link>
                                         </div>
                                     </div>
                                 ))
