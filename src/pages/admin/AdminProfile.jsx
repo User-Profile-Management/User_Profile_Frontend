@@ -40,7 +40,7 @@ export default function AdminProfile() {
                             <div className='border border-zinc-100 bg-white rounded-xl p-4 h-full flex items-center justify-center'>
                                 <div className="flex flex-col items-center ">
                                 <img 
-                                className='w-32 rounded-full' 
+                                className='w-32 h-32 rounded-full ' 
                                 src={adminData.profilePicture 
                                 ? `data:image/png;base64,${adminData.profilePicture}` 
                                 : ProfilePic} 
@@ -89,7 +89,7 @@ export default function AdminProfile() {
                                             <div className="w-1/2 flex gap-5">
                                                 <img className='w-10' src={Emergency} alt="emergency-icon" />
                                                 <div className="flex flex-col">
-                                                    <div className="font-semibold" >{adminData.emergencyNo}</div>
+                                                    <div className="font-semibold" >{adminData.emergencyContact}</div>
                                                     <div className='text-sm' >Emergency Contact</div>
                                                 </div>
                                             </div>

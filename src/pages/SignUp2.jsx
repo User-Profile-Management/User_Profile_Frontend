@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link ,useNavigate, useLocation} from "react-router-dom";
 
 import BackgroundImage from "/src/assets/frontimage.png";
-import authService from "../service/authService";
+import userService from "../service/userService";
 
 
 function SignUp2() {
@@ -26,23 +26,58 @@ function SignUp2() {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
+    // const handleSubmit = async (e) => {
+    //     e.preventDefault();
+        
+    //     if (formData.password !== formData.confirmedpassword) {
+    //         setError("Passwords do not match!");
+    //         return;
+    //     }
+    //     const { confirmedpassword, ...userData } = formData;
+        
+    //     try {
+    //         console.log("form submitted");
+    //         const response = await userService.signup(userData);
+    //         console.log("API Response:", response);
+          
+    //         if(response.status===200)
+    //             alert("Registration successful! Redirecting to Sign In...");
+    //         navigate("/");
+    //     } catch (err) {
+    //         setError(err.response?.data?.message || "An error occurred");
+    //     }
+    // };
+
+
     const handleSubmit = async (e) => {
+        console.log("handleSubmit function executed!");  
         e.preventDefault();
+    
         if (formData.password !== formData.confirmedpassword) {
             setError("Passwords do not match!");
+            console.log(" Passwords do not match!");
             return;
         }
+        console.log(" Passwords match, proceeding...");
+    
         const { confirmedpassword, ...userData } = formData;
-        
+        console.log(" Sending data:", userData);
+    
         try {
-            const response = await authService.signup(userData);
-            if(response.statusCode===200)
-                alert("Registration successful! Redirecting to Sign In...");
+            const response = await userService.signup(userData);
+            console.log("API Response:", response);
+    
+            if (response.statusCode === 200) {
+               
+                console.log("Navigating to '/' page...");
             navigate("/");
+            }
         } catch (err) {
+            console.error("Signup Error:", err.response?.data || err.message);
             setError(err.response?.data?.message || "An error occurred");
         }
     };
+    
     
         const [showPassword, setShowPassword] = useState(false);
     
@@ -147,14 +182,19 @@ function SignUp2() {
 
 
 
-
+                        
                             <div className="grid grid-rows-1 gap-y-4">
-                            <button 
+                                
+                                <button 
                                 type="submit" 
                                 className="flex justify-center bg-blue-800 py-3 rounded-xl text-white font-semibold w-full"
-                            >
+                                >
                                 Sign Up
-                            </button>
+                                </button>
+                                
+                            
+                        
+                            
 
                             <div className="signup flex justify-center gap-2 text-sm">
                                 <div className="text-zinc-500">Already have an account?</div>
