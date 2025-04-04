@@ -16,9 +16,7 @@ const ListCard = ({ title, items, showDelete, onAddClick, onDelete, onEdit }) =>
   return (
     <div className="row-span-3 bg-white border border-zinc-200 rounded-xl p-4">
       <div className="grid grid-rows-7 h-96">
-        
-        {/* Header */}
-        <div className='flex justify-between items-center'>
+        <div className='flex justify-between'>
           <div className="font-semibold text-xl">{title}</div>
           <img 
             className="w-7 h-7 cursor-pointer" 
@@ -65,25 +63,31 @@ const ListCard = ({ title, items, showDelete, onAddClick, onDelete, onEdit }) =>
                     {!showDelete && <div className="text-sm">{item.subtitle}</div>}
                   </div>
                 </div>
+                
+                {showDelete && (
+              <img 
+        src={DeleteButton} 
+        alt="Delete" 
+        className="w-6 h-6 cursor-pointer" 
+        onClick={() => {
+            console.log("Item in ListCard:", item); 
+            if (!item.projectId) {
+                console.error("Error: Project ID is missing!", item);
+                return;
+            }
+            onDelete(item.projectId);
+        }}
+    />
+)}
+
+
 
                
-                {showDelete && item.projectId && (
-                  <img 
-                    src={DeleteButton} 
-                    alt="Delete" 
-                    className="w-6 h-6 cursor-pointer" 
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      console.log("Deleting project:", item); 
-                      onDelete(item.projectId);
-                    }}
-                  />
-                )}
-              </div>
-            ))
-          ) : (
-            <div className="text-center text-gray-500 mt-4">No items found</div>
-          )}
+            </div>
+          ))
+        ) : (
+          <div className="text-center text-gray-500 mt-4">No items found</div>
+        )}
         </div>
       </div>
     </div>
