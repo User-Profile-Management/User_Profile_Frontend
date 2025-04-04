@@ -1,8 +1,28 @@
-import React from 'react'
-import { Link } from "react-router-dom";
+import React, { useState } from 'react'
+import { Link,useNavigate } from "react-router-dom";
 import BackgroundImage from "/src/assets/frontimage.png";
 
 function SignUp1() {
+    const[formData,setFormData] = useState({
+        fullName: "",
+        dateOfBirth: "",
+        contactNo: "",
+        address:""
+
+    });
+    const navigate =useNavigate();
+    const handleChange = (e) =>{
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+
+    };
+    const handleNext = () => {
+        
+        navigate("/signup2", { state: formData });
+    };
+
+
+
+
     return (
         <div className='signuppage bg-white h-screen p-10 grid grid-cols-2'>
            <div
@@ -24,8 +44,10 @@ function SignUp1() {
                                     <input
                                         className='name-input border border-zinc-100 bg-gray-100 p-2 rounded text-sm'
                                         type='text'
-                                        name='name'
+                                        name='fullName'
                                         placeholder='Enter your full name'
+                                        value={formData.fullName}
+                                        onChange={handleChange}
                                         />
                                 </div>
                                 <div className="dob flex flex-col gap-y-1">
@@ -33,8 +55,10 @@ function SignUp1() {
                                     <input
                                         className='dob-input border border-zinc-100 bg-zinc-100 p-2 rounded text-sm'
                                         type='date'
-                                        name='date'
+                                        name='dateOfBirth'
                                         placeholder='Enter your DOB'
+                                        value={formData.dateOfBirth}
+                                        onChange={handleChange}
                                         />
                                 </div>
                                 <div className="contact flex flex-col gap-y-1">
@@ -42,8 +66,10 @@ function SignUp1() {
                                     <input
                                         className='contact-input border border-zinc-100 bg-gray-100 p-2 rounded text-sm'
                                         type='text'
-                                        name='contact'
+                                        name='contactNo'
                                         placeholder='Enter your mobile number'
+                                        value={formData.contactNo}
+                                        onChange={handleChange}
                                         />
                                 </div>
                                 <div className="address flex flex-col gap-y-1">
@@ -53,17 +79,19 @@ function SignUp1() {
                                         type='text'
                                         name='address'
                                         placeholder='Enter your address'
+                                        value={formData.address}
+                                        onChange={handleChange}
                                         />
                                 </div>
                             </div>
                             <div  className='grid grid-rows-1 gap-y-4'>
-                            <Link to="/signup2" className="text-blue-600 hover:underline">
+                            {/* <Link to="/signup2" className="text-blue-600 hover:underline"> */}
                                 <div className="signupbutton flex justify-center bg-blue-800 py-3 rounded-xl text-white cursor-pointer">
-                                    <button className='font-semibold'>
+                                    <button  type="button" onClick={handleNext} className='font-semibold'>
                                         Next
                                     </button>
                                 </div>
-                            </Link>    
+                            {/* </Link>     */}
                                 <div className="signup flex justify-center gap-2 text-sm">
                                     <div className='text-zinc-500'>Already have an account?</div>
                                     <Link to="/" className="text-blue-600 hover:underline">

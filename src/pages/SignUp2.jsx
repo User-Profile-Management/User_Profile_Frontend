@@ -1,8 +1,49 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link ,useNavigate, useLocation} from "react-router-dom";
+
 import BackgroundImage from "/src/assets/frontimage.png";
+import authService from "../service/authService";
+
 
 function SignUp2() {
+    const location = useLocation();
+    const initialData = location.state || {};
+    const navigate = useNavigate();
+    
+    const [formData, setFormData] = useState({
+        fullName: initialData.fullName,
+        contactNo: initialData.contactNo,
+        address: initialData.address,
+        dateOfBirth: initialData.dateOfBirth,
+        email: "",
+        password: "",
+        roleName: ""
+    });
+
+    const [error, setError] = useState("");
+
+    const handleChange = (e) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        if (formData.password !== formData.confirmedpassword) {
+            setError("Passwords do not match!");
+            return;
+        }
+        const { confirmedpassword, ...userData } = formData;
+        
+        try {
+            const response = await authService.signup(userData);
+            if(response.statusCode===200)
+                alert("Registration successful! Redirecting to Sign In...");
+            navigate("/");
+        } catch (err) {
+            setError(err.response?.data?.message || "An error occurred");
+        }
+    };
+    
         const [showPassword, setShowPassword] = useState(false);
     
     return (
@@ -19,7 +60,7 @@ function SignUp2() {
                         <div className="subheading text-md text-zinc-400">Enter your details to register.</div>
                     </div>
                     <div className="signup form ">
-                        <form>
+                        <form onSubmit={handleSubmit}>
                             <div className="flex flex-col gap-y-3 mb-10">
 
                                 <div className="email flex flex-col gap-y-1">
@@ -29,6 +70,8 @@ function SignUp2() {
                                         type='text'
                                         name='email'
                                         placeholder='Enter your email address'
+                                        value={formData.email}
+                                        onChange={handleChange}
                                         />
                                 </div>
                                 <div className="password flex flex-col gap-y-1 relative">
@@ -39,6 +82,8 @@ function SignUp2() {
                                         type={showPassword ? "text" : "password"}
                                         name="password"
                                         placeholder="Enter Password"
+                                        value={formData.password}
+                                        onChange={handleChange}
                                         />
                                     
                                         <button
@@ -63,15 +108,19 @@ function SignUp2() {
                                     <input
                                         className='email-input border border-zinc-100 bg-gray-100 p-2 rounded text-sm'
                                         type='text'
-                                        name='confirmed password'
+                                        name='confirmedpassword'
                                         placeholder='Re enter the password '
+                                        value={formData.confirmedpassword}
+                                        onChange={handleChange}
                                         />
                                 </div>
                                 <div className="flex flex-col gap-y-1">
                                     <label>Role</label>
                                     <select
                                     className="role-input  border border-zinc-100 bg-gray-100 p-2 rounded text-sm"
-                                    name="role"
+                                    name="roleName"
+                                    value={formData.roleName}
+                                    onChange={handleChange}
                                     >
                                     <option >Select Role</option>
                                     <option value="STUDENT">STUDENT</option>
@@ -81,13 +130,13 @@ function SignUp2() {
                                 </div>
                             </div>
                             <div  className='grid grid-rows-1 gap-y-4'>
-                            <Link to="/" className="text-blue-600 hover:underline">
+                             <Link to="/" className="text-blue-600 hover:underline"> 
                                 <div className="signupbutton flex justify-center bg-blue-800 py-3 rounded-xl text-white cursor-pointer">
-                                    <button className='font-semibold'>
+                                <button type="submit" className='font-semibold'>
                                         Sign Up
-                                    </button>
+                                </button>
                                 </div>
-                            </Link>    
+                             </Link>     
                                 <div className="signup flex justify-center gap-2 text-sm">
                                     <div className='text-zinc-500'>Already have an account?</div>
                                     <Link to="/" className="text-blue-600 hover:underline">
@@ -95,6 +144,26 @@ function SignUp2() {
                                     </Link>
                                 </div>
                             </div>
+
+
+
+
+                            {/* <div className="grid grid-rows-1 gap-y-4">
+                            <button 
+                                type="submit" 
+                                className="flex justify-center bg-blue-800 py-3 rounded-xl text-white font-semibold w-full"
+                            >
+                                Sign Up
+                            </button>
+
+                            <div className="signup flex justify-center gap-2 text-sm">
+                                <div className="text-zinc-500">Already have an account?</div>
+                                    <Link to="/" className="text-blue-600 hover:underline">
+                                    Sign In
+                                    </Link>
+                                </div>
+                            </div> */}
+
                         </form>
                     </div>
                 </div>

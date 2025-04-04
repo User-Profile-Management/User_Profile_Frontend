@@ -1,27 +1,98 @@
 
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom"; 
+import { Link,useNavigate } from "react-router-dom";
+import {jwtDecode} from "jwt-decode";
 import { auth, provider, signInWithPopup } from "../firebaseConfig";
 import GoogleLogo from "../assets/google.png";
+import authService from "../service/authService";
 import BackgroundImage from "/src/assets/frontimage.png";
 
 
 
 function SignIn() {
-    const [showPassword, setShowPassword] = useState(false);
-    const navigate = useNavigate();
-
-const handleGoogleSignIn = async () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState("");
+  
+  const navigate = useNavigate();
+  const handleSubmit = async (e) => {
+    e.preventDefault();  
+    setError("");       
+  
     try {
-      const result = await signInWithPopup(auth, provider);
-      console.log("User Info:", result.user);
-      navigate("/mentor-dashboard"); 
-    } catch (error) {
-      console.error("Google Sign-In Error:", error);
+      const response = await authService.login(email, password);   
+      
+      if (response?.response?.token) {
+        const decodedToken = jwtDecode(response.response.token); 
+        console.log("[DEBUG] Decoded Token:", decodedToken);
+  
+        const userRole = decodedToken.roles?.[0]; 
+  
+        if (userRole === "ADMIN") {
+          console.log("Redirecting to /admin-dashboard");
+          navigate("/admin-dashboard");
+        } else if (userRole === "MENTOR") {
+          console.log("Redirecting to /mentor-dashboard");
+          navigate("/mentor-dashboard");
+        } else if (userRole === "STUDENT") {
+          console.log("Redirecting to /student-dashboard");
+          navigate("/student-dashboard");
+        } else {
+          console.error("Unauthorized role:", userRole);
+          setError("Unauthorized role");
+        }
+      } else {
+        setError("Login failed as token is missing.");
+      }
+    } catch (err) {
+      setError("Invalid credentials. Please try again.");
     }
   };
+  
+  
 
+   
+
+  const handleGoogleSignIn = async () => {
+    try {
+      const result = await signInWithPopup(auth, provider);
+      const userEmail = result.user.email; 
+  
+      console.log("[DEBUG] Google User Email:", userEmail);
+  
+      
+      const response = await fetch("http://localhost:8080/api/users");
+      const users = await response.json(); 
+  
+      
+      const user = users.find(u => u.email === userEmail);
+  
+      if (user) {  
+        const userRole = user.role.toUpperCase(); 
+  
+        console.log("[DEBUG] User Role:", userRole);
+  
+        
+        if (userRole === "ADMIN") {
+          navigate("/admin-dashboard");
+        } else if (userRole === "MENTOR") {
+          navigate("/mentor-dashboard");
+        } else if (userRole === "STUDENT") {
+          navigate("/student-dashboard");
+        } else {
+          console.error("Unauthorized role:", userRole);
+          setError("Unauthorized role. Access denied.");
+        }
+      } else {
+        setError("Your Google account is not registered in our system.");
+      }
+    } catch (error) {
+      console.error("Google Sign-In Error:", error);
+      setError("Google Sign-In failed. Try again.");
+    }
+  };
+  
   return (
     <div className='signinpage bg-white h-screen p-10 grid grid-cols-2'>
        <div
@@ -37,16 +108,18 @@ const handleGoogleSignIn = async () => {
                     <div className="subheading text-md  text-zinc-400">Enter your credentials to access your account</div>
                 </div>
                 <div className="credentials ">
-                    <form>
+                    <form onSubmit={handleSubmit}>
                         <div className="form-signin flex flex-col gap-y-3">
                             <div className="email flex flex-col gap-y-1">
                                 <label>Email</label>
                                 <input
                                     className='email-input border border-zinc-100 bg-zinc-100 p-2 rounded text-sm'
                                     type='text'
-                                    
                                     name='email'
                                     placeholder='Enter your Email address'
+                                    value={email}
+                                    onChange={(e)=>setEmail(e.target.value)}
+                                    required
                                     />
                             </div>
                            
@@ -58,6 +131,9 @@ const handleGoogleSignIn = async () => {
                       type={showPassword ? "text" : "password"}
                       name="password"
                       placeholder="Enter Password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      required
                     />
                    
                     <button
@@ -85,14 +161,20 @@ const handleGoogleSignIn = async () => {
                                             <input type="checkbox" className="w-4 h-4 accent-blue-600" />
                                             Remember Me
                                         </label>
-                                        <div className="forgotpassword text-blue-600 cursor-pointer">Forgot Password?</div>
+                                        <div 
+                                            className="forgotpassword text-blue-600 cursor-pointer"
+                                            onClick={() => navigate("/forgot-password")}
+                                        >
+                                            Forgot Password?
                                         </div>
 
-                            <div className="signinbutton flex justify-center bg-blue-800 py-3 font-semibold rounded-xl text-white">
-                                <button className=''>
+                                        </div>
+
+                            <button className="signinbutton flex justify-center bg-blue-800 py-3 rounded-xl text-white cursor-pointer font-semibold" >
+                        
                                     Sign in 
-                                </button>
-                            </div>
+                                
+                            </button>
                             <div 
                                 className="signinwithGoogle flex justify-center border border-zinc-100 bg-zinc-100 py-3 font-semibold rounded-xl text-black gap-2 cursor-pointer"
                                 onClick={handleGoogleSignIn}

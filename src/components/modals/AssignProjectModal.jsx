@@ -69,7 +69,7 @@ const AssignProjectModal = ({ isOpen, onClose, onAssign }) => {
                     
                     <div className="flex justify-end gap-2 mt-4">
                         <button type="button" onClick={onClose}
-                            className="bg-gray-300 text-sm font-semibold text-black px-4 py-3 rounded-md hover:bg-gray-400">
+                            className="bg-gray-200 text-sm font-semibold text-black px-4 py-3 rounded-md hover:bg-gray-300">
                             Cancel
                         </button>
                         <button type="submit"
