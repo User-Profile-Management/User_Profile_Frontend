@@ -13,7 +13,7 @@ const Header = () => {
           <div className="col-span-5"></div>
             <div className="p-3 cursor-pointer flex flex-row items-center gap-3 border-l border-zinc-200 ">
                 <img className="w-7 h-7" src={Profile} alt="Home" />
-                <div className="text-md">Profile</div>
+                <div  type={button} className="text-md">Profile</div>
             </div>
         </div>
       )

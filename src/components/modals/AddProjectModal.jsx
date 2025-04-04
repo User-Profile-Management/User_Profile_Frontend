@@ -81,7 +81,7 @@ const AddProjectModal = ({ isOpen, onClose, onAdd }) => {
                             value={projectData.projectName}
                             onChange={handleChange}
                             placeholder="Enter project"
-                            className="w-2/3 p-2 border-gray-300 rounded-md focus:ring-2 focus:ring-zinc-200 focus:outline-none"
+                            className="w-2/3 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-zinc-200 focus:outline-none"
                         />
                     </div>
 
@@ -92,7 +92,7 @@ const AddProjectModal = ({ isOpen, onClose, onAdd }) => {
                             value={projectData.description}
                             onChange={handleChange}
                             placeholder="Enter description"
-                            className="w-2/3 p-2 border-gray-300 rounded-md focus:ring-2 focus:ring-zinc-200 focus:outline-none"
+                            className="w-2/3 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-zinc-200 focus:outline-none"
                         />
                     </div>
 
@@ -102,7 +102,7 @@ const AddProjectModal = ({ isOpen, onClose, onAdd }) => {
                             name="mentor"
                             value={projectData.mentor}
                             onChange={handleChange}
-                            className="w-2/3 p-2 border-gray-300 rounded-md focus:ring-2 text-gray-900 focus:ring-zinc-200 focus:outline-none"
+                            className="w-2/3 p-2 border border-gray-300 rounded-md focus:ring-2 text-gray-900 focus:ring-zinc-200 focus:outline-none"
                         >
                             <option value="" disabled>Select mentor</option>
                             {mentors.map((mentor) => (
