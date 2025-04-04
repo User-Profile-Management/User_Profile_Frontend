@@ -8,9 +8,27 @@ import DOB from '../../assets/profile-dob.svg'
 import Emergency from '../../assets/profile-emergency.svg'
 import Location from '../../assets/profile-location.svg'
 import userService from '../../service/userService'
+import EditProfileModal from '../../components/modals/EditProfileModal'
 
 export default function AdminProfile() {
     const [adminData, setAdminData] = useState(null);
+    const [passwordData, setPasswordData] = useState({
+        currentPassword: "",
+        newPassword: "",
+        confirmNewPassword: ""
+      });
+      
+    const handleChange = (e) =>{
+        setPasswordData({...passwordData, [e.target.name]: e.target.value});
+    }
+    const [isEditModalOpen, setIsEditModalOpen]= useState(false);
+    const handleEditClick = ()=>{
+        setIsEditModalOpen(true);
+    };
+    const handleCloseModal = () =>{
+        setIsEditModalOpen(false);
+    };
+      
 
     useEffect(() => {
         const fetchUserDetails = async () => {
@@ -24,7 +42,67 @@ export default function AdminProfile() {
         fetchUserDetails();
     }, []);
     
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+      
+        const { currentPassword, newPassword, confirmNewPassword } = passwordData;
+      
+        if (!currentPassword || !newPassword || !confirmNewPassword) {
+          alert("Please fill all the fields.");
+          return;
+        }
+      
+        if (newPassword.length < 8) {
+          alert("New password must be at least 8 characters.");
+          return;
+        }
+      
+        if (newPassword !== confirmNewPassword) {
+          alert("New password and confirm password do not match.");
+          return;
+        }
+      
+        try {
+          await userService.updatePassword({ currentPassword, newPassword });
+          alert("Password updated successfully!");
+          setPasswordData({
+            currentPassword: "",
+            newPassword: "",
+            confirmNewPassword: ""
+          });
+        } catch (error) {
+          console.error("Password update error:", error);
+          alert("Failed to update password. Please try again.");
+        }
+      };
+      const handleProfileSave = async (updatedData) => {
+        try {
+            const formData = new FormData();
+            formData.append("address", updatedData.address);
+            formData.append("contactNo", updatedData.phone);
+            formData.append("emergencyContact", updatedData.emergencyContact);
+    
+            if (updatedData.profilePicture) {
+                formData.append("profilePicture", updatedData.profilePicture);
+            }
+    
+            await userService.updateProfile(formData); // You should have this endpoint in userService
+            alert("Profile updated successfully!");
+    
+            // Refresh admin data after update
+            const refreshedData = await userService.getUserDetails();
+            setAdminData(refreshedData.response);
+    
+        } catch (error) {
+            console.error("Error updating profile:", error);
+            alert("Failed to update profile.");
+        }
+    };
+    
+    
 
+
+    
   if (!adminData) {
     return <div>Loading...</div>; 
   }
@@ -58,7 +136,9 @@ export default function AdminProfile() {
                                 <div className="Personal Details flex flex-col gap-5">
                                     <div className="flex justify-between">
                                         <div className='font-semibold'>Personal Details</div>
+                                        <button onClick={handleEditClick}>
                                         <img src={Edit} alt="edit" />
+                                        </button>
                                     </div>
                                     <div className='flex flex-col gap-y-5'>
                                         <div className="w-full flex gap-5">
@@ -94,22 +174,22 @@ export default function AdminProfile() {
                                                 </div>
                                             </div>
                                         </div>
-                                        {/* <div className="border border-zinc-100"></div>
+                                        <div className="border border-zinc-100"></div>
                                         <div className="">
                                         <div className="w-full flex gap-5">
                                             <div className="w-1/2 flex gap-5">
                                                 <img className='w-10' src={Location} alt="location-icon" />
                                                 <div className="flex flex-col">
-                                                    <div className="font-semibold" >India</div>
-                                                    <div className='text-sm' >Location</div>
+                                                    <div className="font-semibold" >{adminData.address}</div>
+                                                    <div className='text-sm' >Address</div>
                                                 </div>
                                             </div>
                                         </div>
-                                        </div> */}
+                                        </div>
                                         <div className="border border-zinc-100"></div>
                                     </div>
                                 </div>
-                                <div className="Password flex flex-col gap-y-6">
+                                <form onSubmit={handleSubmit} className="Password flex flex-col gap-y-6">
                                     <div className="title">
                                         <div className="font-semibold">Password</div>
                                         <div className="text-sm">Please enter your current password to change your password.</div>
@@ -120,7 +200,9 @@ export default function AdminProfile() {
                                             <input
                                             className='name-input border border-zinc-100  p-2 rounded text-sm'
                                             type='text'
-                                            name='Current Password'
+                                            name='currentPassword'
+                                            value={passwordData.currentPassword}
+                                            onChange={handleChange}
                                             placeholder='Enter current password'
                                             />
                                         </div>
@@ -131,7 +213,9 @@ export default function AdminProfile() {
                                                 <input
                                                 className='name-input border border-zinc-100  p-2 rounded text-sm w-full'
                                                 type='text'
-                                                name='new password'
+                                                name='newPassword'
+                                                value={passwordData.newPassword}
+                                                onChange={handleChange}
                                                 placeholder='Enter new password'
                                                 />
                                                 <div className='text-sm'>Your new password must be more than 8 characters.</div>
@@ -144,22 +228,45 @@ export default function AdminProfile() {
                                                 <input
                                                 className='name-input border border-zinc-100  p-2 rounded text-sm w-full '
                                                 type='text'
-                                                name='confirm password'
+                                                name='confirmNewPassword'
+                                                value={passwordData.confirmNewPassword}
+                                                onChange={handleChange}
                                                 placeholder='Re-Enter new password'
                                                 />
                                             </div> 
                                         </div>
                                     </div>
                                     <div className="updatedetails flex flex-row-reverse gap-6">
-                                        <button className='flex justify-center bg-blue-600 py-3 rounded-xl  text-white px-4 font-semibold hover:bg-blue-700 text-sm'> Update Password</button>
-                                        <button className='flex justify-center bg-zinc-100 py-3 rounded-xl text-black px-4 font-semibold hover:bg-zinc-200 text-sm '> Cancel</button>
+                                        <button type="submit" className='flex justify-center bg-blue-600 py-3 rounded-xl  text-white px-4 font-semibold hover:bg-blue-700 text-sm'>
+                                             Update Password</button>
+
+                                        <button 
+                                        type="button"
+                                        onClick={() => setPasswordData({
+                                            currentPassword: "",
+                                            newPassword: "",
+                                            confirmNewPassword:""
+
+                                        }   
+                                        )}
+                                        className='flex justify-center bg-zinc-100 py-3 rounded-xl text-black px-4 font-semibold hover:bg-zinc-200 text-sm '>
+                                        Cancel</button>
+
+                                             
                                     </div>
-                                </div>
+                                </form>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+            <EditProfileModal
+  isOpen={isEditModalOpen}
+  onClose={handleCloseModal}
+  onSave={handleProfileSave}
+  userData={adminData}
+/>
+
     </DashboardLayout>
   )
 }

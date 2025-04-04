@@ -13,7 +13,7 @@ import CloudDownload from '../../assets/cloud.svg'
 function AdminViewStudent() {
   return (
     <DashboardLayout>
-
+ 
         <div className='grid grid-rows-10 h-full'>
                 <div className='flex items-center justify-between'>
                     <div className="flex gap-4">

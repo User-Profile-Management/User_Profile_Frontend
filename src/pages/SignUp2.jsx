@@ -164,21 +164,6 @@ function SignUp2() {
                                     </select>
                                 </div>
                             </div>
-                            {/* <div  className='grid grid-rows-1 gap-y-4'>
-                             <Link to="/" className="text-blue-600 hover:underline"> 
-                                <div className="signupbutton flex justify-center bg-blue-800 py-3 rounded-xl text-white cursor-pointer">
-                                <button type="submit" className='font-semibold'>
-                                        Sign Up
-                                </button>
-                                </div>
-                             </Link>     
-                                <div className="signup flex justify-center gap-2 text-sm">
-                                    <div className='text-zinc-500'>Already have an account?</div>
-                                    <Link to="/" className="text-blue-600 hover:underline">
-                                        Sign In
-                                    </Link>
-                                </div>
-                            </div> */}
 
 
 

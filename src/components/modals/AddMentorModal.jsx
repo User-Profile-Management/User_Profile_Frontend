@@ -24,7 +24,7 @@ const AddMentorModal = ({ isOpen, onClose }) => {
             alert("Please fill all the fields.");
             return;
         }
-        //because role is fixed for this pop up and it will only go with the payload
+        
         const payload = { ...mentorData, roleName: "MENTOR" };
 
     console.log("Submitting mentor data:", payload);
