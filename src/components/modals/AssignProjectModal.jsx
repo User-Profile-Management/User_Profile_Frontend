@@ -29,7 +29,7 @@ const AssignProjectModal = ({ isOpen, onClose, onAssign }) => {
                 
                 
                 <h2 className="text-xl font-semibold text-left">Assign Project</h2>
-                <p className="text-sm text-gray-500 text-left mb-4">
+                <p className="text-sm text-gray-800 text-left mb-4">
                     Allocate a new project and track progress efficiently.
                 </p>
 

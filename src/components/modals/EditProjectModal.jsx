@@ -56,8 +56,9 @@ const EditProjectModal = ({ isOpen, onClose, project, onUpdate }) => {
             console.error("Error updating project:", error);
             alert("Failed to update project. Please try again.");
         }
+   
     };
-
+    
     if (!isOpen) return null;
 
     return (
@@ -99,18 +100,13 @@ const EditProjectModal = ({ isOpen, onClose, project, onUpdate }) => {
                     </div>
 
                     <div className="flex justify-end gap-2 mt-4">
-                        <button 
-                            type="button" 
-                            onClick={onClose}
-                            className="bg-gray-300 text-sm font-semibold text-black px-4 py-3 rounded-md hover:bg-gray-400"
-                        >
+                        <button type="button" onClick={onClose}
+                            className="bg-gray-300 text-sm font-semibold text-black px-4 py-3 rounded-md hover:bg-gray-400">
                             Cancel
                         </button>
-                        <button 
-                            type="submit"
-                            className="bg-blue-600 text-white text-sm font-semibold px-4 py-3 rounded-md hover:bg-blue-700"
-                        >
-                            Update Project
+                        <button type="submit"
+                            className="bg-blue-600 text-white text-sm font-semibold px-4 py-3 rounded-md hover:bg-blue-700">
+                            Update Projects
                         </button>
                     </div>
                 </form>
