@@ -11,12 +11,12 @@ const Header = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        // Remove array destructuring - service returns direct object
+        
         const userData = await userService.getUserDetails();
         
         if (userData) {
           setUser({
-            name: userData.fullName || "", // Map fullName to name
+            name: userData.fullName || "", 
             image: userData.profilePicture 
               ? `data:image/png;base64,${userData.profilePicture}`
               : Profile,

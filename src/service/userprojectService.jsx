@@ -5,9 +5,9 @@ const BASE_URL = "http://localhost:8080/api/user-projects";
 const getToken = () => localStorage.getItem("token");
 
 const userprojectService = {
-    getProjectsList: async () => {
+    getProjectsList: async (userId) => {
         try {
-          const response = await axios.get(`${BASE_URL}`, {
+          const response = await axios.get(`${BASE_URL}/users/${userId}`, {
             headers: {
               Authorization: `Bearer ${getToken()}`,
               "Content-Type": "application/json",
@@ -20,6 +20,7 @@ const userprojectService = {
           return [];
         }
       },
+      
 };
 
 export default userprojectService;
