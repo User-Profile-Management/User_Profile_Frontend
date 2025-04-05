@@ -49,6 +49,11 @@ function Router() {
        <Route path="/student-dashboard" element={<StudentDashboard />} />
        <Route path="/student-profile" element={<StudentProfile />} />
 
+       <Route path="/admin-student-profile/:id" element={<AdminViewStudent />} />
+       <Route path="/admin-mentor-profile/:id" element={<AdminViewMentor />} />
+
+       <Route path="/admin-accept/:id" element={<AcceptApproval />} />
+
        </Route>
    </Routes>
 

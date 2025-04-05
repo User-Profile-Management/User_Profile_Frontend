@@ -95,6 +95,31 @@ const userService = {
       return [];
     }
   },
+  getUserDetails: async () => {
+    try {
+      const response = await axios.get(`${BASE_URL}/profile`, {
+        headers: {
+          Authorization: `Bearer ${getToken()}`,
+          "Content-Type": "application/json",
+        },
+      });
+  
+      const data = response.data;
+  
+      return [{
+        name: data.fullName,
+        userId: data.userId,
+        email: data.email,
+        roleName: data.roleName,
+        image: data.profilePicture
+          ? `data:image/png;base64,${data.profilePicture}`
+          : Profile,
+      }];
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+      return [];
+    }
+  },
 
   getMentorsList: async () => {
     try {

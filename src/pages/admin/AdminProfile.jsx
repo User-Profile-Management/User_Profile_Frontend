@@ -1,4 +1,4 @@
-import React from 'react'
+import React,{useEffect,useState} from 'react'
 import DashboardLayout from '../../layout/DashboardLayout'
 import ProfilePic from '../../assets/profile pic.svg'
 import Edit from '../../assets/edit.svg'
@@ -7,8 +7,27 @@ import Phone from '../../assets/profile-phone.svg'
 import DOB from '../../assets/profile-dob.svg'
 import Emergency from '../../assets/profile-emergency.svg'
 import Location from '../../assets/profile-location.svg'
+import userService from '../../service/userService'
 
 export default function AdminProfile() {
+    const [adminData, setAdminData] = useState(null);
+
+    useEffect(() => {
+        const fetchUserDetails = async () => {
+            try {
+                const response = await userService.getUserDetails(); 
+                setAdminData(response.response); 
+            } catch (error) {
+                console.error('Error fetching admin profile:', error);
+            }
+        };
+        fetchUserDetails();
+    }, []);
+    
+
+  if (!adminData) {
+    return <div>Loading...</div>; 
+  }
   return (
     <DashboardLayout>
          <div className='grid grid-rows-10 h-full overflow-auto'>
@@ -21,9 +40,17 @@ export default function AdminProfile() {
                         <div className="row-span-4">
                             <div className='border border-zinc-100 bg-white rounded-xl p-4 h-full flex items-center justify-center'>
                                 <div className="flex flex-col items-center ">
-                                    <img className='w-32 h-32' src={ProfilePic} alt="prifilepic" />
-                                    <div className='font-semibold text-2xl'>NAME</div>
-                                    <div>EMPLOYEE ID</div>
+                                <img 
+                                className='w-32 h-32 rounded-full ' 
+                                src={adminData.profilePicture 
+                                ? `data:image/png;base64,${adminData.profilePicture}` 
+                                : ProfilePic} 
+                                alt="Profile Pic" 
+                                />
+
+
+                                    <div className='font-semibold text-2xl'>{adminData.fullName}</div>
+                                    <div>{adminData.userId}</div>
                                 </div>
                             </div>
                         </div>
@@ -39,14 +66,14 @@ export default function AdminProfile() {
                                             <div className="w-1/2 flex gap-5">
                                                 <img className='w-10' src={Email} alt="email-icon" />
                                                 <div className="flex flex-col">
-                                                    <div className="font-semibold" >a@gmail.com</div>
+                                                    <div className="font-semibold" >{adminData.email}</div>
                                                     <div className='text-sm'>Email</div>
                                                 </div>
                                             </div>
                                             <div className="w-1/2 flex gap-5">
                                                 <img className='w-10' src={DOB} alt="phone-icon" />
                                                 <div className="flex flex-col">
-                                                    <div className="font-semibold" >00/00/0000</div>
+                                                    <div className="font-semibold" >{adminData.dateOfBirth}</div>
                                                     <div className='text-sm' >D.O.B</div>
                                                 </div>
                                             </div>
@@ -56,19 +83,19 @@ export default function AdminProfile() {
                                             <div className="w-1/2 flex gap-5">
                                                 <img className='w-10' src={Phone} alt="phone-icon" />
                                                 <div className="flex flex-col">
-                                                    <div className="font-semibold" >00000-00000</div>
+                                                    <div className="font-semibold" >{adminData.contactNo}</div>
                                                     <div  className='text-sm'>Phone Number</div>
                                                 </div>
                                             </div>
                                             <div className="w-1/2 flex gap-5">
                                                 <img className='w-10' src={Emergency} alt="emergency-icon" />
                                                 <div className="flex flex-col">
-                                                    <div className="font-semibold" >00000-00000</div>
+                                                    <div className="font-semibold" >{adminData.emergencyContact}</div>
                                                     <div className='text-sm' >Emergency Contact</div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="border border-zinc-100"></div>
+                                        {/* <div className="border border-zinc-100"></div>
                                         <div className="">
                                         <div className="w-full flex gap-5">
                                             <div className="w-1/2 flex gap-5">
@@ -79,7 +106,7 @@ export default function AdminProfile() {
                                                 </div>
                                             </div>
                                         </div>
-                                        </div>
+                                        </div> */}
                                         <div className="border border-zinc-100"></div>
                                     </div>
                                 </div>

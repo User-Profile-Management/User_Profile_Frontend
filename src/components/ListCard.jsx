@@ -1,10 +1,12 @@
 import React, { useState, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import AddButton from "../assets/add-button.svg";
 import DeleteButton from "../assets/delete.svg";
 import SearchIcon from '../assets/search.png';
 
 const ListCard = ({ title, items, showDelete, onAddClick, onDelete, onEdit }) => {
   const [searchQuery, setSearchQuery] = useState('');
+  const navigate = useNavigate(); // Use navigate for routing
 
   const filteredItems = useMemo(() => {
     return items.filter(item =>
@@ -52,7 +54,17 @@ const ListCard = ({ title, items, showDelete, onAddClick, onDelete, onEdit }) =>
               <div 
                 key={index} 
                 className="flex border-b border-zinc-200 py-2 gap-4 justify-between min-h-16 items-center cursor-pointer"
-                onClick={() => onEdit(item)}
+                onClick={() => {
+                  
+                  if (title === "Student List") {
+                    navigate(`/admin-student-profile/${item.userId || item.id}`);
+                  } else if (title === "Mentor List") {
+                    navigate(`/admin-mentor-profile/${item.userId || item.id}`);
+                  } else if (title === "Project List") {
+                    onEdit(item);
+                  }
+                  
+                }}
               >
                 <div className="flex gap-4">
                   {!showDelete && <img src={item.image} alt="Profile" className="w-10 h-10" />}
