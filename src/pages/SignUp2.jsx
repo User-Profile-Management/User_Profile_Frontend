@@ -167,10 +167,9 @@ function SignUp2() {
 
 
 
-                        
+
                             <div className="grid grid-rows-1 gap-y-4">
-                                
-                                <button 
+                            <button 
                                 type="submit" 
                                 className="flex justify-center bg-blue-800 py-3 rounded-xl text-white font-semibold w-full"
                                 >
@@ -187,7 +186,7 @@ function SignUp2() {
                                     Sign In
                                     </Link>
                                 </div>
-                            </div>
+                            </div> 
 
                         </form>
                     </div>

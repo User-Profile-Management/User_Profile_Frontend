@@ -9,48 +9,65 @@ const AddStudentModal = ({ isOpen, onClose }) => {
         address: "",
         email: "",
         password: ""
-        
     });
+
+    const [errorMessage, setErrorMessage] = useState(""); // Track error message
+    const [errors, setErrors] = useState({}); // Track individual field errors
 
     const handleChange = (e) => {
         const { name, value } = e.target;
         setStudentData({ ...studentData, [name]: value });
+
+        // Clear error when the user types
+        setErrors({ ...errors, [name]: false });
     };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
-    
-        if (!studentData.fullName || !studentData.dateOfBirth || !studentData.contactNo || 
-            !studentData.address || !studentData.email || !studentData.password) {
-            alert("Please fill all the fields.");
+
+        let newErrors = {};
+        let hasError = false;
+
+        // Check for empty fields
+        for (const key in studentData) {
+            if (!studentData[key]) {
+                newErrors[key] = true;
+                hasError = true;
+            }
+        }
+
+        if (hasError) {
+            setErrorMessage("Please fill in the required fields");
+            setErrors(newErrors);
             return;
         }
-        //because role is fixed for this pop up and it will only go with the payload
+
+        setErrorMessage(""); // Clear error message if all fields are filled
+
         const payload = { ...studentData, roleName: "STUDENT" };
 
-    console.log("Submitting student data:", payload);
-    
+        console.log("Submitting student data:", payload);
+
         try {
             const response = await userService.signup(payload);
             console.log("Student registered successfully:", response);
             alert("Student registered successfully!");
-            onClose(); 
+            onClose();
         } catch (error) {
             console.error("Registration error:", error);
             alert("Failed to register student. Please try again.");
         }
     };
-    
-    
-    
 
     if (!isOpen) return null;
 
     return (
-        <div className="fixed inset-0  bg-opacity-50 backdrop-brightness-50 flex items-center justify-center">
+        <div className="fixed inset-0 bg-opacity-50 backdrop-brightness-50 flex items-center justify-center">
             <div className="bg-white p-6 rounded-lg w-full max-w-[600px]">
-                
                 <h2 className="text-xl font-semibold">Add a Student</h2>
-                <p className="text-sm text-gray-500 mb-4">Enter the details of the student</p>
+                <p className={`text-sm mb-4 ${errorMessage ? "text-red-500" : "text-gray-500"}`}>
+                    {errorMessage || "Enter the details of the student"}
+                </p>
 
                 <form onSubmit={handleSubmit} className="space-y-4">
                     
@@ -133,10 +150,9 @@ const AddStudentModal = ({ isOpen, onClose }) => {
                         />
                     </div>
 
-                    <input type="hidden" name="role" value={studentData.role} />
                     <div className="flex justify-end gap-2 mt-4">
                         <button type="button" onClick={onClose}
-                            className="bg-gray-200 text-black px-4 py-2 text-sm font-semibold rounded-md hover:bg-gray-300 ">
+                            className="bg-gray-200 text-black px-4 py-2 text-sm font-semibold rounded-md hover:bg-gray-300">
                             Cancel
                         </button>
                         <button type="submit"

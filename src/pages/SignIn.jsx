@@ -17,17 +17,19 @@ function SignIn() {
   
   const navigate = useNavigate();
   const handleSubmit = async (e) => {
-    e.preventDefault();  // Prevent page refresh
+    e.preventDefault();  
     setError("");       
   
     try {
       const response = await authService.login(email, password);   
       
       if (response?.response?.token) {
-        const decodedToken = jwtDecode(response.response.token); // ✅ Decode token
+        const decodedToken = jwtDecode(response.response.token); 
+        localStorage.setItem("authToken", response.response.token);
+
         console.log("[DEBUG] Decoded Token:", decodedToken);
   
-        const userRole = decodedToken.roles?.[0]; // Get first role
+        const userRole = decodedToken.roles?.[0]; 
   
         if (userRole === "ADMIN") {
           console.log("Redirecting to /admin-dashboard");
@@ -53,17 +55,55 @@ function SignIn() {
   
 
    
-// Function to handle Google Sign-In
-const handleGoogleSignIn = async () => {
+  const handleGoogleSignIn = async () => {
     try {
       const result = await signInWithPopup(auth, provider);
-      console.log("User Info:", result.user);
-      navigate("/Dashboard"); // Redirect to dashboard or home after login
+      
+      const idToken = await result.user.getIdToken(); 
+      const userEmail = result.user.email;
+      
+      console.log("[DEBUG] Google Firebase ID Token:", idToken);
+      console.log("[DEBUG] Google User Email:", userEmail);
+  
+      
+      const backendResponse = await fetch("http://localhost:8080/api/auth/google-login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${idToken}`,
+        },
+        body: JSON.stringify({ email: userEmail }),
+      });
+  
+      const data = await backendResponse.json();
+  
+      if (data?.token) {
+        const decodedToken = jwtDecode(data.token);
+        localStorage.setItem("authToken", data.token);
+  
+        const userRole = decodedToken.roles?.[0];
+        console.log("[DEBUG] User Role:", userRole);
+  
+        if (userRole === "ADMIN") {
+          navigate("/admin-dashboard");
+        } else if (userRole === "MENTOR") {
+          navigate("/mentor-dashboard");
+        } else if (userRole === "STUDENT") {
+          navigate("/student-dashboard");
+        } else {
+          console.error("Unauthorized role:", userRole);
+          setError("Unauthorized role. Access denied.");
+        }
+      } else {
+        setError("Backend did not return a valid token.");
+      }
+  
     } catch (error) {
       console.error("Google Sign-In Error:", error);
+      setError("Google Sign-In failed. Try again.");
     }
   };
-
+  
   return (
     <div className='signinpage bg-white h-screen p-10 grid grid-cols-2'>
        <div
@@ -86,7 +126,6 @@ const handleGoogleSignIn = async () => {
                                 <input
                                     className='email-input border border-zinc-100 bg-zinc-100 p-2 rounded text-sm'
                                     type='text'
-                                   
                                     name='email'
                                     placeholder='Enter your Email address'
                                     value={email}
@@ -133,7 +172,13 @@ const handleGoogleSignIn = async () => {
                                             <input type="checkbox" className="w-4 h-4 accent-blue-600" />
                                             Remember Me
                                         </label>
-                                        <div className="forgotpassword text-blue-600 cursor-pointer">Forgot Password?</div>
+                                        <div 
+                                            className="forgotpassword text-blue-600 cursor-pointer"
+                                            onClick={() => navigate("/forgot-password")}
+                                        >
+                                            Forgot Password?
+                                        </div>
+
                                         </div>
 
                             <button className="signinbutton flex justify-center bg-blue-800 py-3 rounded-xl text-white cursor-pointer font-semibold" >
