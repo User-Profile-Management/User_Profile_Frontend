@@ -25,6 +25,8 @@ function SignIn() {
       
       if (response?.response?.token) {
         const decodedToken = jwtDecode(response.response.token); 
+        localStorage.setItem("authToken", response.response.token);
+
         console.log("[DEBUG] Decoded Token:", decodedToken);
   
         const userRole = decodedToken.roles?.[0]; 
@@ -53,27 +55,35 @@ function SignIn() {
   
 
    
-
   const handleGoogleSignIn = async () => {
     try {
       const result = await signInWithPopup(auth, provider);
-      const userEmail = result.user.email; 
-  
+      
+      const idToken = await result.user.getIdToken(); 
+      const userEmail = result.user.email;
+      
+      console.log("[DEBUG] Google Firebase ID Token:", idToken);
       console.log("[DEBUG] Google User Email:", userEmail);
   
       
-      const response = await fetch("http://localhost:8080/api/users");
-      const users = await response.json(); 
+      const backendResponse = await fetch("http://localhost:8080/api/auth/google-login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${idToken}`,
+        },
+        body: JSON.stringify({ email: userEmail }),
+      });
   
-      
-      const user = users.find(u => u.email === userEmail);
+      const data = await backendResponse.json();
   
-      if (user) {  
-        const userRole = user.role.toUpperCase(); 
+      if (data?.token) {
+        const decodedToken = jwtDecode(data.token);
+        localStorage.setItem("authToken", data.token);
   
+        const userRole = decodedToken.roles?.[0];
         console.log("[DEBUG] User Role:", userRole);
   
-        
         if (userRole === "ADMIN") {
           navigate("/admin-dashboard");
         } else if (userRole === "MENTOR") {
@@ -85,8 +95,9 @@ function SignIn() {
           setError("Unauthorized role. Access denied.");
         }
       } else {
-        setError("Your Google account is not registered in our system.");
+        setError("Backend did not return a valid token.");
       }
+  
     } catch (error) {
       console.error("Google Sign-In Error:", error);
       setError("Google Sign-In failed. Try again.");
