@@ -5,7 +5,7 @@ import Profile from '../../assets/profile.svg'
 
 function RequestApproval() {
     const [searchQuery, setSearchQuery] = useState('');
-    const [approvals, setApprovalList] = useState([]); // Initialize state
+    const [approvals, setApprovalList] = useState([]);
 
     useEffect(() => {
         const fetchApprovalList = async () => {
@@ -14,7 +14,7 @@ function RequestApproval() {
             setApprovalList(fetchedApprovals);
           } catch (error) {
             console.error("Approval list error:", error);
-            setApprovalList([]); // Handle error by setting an empty list
+            setApprovalList([]); 
           }
         };
         fetchApprovalList();

@@ -86,10 +86,10 @@ export default function AdminProfile() {
                 formData.append("profilePicture", updatedData.profilePicture);
             }
     
-            await userService.updateProfile(formData); // You should have this endpoint in userService
+            await userService.updateProfile(formData); 
             alert("Profile updated successfully!");
     
-            // Refresh admin data after update
+            
             const refreshedData = await userService.getUserDetails();
             setAdminData(refreshedData.response);
     
