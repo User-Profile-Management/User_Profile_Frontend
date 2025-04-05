@@ -1,10 +1,12 @@
 import React, { useState, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import AddButton from "../assets/add-button.svg";
 import DeleteButton from "../assets/delete.svg";
 import SearchIcon from '../assets/search.png';
 
 const ListCard = ({ title, items, showDelete, onAddClick, onDelete, onEdit }) => {
   const [searchQuery, setSearchQuery] = useState('');
+  const navigate = useNavigate(); // Use navigate for routing
 
   const filteredItems = useMemo(() => {
     return items.filter(item =>
@@ -16,7 +18,8 @@ const ListCard = ({ title, items, showDelete, onAddClick, onDelete, onEdit }) =>
   return (
     <div className="row-span-3 bg-white border border-zinc-200 rounded-xl p-4">
       <div className="grid grid-rows-7 h-96">
-        <div className='flex justify-between'>
+        {/* Header */}
+        <div className='flex justify-between items-center'>
           <div className="font-semibold text-xl">{title}</div>
           <img 
             className="w-7 h-7 cursor-pointer" 
@@ -51,7 +54,17 @@ const ListCard = ({ title, items, showDelete, onAddClick, onDelete, onEdit }) =>
               <div 
                 key={index} 
                 className="flex border-b border-zinc-200 py-2 gap-4 justify-between min-h-16 items-center cursor-pointer"
-                onClick={() => onEdit(item)}
+                onClick={() => {
+                  
+                  if (title === "Student List") {
+                    navigate(`/admin-student-profile/${item.userId || item.id}`);
+                  } else if (title === "Mentor List") {
+                    navigate(`/admin-mentor-profile/${item.userId || item.id}`);
+                  } else if (title === "Project List") {
+                    onEdit(item);
+                  }
+                  
+                }}
               >
                 <div className="flex gap-4">
                   {!showDelete && <img src={item.image} alt="Profile" className="w-10 h-10" />}
@@ -63,31 +76,25 @@ const ListCard = ({ title, items, showDelete, onAddClick, onDelete, onEdit }) =>
                     {!showDelete && <div className="text-sm">{item.subtitle}</div>}
                   </div>
                 </div>
-                
-                {showDelete && (
-              <img 
-        src={DeleteButton} 
-        alt="Delete" 
-        className="w-6 h-6 cursor-pointer" 
-        onClick={() => {
-            console.log("Item in ListCard:", item); 
-            if (!item.projectId) {
-                console.error("Error: Project ID is missing!", item);
-                return;
-            }
-            onDelete(item.projectId);
-        }}
-    />
-)}
 
-
-
-               
-            </div>
-          ))
-        ) : (
-          <div className="text-center text-gray-500 mt-4">No items found</div>
-        )}
+                {/* Delete Button (Only for projects) */}
+                {showDelete && item.projectId && (
+                  <img 
+                    src={DeleteButton} 
+                    alt="Delete" 
+                    className="w-6 h-6 cursor-pointer" 
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      console.log("Deleting project:", item); 
+                      onDelete(item.projectId);
+                    }}
+                  />
+                )}
+              </div>
+            ))
+          ) : (
+            <div className="text-center text-gray-500 mt-4">No items found</div>
+          )}
         </div>
       </div>
     </div>

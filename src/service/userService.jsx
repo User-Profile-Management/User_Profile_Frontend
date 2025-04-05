@@ -98,16 +98,17 @@ const userService = {
   getUserDetails: async () => {
     try {
       const response = await axios.get(`${BASE_URL}/profile`, {
-        
         headers: {
           Authorization: `Bearer ${getToken()}`,
           "Content-Type": "application/json",
         },
       });
-      return response.data;
-     
+  
+      return response.data.response;
+  
+      
     } catch (error) {
-      console.error("Error fetching data:", error);
+      console.error("Error fetching user data:", error);
       return [];
     }
   },

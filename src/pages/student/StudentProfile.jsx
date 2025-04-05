@@ -1,4 +1,4 @@
-import React from 'react'
+import React,{useState,useEffect} from 'react'
 import DashboardLayout from '../../layout/DashboardLayout'
 import ProfilePic from '../../assets/profile pic.svg'
 import ProfileSquare from '../../assets/profile-square.svg'
@@ -11,14 +11,109 @@ import Location from '../../assets/profile-location.svg'
 import Tick from '../../assets/tick.svg'
 import AddButton from '../../assets/add-button.svg'
 import DeleteButton from '../../assets/delete.svg'
+import EditProfileModal from '../../components/modals/EditProfileModal'
+import userService from '../../service/userService'
 
 function StudentProfile() {
+    const [studentData, setStudentData] = useState(null);
+        const [passwordData, setPasswordData] = useState({
+            currentPassword: "",
+            newPassword: "",
+            confirmNewPassword: ""
+          });
+           const handleChange = (e) =>{
+                  setPasswordData({...passwordData, [e.target.name]: e.target.value});
+              }
+              const [isEditModalOpen, setIsEditModalOpen]= useState(false);
+              const handleEditClick = ()=>{
+                  setIsEditModalOpen(true);
+              };
+              const handleCloseModal = () =>{
+                  setIsEditModalOpen(false);
+              };
+
+
+              useEffect(() => {
+                const fetchUserDetails = async () => {
+                    try {
+                        const response = await userService.getUserDetails(); 
+                        console.log("User data:", response);
+                        setStudentData(response); 
+                    } catch (error) {
+                        console.error('Error fetching student profile:', error);
+                    }
+                };
+                fetchUserDetails();
+            }, []);
+
+            const handleSubmit = async (e) => {
+                e.preventDefault();
+              
+                const { currentPassword, newPassword, confirmNewPassword } = passwordData;
+              
+                if (!currentPassword || !newPassword || !confirmNewPassword) {
+                  alert("Please fill all the fields.");
+                  return;
+                }
+              
+                if (newPassword.length < 8) {
+                  alert("New password must be at least 8 characters.");
+                  return;
+                }
+              
+                if (newPassword !== confirmNewPassword) {
+                  alert("New password and confirm password do not match.");
+                  return;
+                }
+              
+                try {
+                  await userService.updatePassword({ currentPassword, newPassword });
+                  alert("Password updated successfully!");
+                  setPasswordData({
+                    currentPassword: "",
+                    newPassword: "",
+                    confirmNewPassword: ""
+                  });
+                } catch (error) {
+                  console.error("Password update error:", error);
+                  alert("Failed to update password. Please try again.");
+                }
+              };
+              const handleProfileSave = async (updatedData) => {
+                try {
+                    const formData = new FormData();
+                    formData.append("address", updatedData.address);
+                    formData.append("contactNo", updatedData.phone);
+                    formData.append("emergencyContact", updatedData.emergencyContact);
+            
+                    if (updatedData.profilePicture) {
+                        formData.append("profilePicture", updatedData.profilePicture);
+                    }
+            
+                    await userService.updateProfile(formData); 
+                    alert("Profile updated successfully!");
+            
+                    
+                    const refreshedData = await userService.getUserDetails();
+                    setStudentData(refreshedData);
+            
+                } catch (error) {
+                    console.error("Error updating profile:", error);
+                    alert("Failed to update profile.");
+                }
+            };
+         
+
+
+            if (!studentData) {
+                return <div>Loading...</div>; 
+              }
   return (
     <DashboardLayout>
 
          <div className='grid grid-rows-10 h-full overflow-auto'>
                 <div className='flex items-center'>
-                    Profile
+                    <div className="font-semibold">Profile</div>
                 </div>
                 <div className="row-span-9 overflow-y-auto scrollbar-hide h-full">
                     <div className="w-full grid grid-cols-10 gap-5">
@@ -29,9 +124,15 @@ function StudentProfile() {
                                 <div className="col-span-2">
                                     <div className='border border-zinc-100 bg-white rounded-xl p-4 h-full flex items-center justify-center'>
                                         <div className="flex flex-col items-center ">
-                                            <img className='w-32' src={ProfilePic} alt="prifilepic" />
-                                            <div className='font-semibold text-2xl'>NAME</div>
-                                            <div>EMPLOYEE ID</div>
+                                        <img 
+                                className='w-32 h-32 rounded-full ' 
+                                src={studentData.profilePicture 
+                                ? `data:image/png;base64,${studentData.profilePicture}` 
+                                : ProfilePic} 
+                                alt="Profile Pic" 
+                                />
+                                            <div className='font-semibold text-2xl'>{studentData.fullName}</div>
+                                            <div>{studentData.userId}</div>
                                         </div>
                                     </div>
                                 </div>
@@ -75,21 +176,23 @@ function StudentProfile() {
                                 <div className="Personal Details flex flex-col gap-5">
                                     <div className="flex justify-between">
                                         <div className='text-xl font-semibold'>Personal Details</div>
+                                        <button onClick={handleEditClick}>
                                         <img src={Edit} alt="edit" />
+                                        </button>
                                     </div>
                                     <div className='flex flex-col gap-y-5'>
                                         <div className="w-full flex gap-5">
                                             <div className="w-1/2 flex gap-5">
                                                 <img className='w-10' src={Email} alt="email-icon" />
                                                 <div className="flex flex-col">
-                                                    <div className="font-semibold" >a@gmail.com</div>
+                                                    <div className="font-semibold" >{studentData.email}</div>
                                                     <div className='text-sm'>Email</div>
                                                 </div>
                                             </div>
                                             <div className="w-1/2 flex gap-5">
                                                 <img className='w-10' src={DOB} alt="phone-icon" />
                                                 <div className="flex flex-col">
-                                                    <div className="font-semibold" >00/00/0000</div>
+                                                    <div className="font-semibold" >{studentData.dateOfBirth}</div>
                                                     <div className='text-sm' >D.O.B</div>
                                                 </div>
                                             </div>
@@ -99,14 +202,14 @@ function StudentProfile() {
                                             <div className="w-1/2 flex gap-5">
                                                 <img className='w-10' src={Phone} alt="phone-icon" />
                                                 <div className="flex flex-col">
-                                                    <div className="font-semibold" >00000-00000</div>
+                                                    <div className="font-semibold" >{studentData.contactNo}</div>
                                                     <div  className='text-sm'>Phone Number</div>
                                                 </div>
                                             </div>
                                             <div className="w-1/2 flex gap-5">
                                                 <img className='w-10' src={Emergency} alt="emergency-icon" />
                                                 <div className="flex flex-col">
-                                                    <div className="font-semibold" >00000-00000</div>
+                                                    <div className="font-semibold" >{studentData.emergencyContact}</div>
                                                     <div className='text-sm' >Emergency Contact</div>
                                                 </div>
                                             </div>
@@ -117,8 +220,8 @@ function StudentProfile() {
                                             <div className="w-1/2 flex gap-5">
                                                 <img className='w-10' src={Location} alt="location-icon" />
                                                 <div className="flex flex-col">
-                                                    <div className="font-semibold" >India</div>
-                                                    <div className='text-sm' >Location</div>
+                                                    <div className="font-semibold" >{studentData.address}</div>
+                                                    <div className='text-sm' >Address</div>
                                                 </div>
                                             </div>
                                         </div>
@@ -126,7 +229,7 @@ function StudentProfile() {
                                         <div className="border border-zinc-100"></div>
                                     </div>
                                 </div>
-                                <div className="Password flex flex-col gap-y-6">
+                                <form onSubmit={handleSubmit} className="Password flex flex-col gap-y-6">
                                     <div className="title">
                                         <div className="font-semibold">Password</div>
                                         <div className="text-sm">Please enter your current password to change your password.</div>
@@ -137,7 +240,9 @@ function StudentProfile() {
                                             <input
                                             className='name-input border border-zinc-100  p-2 rounded text-sm'
                                             type='text'
-                                            name='Current Password'
+                                            name='currentPassword'
+                                            value={passwordData.currentPassword}
+                                            onChange={handleChange}
                                             placeholder='Enter current password'
                                             />
                                         </div>
@@ -148,7 +253,9 @@ function StudentProfile() {
                                                 <input
                                                 className='name-input border border-zinc-100  p-2 rounded text-sm w-full'
                                                 type='text'
-                                                name='new password'
+                                                name='newPassword'
+                                                value={passwordData.newPassword}
+                                                onChange={handleChange}
                                                 placeholder='Enter new password'
                                                 />
                                                 <div className='text-sm'>Your new password must be more than 8 characters.</div>
@@ -161,17 +268,27 @@ function StudentProfile() {
                                                 <input
                                                 className='name-input border border-zinc-100  p-2 rounded text-sm w-full '
                                                 type='text'
-                                                name='confirm password'
+                                                name='confirmNewPassword'
+                                                value={passwordData.confirmNewPassword}
+                                                onChange={handleChange}
                                                 placeholder='Re-Enter new password'
                                                 />
                                             </div> 
                                         </div>
                                     </div>
                                     <div className="updatedetails flex flex-row-reverse gap-6">
-                                        <button className='flex justify-center bg-blue-600 py-3 rounded-xl  text-white px-4 font-semibold hover:bg-blue-700 text-sm'> Update Password</button>
-                                        <button className='flex justify-center bg-zinc-100 py-3 rounded-xl text-black px-4 font-semibold hover:bg-zinc-200 text-sm '> Cancel</button>
+                                        <button type= "submit" className='flex justify-center bg-blue-600 py-3 rounded-xl  text-white px-4 font-semibold hover:bg-blue-700 text-sm'> 
+                                            Update Password</button>
+                                        <button type="button" 
+                                        onClick={() => setPasswordData ({
+                                            currentPassword: "",
+                                            newPassword: "",
+                                            confirmNewPassword: "",
+                                        })}
+                                        className='flex justify-center bg-zinc-100 py-3 rounded-xl text-black px-4 font-semibold hover:bg-zinc-200 text-sm '> 
+                                            Cancel</button>
                                     </div>
-                                </div>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -255,6 +372,12 @@ function StudentProfile() {
                     
                 </div>
             </div>
+            <EditProfileModal
+  isOpen={isEditModalOpen}
+  onClose={handleCloseModal}
+  onSave={handleProfileSave}
+  userData={studentData}
+/>
     </DashboardLayout>
   )
 }

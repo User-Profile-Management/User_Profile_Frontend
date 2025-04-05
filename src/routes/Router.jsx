@@ -15,6 +15,7 @@ import RequestApproval from '../pages/admin/RequestApproval'
 import AdminViewStudent from '../pages/admin/AdminViewStudent'
 import AdminViewMentor from '../pages/admin/AdminViewMentor'
 import MentorViewStudent from '../pages/mentor/MentorViewStudent'
+import AcceptApproval from '../pages/admin/AcceptApproval'
 
   
 
@@ -35,6 +36,7 @@ function Router() {
        <Route path="/admin-approval" element={<RequestApproval />} />
        <Route path="/admin-student-profile" element={<AdminViewStudent />} />
        <Route path="/admin-mentor-profile" element={<AdminViewMentor />} />
+       <Route path="/admin-accept" element={<AcceptApproval />} />
 
 
        {/* Mentor */}
@@ -46,6 +48,11 @@ function Router() {
        {/* Student */}
        <Route path="/student-dashboard" element={<StudentDashboard />} />
        <Route path="/student-profile" element={<StudentProfile />} />
+
+       <Route path="/admin-student-profile/:id" element={<AdminViewStudent />} />
+       <Route path="/admin-mentor-profile/:id" element={<AdminViewMentor />} />
+
+       <Route path="/admin-accept/:id" element={<AcceptApproval />} />
 
        </Route>
    </Routes>
