@@ -32,7 +32,7 @@ const userService = {
       });
   
 
-      return response.data.response || 0; // Ensure it returns a number
+      return response.data.response || 0; 
     } catch (error) {
       console.error("Error fetching students count:", error);
       return 0;
@@ -95,6 +95,64 @@ const userService = {
       return [];
     }
   },
+  getUserDetails: async () => {
+    try {
+      const response = await axios.get(`${BASE_URL}/profile`, {
+        
+        headers: {
+          Authorization: `Bearer ${getToken()}`,
+          "Content-Type": "application/json",
+        },
+      });
+      return response.data;
+     
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      return [];
+    }
+  },
+  updateProfile: async (profileData) => {
+    try {
+    const formData = new FormData();
+    formData.append("name", profileData.name);
+    formData.append("email", profileData.email);
+    formData.append("address", profileData.address);
+    formData.append("phone", profileData.phone);
+    formData.append("emergencyContact", profileData.emergencyContact);
+
+    if (profileData.profilePicture) {
+      formData.append("profilePicture", profileData.profilePicture);
+    }
+      const response = await axios.put(`${BASE_URL}/profile`,profileData, {
+        
+        headers: {
+          Authorization: `Bearer ${getToken()}`,
+          
+        },
+      });
+      return response.data;
+     
+    } catch (error) {
+      console.error("Error updating data:", error);
+      return [];
+    }
+  },
+  updatePassword: async(passwordData) => {
+    try {
+      const response = await axios.put(`${BASE_URL}/update-password`, passwordData, {
+        headers: {
+          Authorization: `Bearer ${getToken()}`,
+          "Content-Type":"application/json",
+        },
+      });
+      return response.data;
+    } catch (error){
+      console.error("Password updation error:",error.response?.data || error.message);
+      throw error;
+    }
+
+  },
+
 
   getMentorsList: async () => {
     try {

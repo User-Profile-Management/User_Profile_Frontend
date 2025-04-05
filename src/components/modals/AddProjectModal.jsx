@@ -74,12 +74,12 @@ const AddProjectModal = ({ isOpen, onClose, onAdd }) => {
 
     return (
         <>
-            {isOpen && !successModalOpen && ( // Hide first modal when SuccessModal opens
+            {isOpen && (
                 <div className="fixed inset-0 bg-opacity-50 backdrop-brightness-50 flex items-center justify-center">
                     <div className="bg-white p-6 rounded-lg w-full max-w-[700px] shadow-lg">
                         <h2 className="text-xl font-semibold text-left">Add Project</h2>
-                        <p className={`text-sm mb-4 ${errorMessage ? "text-red-500" : "text-gray-500"}`}>
-                            {errorMessage || "Allocate a new project and track progress efficiently."}
+                        <p className="text-sm text-gray-500 text-left mb-4">
+                            Allocate a new project and track progress efficiently.
                         </p>
 
                         <form onSubmit={handleSubmit} className="space-y-4">
@@ -127,6 +127,10 @@ const AddProjectModal = ({ isOpen, onClose, onAdd }) => {
                                 </select>
                             </div>
 
+                            {errorMessage && (
+                                <div className="text-red-500 text-sm mt-2">{errorMessage}</div>
+                            )}
+
                             <div className="flex justify-end gap-2 mt-4">
                                 <button type="button" onClick={onClose}
                                     className="bg-gray-200 text-sm font-semibold text-black px-4 py-3 rounded-md hover:bg-gray-300">
@@ -146,7 +150,6 @@ const AddProjectModal = ({ isOpen, onClose, onAdd }) => {
         </>
     );
 };
-
 
 const SuccessModal = ({ onClose }) => {
     return (

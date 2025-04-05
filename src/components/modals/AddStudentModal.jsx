@@ -70,36 +70,85 @@ const AddStudentModal = ({ isOpen, onClose }) => {
                 </p>
 
                 <form onSubmit={handleSubmit} className="space-y-4">
-                    {[
-                        { label: "Name", name: "fullName", type: "text", placeholder: "Enter name" },
-                        { label: "DOB", name: "dateOfBirth", type: "date" },
-                        { label: "Mobile Number", name: "contactNo", type: "tel", placeholder: "Enter mobile number" },
-                        { label: "Address", name: "address", type: "text", placeholder: "Enter address", isTextarea: true },
-                        { label: "Email", name: "email", type: "email", placeholder: "Enter email address" },
-                        { label: "Password", name: "password", type: "password", placeholder: "Enter password" }
-                    ].map(({ label, name, type, placeholder, isTextarea }) => (
-                        <div className="flex items-center" key={name}>
-                            <label className="w-1/3 font-medium">{label}</label>
-                            {isTextarea ? (
-                                <textarea
-                                    name={name}
-                                    value={studentData[name]}
-                                    onChange={handleChange}
-                                    placeholder={placeholder}
-                                    className={`w-2/3 p-2 rounded-md focus:ring-2 focus:ring-gray-200 focus:outline-none ${errors[name] ? "border-red-500 border-2" : ""}`}
-                                />
-                            ) : (
-                                <input
-                                    type={type}
-                                    name={name}
-                                    value={studentData[name]}
-                                    onChange={handleChange}
-                                    placeholder={placeholder}
-                                    className={`w-2/3 p-2 rounded-md focus:ring-2 focus:ring-gray-200 focus:outline-none ${errors[name] ? "border-red-500 border-2" : ""}`}
-                                />
-                            )}
-                        </div>
-                    ))}
+                    
+                    
+                    <div className="flex items-center">
+                        <label className="w-1/3 font-medium">Name</label>
+                        <input 
+                            type="text" 
+                            name="fullName" 
+                            value={studentData.fullName} 
+                            onChange={handleChange}
+                            placeholder="Enter name"
+                            className="w-2/3 p-2 border text-gray-300 rounded-md focus:ring-2 focus:ring-gray-200 focus:outline-none"
+                        />
+                    </div>
+
+                    
+                    <div className="flex items-center">
+                        <label className="w-1/3 font-medium">DOB</label>
+                        <input 
+                            type="date" 
+                            name="dateOfBirth" 
+                            value={studentData.dateOfBirth} 
+                            onChange={handleChange}
+                            className="w-2/3 p-2 border text-gray-300  rounded-md focus:ring-2 focus:ring-gray-200 focus:outline-none"
+                           
+                        />
+                    </div>
+
+
+                    
+                    <div className="flex items-center">
+                        <label className="w-1/3 font-medium">Mobile Number</label>
+                        <input 
+                            type="tel" 
+                            name="contactNo" 
+                            value={studentData.contactNo} 
+                            onChange={handleChange}
+                            placeholder="Enter mobile number"
+                            className="w-2/3 p-2 border text-gray-300  rounded-md focus:ring-2 focus:ring-gray-200 focus:outline-none"
+                        />
+                    </div>
+
+                    
+                    <div className="flex items-center">
+                        <label className="w-1/3 font-medium">Address</label>
+                        <textarea 
+                            type="text" 
+                            name="address" 
+                            value={studentData.address} 
+                            onChange={handleChange}
+                            placeholder="Enter address"
+                            className="w-2/3 p-2 border text-gray-300  rounded-md focus:ring-2 focus:ring-gray-200 focus:outline-none"
+                        />
+                    </div>
+
+                    
+                    <div className="flex items-center">
+                        <label className="w-1/3 font-medium">Email</label>
+                        <input 
+                            type="email" 
+                            name="email" 
+                            value={studentData.email} 
+                            onChange={handleChange}
+                            placeholder="Enter email address"
+                            className="w-2/3 p-2 border text-gray-300  rounded-md focus:ring-2 focus:ring-gray-200 focus:outline-none"
+                        />
+                    </div>
+
+                    
+                    <div className="flex items-center">
+                        <label className="w-1/3 font-medium">Password</label>
+                        <input 
+                            type="password" 
+                            name="password" 
+                            value={studentData.password} 
+                            onChange={handleChange}
+                            placeholder="Enter password"
+                            className="w-2/3 p-2 border text-gray-300  rounded-md focus:ring-2 focus:ring-gray-200 focus:outline-none"
+                        />
+                    </div>
 
                     <div className="flex justify-end gap-2 mt-4">
                         <button type="button" onClick={onClose}
