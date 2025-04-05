@@ -6,14 +6,23 @@ import DeleteProjectModal from "../components/modals/DeleteProjectModal.jsx";
 import EditProfileModal from "../components/modals/EditProfileModal.jsx";
 import AddStudentModal from "../components/modals/AddStudentModal.jsx";  
 import AddMentorModal from "../components/modals/AddMentorModal.jsx";
+import WarningModal from "../components/modals/WarningModal.jsx";
+import DeleteUserModal from "../components/modals/DeleteUserModal.jsx";
+
 
 
 const Dashboard = () => {
     const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
     const [certificates, setCertificates] = useState([]);
 
+    const [isWarningOpen, setIsWarningOpen] = useState(false);
+
     const [isAssignModalOpen, setIsAssignModalOpen] = useState(false);
     const [assignedProjects, setAssignedProjects] = useState([]);
+
+    const [isDeleteUserModalOpen, setIsDeleteUserModalOpen] = useState(false);
+    const [userToDelete, setUserToDelete] = useState(null);
+
 
     const [isAddProjectModalOpen, setIsAddProjectModalOpen] = useState(false);
     const [Projects, setProjects] = useState([]);
@@ -65,6 +74,13 @@ const Dashboard = () => {
         console.log("Added Project:", newProject);
     };
 
+    const handleDeleteUser = () => {
+        setStudents(students.filter(student => student !== userToDelete));
+        setIsDeleteUserModalOpen(false);
+        console.log("Deleted User:", userToDelete);
+    };
+    
+
     const handleDeleteProject = () => {
         setProjects(Projects.filter(proj => proj !== projectToDelete));
         setIsDeleteModalOpen(false);
@@ -90,6 +106,25 @@ const Dashboard = () => {
                 className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-purple-600">
                 Add Mentor
             </button>
+
+            <button onClick={() => setIsWarningOpen(true)}
+                className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-yellow-600">
+                Show Warning
+            </button>
+
+            <button 
+                onClick={() => setIsDeleteUserModalOpen(true)} 
+                className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-red-600 ml-4">
+                Delete User
+            </button>
+
+            <button 
+                onClick={() => setIsDeleteModalOpen(true)} 
+                className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-red-600 ml-4">
+            
+                Delete Project
+            </button>
+
 
 
 
@@ -164,6 +199,18 @@ const Dashboard = () => {
                 onClose={() => setIsAddProjectModalOpen(false)} 
                 onAdd={handleAddProject} 
             />
+
+            <WarningModal 
+            isOpen={isWarningOpen} onClose={() => setIsWarningOpen(false)} 
+            />
+
+            <DeleteUserModal
+                isOpen={isDeleteUserModalOpen}
+                onClose={() => setIsDeleteUserModalOpen(false)}
+                onDelete={handleDeleteUser}
+            />
+
+
 
             <DeleteProjectModal
                 isOpen={isDeleteModalOpen}

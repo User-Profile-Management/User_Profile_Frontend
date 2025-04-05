@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, { useState ,useEffect} from "react";
 import CertificateIcon from "../../assets/certificate.svg";
 
 const EditProfileModal = ({ isOpen, onClose, onSave, userData }) => {
     const [profileData, setProfileData] = useState({
-        name: userData.name || "",  
-        email: userData.email || "",  
+        name: userData.fullName ,  
+        email: userData.email,  
         address: "",
         phone: "",
         emergencyContact: "",
@@ -28,12 +28,24 @@ const EditProfileModal = ({ isOpen, onClose, onSave, userData }) => {
         }
         onSave(profileData);
         onClose();
-    };
+    
+   
+          setProfileData({
+            name: userData.name || "",
+            email: userData.email || "",
+            address:  "",
+            phone:  "",
+            emergencyContact:"",
+            profilePicture: null,
+          });
+        };
+    
+     
 
     if (!isOpen) return null;
 
     return (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+        <div className="fixed inset-0  bg-opacity-50 backdrop-brightness-50 flex items-center justify-center">
             <div className="bg-white p-6 rounded-lg w-full max-w-[700px]">
                 
                 <h2 className="text-xl font-semibold">Edit Profile</h2>
@@ -76,7 +88,7 @@ const EditProfileModal = ({ isOpen, onClose, onSave, userData }) => {
                             value={profileData.address} 
                             onChange={handleChange}
                             placeholder="Enter new address"
-                            className="w-2/3 p-2 border-zinc-100 rounded-md focus:ring-2 focus:ring-zinc-300 focus:outline-none"
+                            className="w-2/3 p-2 border border-zinc-100 rounded-md focus:ring-2 focus:ring-zinc-300 focus:outline-none"
                         />
                     </div>
 
@@ -89,7 +101,7 @@ const EditProfileModal = ({ isOpen, onClose, onSave, userData }) => {
                             value={profileData.phone} 
                             onChange={handleChange}
                             placeholder="Enter new phone number"
-                            className="w-2/3 p-2 border-zinc-100 rounded-md focus:ring-2 focus:ring-zinc-300 focus:outline-none"
+                            className="w-2/3 p-2 border border-zinc-100 rounded-md focus:ring-2 focus:ring-zinc-300 focus:outline-none"
                         />
                     </div>
 
@@ -102,7 +114,7 @@ const EditProfileModal = ({ isOpen, onClose, onSave, userData }) => {
                             value={profileData.emergencyContact} 
                             onChange={handleChange}
                             placeholder="Enter new emergency contact number"
-                            className="w-2/3 p-2 border-zinc-100 rounded-md focus:ring-2 focus:ring-zinc-300 focus:outline-none"
+                            className="w-2/3 p-2 border border-zinc-100 rounded-md focus:ring-2 focus:ring-zinc-300 focus:outline-none"
                         />
                     </div>
 

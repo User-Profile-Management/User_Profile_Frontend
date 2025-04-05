@@ -164,7 +164,6 @@ function SignUp2() {
                                     </select>
                                 </div>
                             </div>
-                            
 
 
 

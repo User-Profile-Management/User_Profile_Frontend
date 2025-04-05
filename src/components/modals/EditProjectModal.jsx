@@ -56,8 +56,9 @@ const EditProjectModal = ({ isOpen, onClose, project, onUpdate }) => {
             console.error("Error updating project:", error);
             alert("Failed to update project. Please try again.");
         }
+   
     };
-
+    
     if (!isOpen) return null;
 
     return (
@@ -77,7 +78,7 @@ const EditProjectModal = ({ isOpen, onClose, project, onUpdate }) => {
                             value={projectData.projectName}
                             onChange={handleChange}
                             placeholder="Enter project"
-                            className="w-2/3 p-2 border-gray-300 rounded-md focus:ring-2 focus:ring-zinc-200 focus:outline-none"
+                            className="w-2/3 p-2 border text-gray-300  border-gray-300 rounded-md focus:ring-2 focus:ring-zinc-200 focus:outline-none"
                         />
                     </div>
 
@@ -87,7 +88,7 @@ const EditProjectModal = ({ isOpen, onClose, project, onUpdate }) => {
                             name="mentor"
                             value={projectData.mentor}
                             onChange={handleChange}
-                            className="w-2/3 p-2 border-gray-300 rounded-md focus:ring-2 text-gray-900 focus:ring-zinc-200 focus:outline-none"
+                            className="w-2/3 p-2 border  border-gray-300 rounded-md focus:ring-2 text-gray-900 focus:ring-zinc-200 focus:outline-none"
                         >
                             <option value="" disabled>Select mentor</option>
                             {mentors.map((mentor) => (
@@ -99,18 +100,13 @@ const EditProjectModal = ({ isOpen, onClose, project, onUpdate }) => {
                     </div>
 
                     <div className="flex justify-end gap-2 mt-4">
-                        <button 
-                            type="button" 
-                            onClick={onClose}
-                            className="bg-gray-300 text-sm font-semibold text-black px-4 py-3 rounded-md hover:bg-gray-400"
-                        >
+                        <button type="button" onClick={onClose}
+                            className="bg-gray-300 text-sm font-semibold text-black px-4 py-3 rounded-md hover:bg-gray-400">
                             Cancel
                         </button>
-                        <button 
-                            type="submit"
-                            className="bg-blue-600 text-white text-sm font-semibold px-4 py-3 rounded-md hover:bg-blue-700"
-                        >
-                            Update Project
+                        <button type="submit"
+                            className="bg-blue-600 text-white text-sm font-semibold px-4 py-3 rounded-md hover:bg-blue-700">
+                            Update Projects
                         </button>
                     </div>
                 </form>

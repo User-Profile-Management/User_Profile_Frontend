@@ -10,8 +10,11 @@ import AddStudentModal from '../../components/modals/AddStudentModal.jsx';
 import AddProjectModal from '../../components/modals/AddProjectModal.jsx';
 import AddMentorModal from '../../components/modals/AddMentorModal.jsx';
 import EditProjectModal from '../../components/modals/EditProjectModal.jsx';
+import AdminViewStudent from './AdminViewStudent.jsx';
+import { useNavigate } from 'react-router-dom';
 
 function AdminDashboard() {
+  const navigate = useNavigate();
   const studentsCount = useRecoilValue(studentsCountState);
   const mentorsCount = useRecoilValue(mentorsCountState);
   const projectsCount = useRecoilValue(projectsCountState);
@@ -143,6 +146,10 @@ function AdminDashboard() {
     console.log("[DEBUG] Selected project for editing:", project); 
     setSelectedProject(project);
   };
+  const handleEditStudent = (student) => {
+    console.log("[DEBUG] Selected student for editing:", student); 
+    navigate("/admin-student-profile", { state: { student } });
+  };
 
   const handleCloseEditModal = () => {
     setSelectedProject(null);
@@ -160,7 +167,7 @@ function AdminDashboard() {
           <div className="grid grid-cols-3 gap-6 h-full">
             <div className="grid grid-rows-5 gap-6 ">
               <StatCard number={studentsCount} title="Total Students" color="bg-cyan-600" />
-              <ListCard title="Student List" items={StudentsList} showDelete={false} onAddClick={handleAddClick} />
+              <ListCard title="Student List" items={StudentsList} showDelete={false} onAddClick={handleAddClick} onEdit={handleEditStudent} />
             </div>
 
             <div className="grid grid-rows-5 gap-6 ">

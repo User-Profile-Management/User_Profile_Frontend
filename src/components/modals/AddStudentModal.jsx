@@ -63,7 +63,7 @@ const AddStudentModal = ({ isOpen, onClose }) => {
                             value={studentData.fullName} 
                             onChange={handleChange}
                             placeholder="Enter name"
-                            className="w-2/3 p-2  rounded-md focus:ring-2 focus:ring-gray-200 focus:outline-none"
+                            className="w-2/3 p-2 border text-gray-300 rounded-md focus:ring-2 focus:ring-gray-200 focus:outline-none"
                         />
                     </div>
 
@@ -75,7 +75,7 @@ const AddStudentModal = ({ isOpen, onClose }) => {
                             name="dateOfBirth" 
                             value={studentData.dateOfBirth} 
                             onChange={handleChange}
-                            className="w-2/3 p-2  rounded-md text-gray-400 focus:ring-2 focus:ring-gray-200 focus:outline-none"
+                            className="w-2/3 p-2 border text-gray-300  rounded-md focus:ring-2 focus:ring-gray-200 focus:outline-none"
                            
                         />
                     </div>
@@ -90,7 +90,7 @@ const AddStudentModal = ({ isOpen, onClose }) => {
                             value={studentData.contactNo} 
                             onChange={handleChange}
                             placeholder="Enter mobile number"
-                            className="w-2/3 p-2  rounded-md focus:ring-2 focus:ring-gray-200 focus:outline-none"
+                            className="w-2/3 p-2 border text-gray-300  rounded-md focus:ring-2 focus:ring-gray-200 focus:outline-none"
                         />
                     </div>
 
@@ -103,7 +103,7 @@ const AddStudentModal = ({ isOpen, onClose }) => {
                             value={studentData.address} 
                             onChange={handleChange}
                             placeholder="Enter address"
-                            className="w-2/3 p-2  rounded-md focus:ring-2 focus:ring-gray-200 focus:outline-none"
+                            className="w-2/3 p-2 border text-gray-300  rounded-md focus:ring-2 focus:ring-gray-200 focus:outline-none"
                         />
                     </div>
 
@@ -116,7 +116,7 @@ const AddStudentModal = ({ isOpen, onClose }) => {
                             value={studentData.email} 
                             onChange={handleChange}
                             placeholder="Enter email address"
-                            className="w-2/3 p-2  rounded-md focus:ring-2 focus:ring-gray-200 focus:outline-none"
+                            className="w-2/3 p-2 border text-gray-300  rounded-md focus:ring-2 focus:ring-gray-200 focus:outline-none"
                         />
                     </div>
 
@@ -129,7 +129,7 @@ const AddStudentModal = ({ isOpen, onClose }) => {
                             value={studentData.password} 
                             onChange={handleChange}
                             placeholder="Enter password"
-                            className="w-2/3 p-2  rounded-md focus:ring-2 focus:ring-gray-200 focus:outline-none"
+                            className="w-2/3 p-2 border text-gray-300  rounded-md focus:ring-2 focus:ring-gray-200 focus:outline-none"
                         />
                     </div>
 
