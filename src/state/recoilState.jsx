@@ -32,5 +32,6 @@ export const userState = atom({
     fullName: "",
     email: "",
     roleName: "",
+    
   },
 });

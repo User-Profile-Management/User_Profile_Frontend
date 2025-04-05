@@ -109,8 +109,9 @@ export default function AdminProfile() {
   return (
     <DashboardLayout>
          <div className='grid grid-rows-10 h-full overflow-auto'>
-                <div className='flex items-center'>
-                    Profile
+                <div className='flex items-center gap-4'>
+                    <div className="font-semibold">Profile</div>
+                    <div className="text-gray-500">{">"}</div>
                 </div>
                 <div className="row-span-9 overflow-y-auto scrollbar-hide h-full">
                     <div className="grid grid-rows-10 h-full gap-y-6">

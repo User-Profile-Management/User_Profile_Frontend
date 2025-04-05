@@ -18,7 +18,7 @@ function StudentProfile() {
 
          <div className='grid grid-rows-10 h-full overflow-auto'>
                 <div className='flex items-center'>
-                    Profile
+                    <div className="font-semibold">Profile</div>
                 </div>
                 <div className="row-span-9 overflow-y-auto scrollbar-hide h-full">
                     <div className="w-full grid grid-cols-10 gap-5">
@@ -29,7 +29,7 @@ function StudentProfile() {
                                 <div className="col-span-2">
                                     <div className='border border-zinc-100 bg-white rounded-xl p-4 h-full flex items-center justify-center'>
                                         <div className="flex flex-col items-center ">
-                                            <img className='w-32' src={ProfilePic} alt="prifilepic" />
+                                            <img className='w-32 h-32' src={ProfilePic} alt="prifilepic" />
                                             <div className='font-semibold text-2xl'>NAME</div>
                                             <div>EMPLOYEE ID</div>
                                         </div>

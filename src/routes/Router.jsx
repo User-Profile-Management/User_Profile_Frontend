@@ -17,6 +17,9 @@ import AdminViewStudent from '../pages/admin/AdminViewStudent'
 import AdminViewMentor from '../pages/admin/AdminViewMentor'
 import MentorViewStudent from '../pages/mentor/MentorViewStudent'
 import ConfirmationModal from '../components/modals/ConfirmationModal'
+import AcceptApproval from '../pages/admin/AcceptApproval';
+
+
 
   
 
@@ -38,6 +41,7 @@ function Router() {
        <Route path="/admin-approval" element={<RequestApproval />} />
        <Route path="/admin-student-profile" element={<AdminViewStudent />} />
        <Route path="/admin-mentor-profile" element={<AdminViewMentor />} />
+       <Route path="/admin-accept" element={<AcceptApproval />} />
 
 
        {/* Mentor */}

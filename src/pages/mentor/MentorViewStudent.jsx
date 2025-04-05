@@ -30,7 +30,7 @@ function MentorViewStudent() {
                             {/* Profile */}
                             <div className='border border-zinc-100 bg-white rounded-xl p-4 h-full flex items-center justify-center'>
                                 <div className="flex flex-col items-center ">
-                                    <img className='w-32' src={ProfilePic} alt="prifilepic" />
+                                    <img className='w-32 h-32' src={ProfilePic} alt="prifilepic" />
                                     <div className='font-semibold text-2xl'>NAME</div>
                                     <div>EMPLOYEE ID</div>
                                 </div>

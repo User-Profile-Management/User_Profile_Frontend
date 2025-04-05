@@ -15,9 +15,9 @@ function AdminViewMentor() {
         <div className='grid grid-rows-10 h-full'>
                 <div className='flex items-center justify-between'>
                     <div className="flex gap-4">
-                      <div className="">Home</div>
-                      <div className="">{">"}</div>
-                      <div className="">Mentor Profile</div>
+                      <div className="text-gray-500 hover:underline hover:cursor-pointer">Home</div>
+                      <div className="text-gray-500">{">"}</div>
+                      <div className="font-semibold">Mentor Profile</div>
                     </div>
                     <div className="updatedetails flex flex-row-reverse gap-6">
                       <button className='flex justify-center border border-red-600 py-3 rounded-xl text-red-600 px-4 font-semibold hover:bg-red-600 hover:text-white text-sm '>Delete Mentor</button>
@@ -31,7 +31,7 @@ function AdminViewMentor() {
                             {/* Profile */}
                             <div className='border border-zinc-100 bg-white rounded-xl p-4 h-full flex items-center justify-center'>
                                 <div className="flex flex-col items-center ">
-                                    <img className='w-32' src={ProfilePic} alt="prifilepic" />
+                                    <img className='w-32 h-32' src={ProfilePic} alt="prifilepic" />
                                     <div className='font-semibold text-2xl'>NAME</div>
                                     <div>EMPLOYEE ID</div>
                                 </div>
