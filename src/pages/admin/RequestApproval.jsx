@@ -7,7 +7,7 @@ import Profile from '../../assets/profile.svg';
 function RequestApproval() {
     const [searchQuery, setSearchQuery] = useState('');
     const [approvals, setApprovalList] = useState([]);
-    const navigate = useNavigate(); // Added useNavigate
+    const navigate = useNavigate(); 
 
     useEffect(() => {
         const fetchApprovalList = async () => {

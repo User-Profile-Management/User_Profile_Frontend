@@ -32,14 +32,14 @@ function SignIn() {
         const userRole = decodedToken.roles?.[0]; 
   
         if (userRole === "ADMIN") {
-          console.log("Redirecting to /admin-dashboard");
-          navigate("/admin-dashboard");
+          console.log("Redirecting to /dashboard");
+          navigate("/dashboard");
         } else if (userRole === "MENTOR") {
           console.log("Redirecting to /mentor-dashboard");
-          navigate("/mentor-dashboard");
+          navigate("/dashboard");
         } else if (userRole === "STUDENT") {
           console.log("Redirecting to /student-dashboard");
-          navigate("/student-dashboard");
+          navigate("/dashboard");
         } else {
           console.error("Unauthorized role:", userRole);
           setError("Unauthorized role");
@@ -85,7 +85,7 @@ function SignIn() {
         console.log("[DEBUG] User Role:", userRole);
   
         if (userRole === "ADMIN") {
-          navigate("/admin-dashboard");
+          navigate("/dashboard");
         } else if (userRole === "MENTOR") {
           navigate("/mentor-dashboard");
         } else if (userRole === "STUDENT") {

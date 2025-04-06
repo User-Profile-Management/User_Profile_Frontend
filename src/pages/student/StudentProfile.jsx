@@ -120,11 +120,6 @@ function StudentProfile() {
     };
     fetchProjects();
   }, [studentData]);
-
-  if (!studentData) {
-    return <div>Loading...</div>;
-  }
-
   const uniqueMentors = [
     ...new Map(
       projects.filter((p) => p.mentor).map((p) => [p.mentor.userId, p.mentor])
@@ -143,6 +138,10 @@ function StudentProfile() {
 
     fetchCertificates();
   }, []);
+
+  if (!studentData) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <DashboardLayout>
