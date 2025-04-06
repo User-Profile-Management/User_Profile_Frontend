@@ -20,7 +20,15 @@ function StudentDashboard() {
     const [projects, setProjects] = useState([]);
     const [notifications, setNotifications] = useState([]);
     const completedCountRef = useRef(0);
+    const previousProjectCount = useRef(0);
+    const previousBadgeCount = useRef(0);
     const completedCount = projects.filter(project => project.status === 'COMPLETED').length;
+    const maxCertificateScore = 5;
+
+    const performanceScore = (
+        (completedCount / (projects.length || 1)) * 60 +
+        (certifications.length / maxCertificateScore) * 40
+    );
 
     const badgeLevels = [
         { label: 'BRONZE', src: BronzeBadge, min: 1 },
@@ -63,16 +71,6 @@ function StudentDashboard() {
                 console.error("Error fetching projects:", error);
             }
         };
-
-        const fetchDummyNotifications = () => {
-            const dummyNotifications = [
-                { message: "New project assigned: React Portfolio Site" },
-                { message: "Mentor commented on your last submission" },
-                { message: "Certificate issued for UI/UX Fundamentals" },
-                { message: "Your badge level upgraded to BRONZE" }
-            ];
-            setNotifications(dummyNotifications);
-        };
     
         const fetchData = async () => {
             try {
@@ -97,17 +95,37 @@ function StudentDashboard() {
                 }
     
                 completedCountRef.current = completed; // update stored count
+
+                if (projects.length > previousProjectCount.current) {
+                    const diff = projects.length - previousProjectCount.current;
+                    const message = diff === 1
+                        ? "📌 A new project has been assigned to you!"
+                        : `📌 ${diff} new projects have been assigned!`;
+                
+                    setNotifications(prev => [{ message }, ...prev]);
+                }
+                previousProjectCount.current = projects.length;
+
+                if (badges.length > previousBadgeCount.current) {
+                    const diff = badges.length - previousBadgeCount.current;
+                    const message = diff === 1
+                        ? "🏅 You earned a new badge!"
+                        : `🏅 You earned ${diff} new badges!`;
+                
+                    setNotifications(prev => [{ message }, ...prev]);
+                }
+                previousBadgeCount.current = badges.length;
             } catch (error) {
                 console.error("Error fetching data:", error);
             }
         };
     
-        fetchDummyNotifications();
+
         fetchData();
         fetchProgress();
         fetchCertificates();
         fetchProjects();
-        fetchDummyNotifications();
+
     }, []);
 
     return (
@@ -121,7 +139,7 @@ function StudentDashboard() {
                     <div className='grid grid-rows-5 gap-y-6 h-full'>
                         <div className="row-span-2">
                             <div className="grid grid-cols-4 h-full gap-6">
-                                <StatCard number={progress} title="Overall Performance" color="bg-sky-900" />
+                                <StatCard number={performanceScore} title="Overall Performance" color="bg-sky-900" />
                                 <StatCard 
                                     number={projects.filter(project => project.status !== 'COMPLETED').length} 
                                     title="Ongoing Projects" 
@@ -163,7 +181,7 @@ function StudentDashboard() {
                                                     </div>
                                                 </div>
                                                 <div className="flex items-center">
-                                                    <Link to='/student-profile' className="px-4 py-2 bg-sky-700 text-white rounded-lg hover:bg-sky-900 transition">
+                                                    <Link to='/student-profile' className="px-4 py-2 bg-sky-700 font-semibold text-white rounded-lg hover:bg-sky-900 transition">
                                                         Update Profile
                                                     </Link>
                                                 </div>
@@ -172,30 +190,35 @@ function StudentDashboard() {
 
                                         {/* Certifications & Badges */}
                                         <div className="row-span-3">
-                                            <div className="grid grid-cols-2 h-full gap-6">
+                                            <div className="grid grid-cols-2 gap-6">
                                                 {/* Certifications */}
-                                                <div className="border border-zinc-200 bg-white rounded-xl p-4">
-                                                    <div className="grid grid-rows-7 h-full">
-                                                        <div className="font-semibold text-xl">Your Certifications</div>
+                                                <div className="border border-zinc-200 bg-white rounded-xl p-4 max-h-60">
+                                                <div className="flex flex-col h-full">
+                                                    {/* Title */}
+                                                    <div className="font-semibold text-xl mb-2">Your Certifications</div>
 
-                                                        <div className="row-span-6 overflow-y-scroll scrollbar-hide">
-                                                            {certifications.length > 0 ? (
-                                                                certifications.map((cert) => (
-                                                                    <div key={cert.certificateId} className="flex border-b border-zinc-200 py-2 justify-between hover:cursor-pointer">
-                                                                        <div className="flex flex-col justify-between ">
-                                                                            <div className="text-md font-medium">{cert.certificateName}</div>
-                                                                            <div className="text-sm">Issued By : {cert.issuedBy}</div>
-                                                                        </div>
-                                                                        <div>
-                                                                            <img src={Verified} alt="verified icon" />
-                                                                        </div>
-                                                                    </div>
-                                                                ))
-                                                            ) : (
-                                                                <div className="text-sm text-zinc-400">No certifications yet.</div>
-                                                            )}
+                                                    {/* Scrollable Certification List */}
+                                                    <div className="flex-1 overflow-y-auto scrollbar-hide">
+                                                    {certifications.length > 0 ? (
+                                                        certifications.map((cert) => (
+                                                        <div
+                                                            key={cert.certificateId}
+                                                            className="flex border-b border-zinc-200 py-2 justify-between hover:cursor-pointer min-h-16"
+                                                        >
+                                                            <div className="flex flex-col justify-between">
+                                                            <div className="text-md font-medium">{cert.certificateName}</div>
+                                                            <div className="text-sm">Issued By: {cert.issuedBy}</div>
+                                                            </div>
+                                                            <div>
+                                                            <img src={Verified} alt="verified icon" />
+                                                            </div>
                                                         </div>
+                                                        ))
+                                                    ) : (
+                                                        <div className="text-sm text-zinc-400">No certifications yet.</div>
+                                                    )}
                                                     </div>
+                                                </div>
                                                 </div>
 
                                                 {/* Badges */}

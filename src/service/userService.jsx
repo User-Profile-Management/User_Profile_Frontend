@@ -104,17 +104,9 @@ const userService = {
         },
       });
   
-      const data = response.data;
+      return response.data.response;
   
-      return [{
-        name: data.fullName,
-        userId: data.userId,
-        email: data.email,
-        roleName: data.roleName,
-        image: data.profilePicture
-          ? `data:image/png;base64,${data.profilePicture}`
-          : Profile,
-      }];
+      
     } catch (error) {
       console.error("Error fetching user data:", error);
       return [];
@@ -183,6 +175,44 @@ const userService = {
       return [];
     }
   },
+
+  getStudentProgress: async () => {
+    try {
+      const profile = await userService.getUserDetails();
+      console.log("Fetched user profile:", profile);
+      
+      // Define which fields to consider for completeness
+      const profileFieldsToCheck = [
+        "fullName",
+        "dateOfBirth",
+        "email",
+        "contactNo",
+        "address",
+        "profilePicture" // optional: exclude if not required
+      ];
+      
+      // Count how many are filled
+      const filledFields = profileFieldsToCheck.filter(
+        field => profile[field] && profile[field].toString().trim() !== ""
+      ).length;
+      
+      const totalFields = profileFieldsToCheck.length;
+      
+      const profileCompletion = totalFields > 0 
+        ? Math.round((filledFields / totalFields) * 100)
+        : 0;
+      
+      console.log(`Profile completeness: ${profileCompletion}%`);
+      
+      setProgress(profileCompletion);
+  
+    } catch (error) {
+      console.error("Error fetching progress:", error);
+    }
+  },
+  
 };
+
+
 console.log("Exporting userService:", userService);
 export default userService;
