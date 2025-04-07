@@ -53,15 +53,30 @@ function SignIn() {
     }
   };
 
+  // const handleGoogleSignIn = async () => {
+  //   try {
+  //     const result = await signInWithPopup(auth, provider);
+  //     console.log("User Info:", result.user);
+  //     navigate("/dashboard");
+  //   } catch (error) {
+  //     console.error("Google Sign-In Error:", error);
+  //   }
+  // };
+
   const handleGoogleSignIn = async () => {
     try {
       const result = await signInWithPopup(auth, provider);
-      console.log("User Info:", result.user);
+      const idToken = await result.user.getIdToken();
+  
+      const response = await authService.googleLogin(idToken); // pass token to backend
+      console.log("Backend Google Login Response:", response);
       navigate("/dashboard");
     } catch (error) {
-      console.error("Google Sign-In Error:", error);
+      console.error("Google Sign-In Error:", error.message);
     }
   };
+  
+  
 
   return (
     <div className="signinpage bg-white h-screen p-10 grid grid-cols-2">

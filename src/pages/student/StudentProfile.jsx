@@ -149,12 +149,12 @@ function StudentProfile() {
     const uniqueMentors = [
       ...new Map(
         projects
-          .filter((p) => p.project?.mentor) // make sure mentor exists
+          .filter((p) => p.project?.mentor) 
           .map((p) => [p.project.mentor.userId, p.project.mentor])
       ).values(),
     ];
     
-    console.log("Unique mentors:", uniqueMentors); // ✅ log the unique mentors
+    console.log("Unique mentors:", uniqueMentors); 
     
 
   if (!studentData) {

@@ -30,7 +30,8 @@ function Router() {
         {/* Admin */}
 
         <Route path="/admin-approval" element={<RequestApproval />} />
-        <Route path="/admin-student-profile" element={<AdminViewStudent />} />
+        <Route path="/admin-student-profile/:userId" element={<AdminViewStudent />} />
+
         <Route path="/admin-mentor-profile" element={<AdminViewMentor />} />
         <Route path="/admin-accept/:userId" element={<AcceptApproval />} />
 
