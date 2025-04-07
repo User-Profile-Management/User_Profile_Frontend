@@ -105,10 +105,10 @@ function SignIn() {
           console.log("[DEBUG] Navigation triggered");
         } else if (userRole === "MENTOR") {
           console.log("Redirecting to /mentor-dashboard");
-          navigate("/mentor-dashboard");
+          navigate("/dashboard");
         } else if (userRole === "STUDENT") {
           console.log("Redirecting to /student-dashboard");
-          navigate("/student-dashboard");
+          navigate("/dashboard");
         } else {
           console.error("Unauthorized role:", userRole);
           setError("Unauthorized role");
