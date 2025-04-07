@@ -159,7 +159,7 @@ function StudentProfile() {
                       <div className="border border-zinc-100 bg-white rounded-xl p-4 h-full flex items-center justify-center">
                         <div className="flex flex-col items-center ">
                           <img
-                            className="w-32 h-32 rounded-full "
+                            className="w-32 h-32 rounded-2xl border border-zinc-100 p-2 object-contain "
                             src={
                               studentData.profilePicture
                                 ? `data:image/png;base64,${studentData.profilePicture}`

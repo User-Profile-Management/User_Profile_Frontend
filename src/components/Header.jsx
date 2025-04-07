@@ -36,7 +36,7 @@ const Header = () => {
       <div className="col-span-5"></div>
       <div className="p-3 cursor-pointer flex flex-row items-center gap-3 border-l border-zinc-200 ">
         <img 
-          className="w-7 h-7 rounded-full" 
+          className="w-9 h-9 rounded-lg border border-zinc-100 p-1 object-contain" 
           src={user.image} 
           alt="Profile" 
         />
