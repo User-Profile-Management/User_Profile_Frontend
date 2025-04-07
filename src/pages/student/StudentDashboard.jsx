@@ -174,7 +174,7 @@ function StudentDashboard() {
                                         <div className="row-span-2 border border-zinc-200 bg-white rounded-xl p-4 h-full flex items-center">
                                             <div className="flex justify-between w-full">
                                                 <div className='flex gap-6 items-center'>
-                                                    <CircularProgress percentage={progress || 0} />
+                                                    <CircularProgress percentage={progress || 80} />
                                                     <div className='flex flex-col'>
                                                         <div className='text-2xl font-semibold'>You're so close!</div>
                                                         <div className='text-lg'>Finish up for the best experience.</div>
