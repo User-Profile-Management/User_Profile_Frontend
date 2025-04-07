@@ -67,7 +67,7 @@ const ListCard = ({ title, items, showDelete, onAddClick, onDelete, onEdit }) =>
                 }}
               >
                 <div className="flex gap-4">
-                  {!showDelete && <img src={item.image} alt="Profile" className="w-10 h-10" />}
+                  {!showDelete && <img src={item.image} alt="Profile" className="w-10 h-10 object-contain border border-zinc-100 p-1" />}
                   <div className='flex flex-col items-start justify-center'>
                     <div className='font-semibold'>{item.name}</div>
                     {title !== "Project List" && item.userId && (
