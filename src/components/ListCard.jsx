@@ -6,7 +6,7 @@ import SearchIcon from '../assets/search.png';
 
 const ListCard = ({ title, items, showDelete, onAddClick, onDelete, onEdit }) => {
   const [searchQuery, setSearchQuery] = useState('');
-  const navigate = useNavigate(); 
+  const navigate = useNavigate(); // Use navigate for routing
 
   const filteredItems = useMemo(() => {
     return items.filter(item =>

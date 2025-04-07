@@ -1,22 +1,6 @@
 import React, { useState } from "react";
 import userService from "../../service/userService";
 
-const SuccessModal = ({ isOpen, onClose }) => {
-    if (!isOpen) return null;
-
-    return (
-        <div className="fixed inset-0 bg-opacity-50 backdrop-brightness-50 flex items-center justify-center">
-            <div className="bg-white p-6 rounded-lg w-full max-w-sm text-center">
-                <h2 className="text-xl font-semibold text-green-600">Success!</h2>
-                <p className="text-gray-600">Mentor added successfully.</p>
-                <button onClick={onClose} className="bg-blue-600 text-white px-4 py-2 mt-4 rounded-md hover:bg-blue-700">
-                    OK
-                </button>
-            </div>
-        </div>
-    );
-};
-
 const AddMentorModal = ({ isOpen, onClose }) => {
     const [mentorData, setMentorData] = useState({
         fullName: "",
@@ -27,45 +11,32 @@ const AddMentorModal = ({ isOpen, onClose }) => {
         password: ""
     });
 
-    const [errors, setErrors] = useState({});
-    const [errorMessage, setErrorMessage] = useState("");
-    const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
-
     const handleChange = (e) => {
         const { name, value } = e.target;
         setMentorData({ ...mentorData, [name]: value });
-        setErrors({ ...errors, [name]: value.trim() === "" });
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        let newErrors = {};
-        let hasError = false;
-
-        for (let key in mentorData) {
-            if (!mentorData[key].trim()) {
-                newErrors[key] = true;
-                hasError = true;
-            }
-        }
-
-        setErrors(newErrors);
-
-        if (hasError) {
-            setErrorMessage("Please fill in the required fields");
+    
+        if (!mentorData.fullName || !mentorData.dateOfBirth || !mentorData.contactNo || 
+            !mentorData.address || !mentorData.email || !mentorData.password) {
+            alert("Please fill all the fields.");
             return;
         }
         
         const payload = { ...mentorData, roleName: "MENTOR" };
-        console.log("Submitting mentor data:", payload);
 
+    console.log("Submitting mentor data:", payload);
+    
         try {
             const response = await userService.signup(payload);
             console.log("Mentor registered successfully:", response);
+            alert("Mentor registered successfully!");
             onClose(); 
-            setIsSuccessModalOpen(true);
         } catch (error) {
             console.error("Registration error:", error);
+            alert("Failed to register mentor. Please try again.");
         }
     };
 
@@ -163,9 +134,6 @@ const AddMentorModal = ({ isOpen, onClose }) => {
                     </div>
                 </form>
             </div>
-
-            {/* Success Modal */}
-            <SuccessModal isOpen={isSuccessModalOpen} onClose={() => setIsSuccessModalOpen(false)} />
         </div>
     );
 };
