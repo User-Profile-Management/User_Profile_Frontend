@@ -33,7 +33,7 @@ function StudentProfile() {
     setPasswordData({...passwordData,[e.target.name]: e.target.value});
     }
     const [isEditModalOpen,setIsEditModalOpen] = useState(false);
-    
+
     const handleEditClick = ()=>{
         setIsEditModalOpen(true);
     };

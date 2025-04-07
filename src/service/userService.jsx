@@ -153,7 +153,21 @@ const userService = {
     }
 
   },
-
+  getUserById: async (userId) => {
+    try {
+      const response = await axios.get(`${BASE_URL}/profile/${userId}`, {
+        headers: {
+          Authorization: `Bearer ${getToken()}`,
+          "Content-Type": "application/json",
+        },
+      });
+      return response.data.response; // or adjust based on actual response shape
+    } catch (error) {
+      console.error("Error fetching user by ID:", error);
+      throw error;
+    }
+  },
+  
 
   getMentorsList: async () => {
     try {

@@ -26,28 +26,6 @@ function SignUp2() {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    // const handleSubmit = async (e) => {
-    //     e.preventDefault();
-        
-    //     if (formData.password !== formData.confirmedpassword) {
-    //         setError("Passwords do not match!");
-    //         return;
-    //     }
-    //     const { confirmedpassword, ...userData } = formData;
-        
-    //     try {
-    //         console.log("form submitted");
-    //         const response = await userService.signup(userData);
-    //         console.log("API Response:", response);
-          
-    //         if(response.status===200)
-    //             alert("Registration successful! Redirecting to Sign In...");
-    //         navigate("/");
-    //     } catch (err) {
-    //         setError(err.response?.data?.message || "An error occurred");
-    //     }
-    // };
-
 
     const handleSubmit = async (e) => {
         console.log("handleSubmit function executed!");  
