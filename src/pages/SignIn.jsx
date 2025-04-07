@@ -1,6 +1,6 @@
 
 import React, { useState } from "react";
-import { Link,useNavigate } from "react-router-dom";
+import { Link, useNavigate } from 'react-router-dom';
 import {jwtDecode} from "jwt-decode";
 import { auth, provider, signInWithPopup } from "../firebaseConfig";
 import GoogleLogo from "../assets/google.png";
@@ -54,7 +54,6 @@ function SignIn() {
   
   
 
-   
   const handleGoogleSignIn = async () => {
     try {
       const result = await signInWithPopup(auth, provider);
@@ -65,36 +64,57 @@ function SignIn() {
       console.log("[DEBUG] Google Firebase ID Token:", idToken);
       console.log("[DEBUG] Google User Email:", userEmail);
   
-      
       const backendResponse = await fetch("http://localhost:8080/api/auth/google-login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${idToken}`,
+          "X-Google-ID-Token": idToken,
         },
-        body: JSON.stringify({ email: userEmail }),
+        body: JSON.stringify({ email: userEmail }), 
       });
   
-      const data = await backendResponse.json();
+      let data;
   
-      if (data?.token) {
-        const decodedToken = jwtDecode(data.token);
-        localStorage.setItem("authToken", data.token);
+      try {
+        data = await backendResponse.json();
+      } catch (jsonError) {
+        const text = await backendResponse.text();
+        console.error("Non-JSON response:", text);
+        setError("Login failed. Please try again later.");
+        return;
+      }
+  
+      if (!backendResponse.ok) {
+        console.error("Backend responded with error:", data);
+        setError(data?.message || "Login failed. Please try again.");
+        return;
+      }
+  
+      const token = data?.response?.token;
+  
+      if (token) {
+        const decodedToken = jwtDecode(token);
+        localStorage.setItem("authToken", token);
   
         const userRole = decodedToken.roles?.[0];
         console.log("[DEBUG] User Role:", userRole);
   
         if (userRole === "ADMIN") {
+          console.log("[DEBUG] Navigating to /dashboard...");
           navigate("/dashboard");
+          console.log("[DEBUG] Navigation triggered");
         } else if (userRole === "MENTOR") {
+          console.log("Redirecting to /mentor-dashboard");
           navigate("/mentor-dashboard");
         } else if (userRole === "STUDENT") {
+          console.log("Redirecting to /student-dashboard");
           navigate("/student-dashboard");
         } else {
           console.error("Unauthorized role:", userRole);
-          setError("Unauthorized role. Access denied.");
+          setError("Unauthorized role");
         }
       } else {
+        console.error("[ERROR] Token missing from backend response:", data);
         setError("Backend did not return a valid token.");
       }
   
@@ -103,6 +123,8 @@ function SignIn() {
       setError("Google Sign-In failed. Try again.");
     }
   };
+  
+  
   
   return (
     <div className='signinpage bg-white h-screen p-10 grid grid-cols-2'>

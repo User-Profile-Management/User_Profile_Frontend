@@ -1,17 +1,23 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useRecoilState } from "recoil";
+import { selectedStudentState } from '../../state/recoilState';
+import { useNavigate } from 'react-router-dom';
 import userService from "../../service/userService";
 import { studentsListState } from "../../state/recoilState";
 import DashboardLayout from '../../layout/DashboardLayout.jsx';
 import Profile from "../../assets/profile-ListCard.svg";
 import SearchIcon from "../../assets/search.png";
-import FilterIcon from "../../assets/filter.svg";
+import FilterIcon from "../../assets/filter.svg";  
+import { useSetRecoilState } from 'recoil';
+
 
 function MentorDashboard() {
     const [students, setStudents] = useRecoilState(studentsListState);
     const [searchQuery, setSearchQuery] = useState('');
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const navigate = useNavigate();
+    const setSelectedStudent = useSetRecoilState(selectedStudentState);
 
     useEffect(() => {
         const fetchStudents = async () => {
@@ -100,9 +106,16 @@ function MentorDashboard() {
                                             </div>
                                         </div>
                                         <div className='flex justify-center'>
-                                            <button className="bg-gray-200 hover:bg-gray-300 text-gray-700 px-3 py-1 rounded-md">
-                                                View More
-                                            </button>
+                                        <button
+                                            onClick={() => {
+                                                setSelectedStudent(student);
+                                                navigate("/mentor-student-profile");
+                                            }}
+                                            className="bg-gray-200 hover:bg-gray-300 text-gray-700 px-3 py-1 rounded-md"
+                                            >
+                                            View More
+                                        </button>
+
                                         </div>
                                     </div>
                                 ))

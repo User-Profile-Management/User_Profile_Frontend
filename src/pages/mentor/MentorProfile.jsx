@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react';
 import DashboardLayout from '../../layout/DashboardLayout'
 import ProfilePic from '../../assets/profile pic.svg'
 import ProfileSquare from '../../assets/profile-square.svg'
@@ -11,9 +11,127 @@ import Location from '../../assets/profile-location.svg'
 import Tick from '../../assets/tick.svg'
 import AddButton from '../../assets/add-button.svg'
 import DeleteButton from '../../assets/delete.svg'
+import StudentListCard from '../../components/StudentListCard';
+import EditProfileModal from '../../components/modals/EditProfileModal.jsx';
+import userService from "../../service/userService.jsx";
 
 function MentorProfile() {
+
+    const [mentorData,setMentorData] = useState(null);
+    const [StudentsList, setStudentsList] = useState([]);
+    const [passwordData,setPasswordData]= useState({
+        currentPasword: "",
+        newPasword: "",
+        confirmNewPassword:""
+    });
+ 
+    const handleChange= (e) => {
+    setPasswordData({...passwordData,[e.target.name]: e.target.value});
+    }
+    const [isEditModalOpen,setIsEditModalOpen] = useState(false);
+    
+    const handleEditClick = ()=>{
+        setIsEditModalOpen(true);
+    };
+    const handleCloseModal = () =>{
+        setIsEditModalOpen(false);
+    };
+
+    useEffect(() => {
+        const fetchStudents = async () => {
+          try {
+            const students = await userService.getStudentsList();
+            setStudentsList(students);
+          } catch (error) {
+            console.error("Error fetching students:", error);
+          }
+        };
+    
+        fetchStudents();
+      }, []);
+ 
+    useEffect(() => {
+        
+        const fetchUserDetails = async () => {
+            try {
+                const response = await userService.getUserDetails();
+                
+                // Adjust this line depending on how your API returns data
+                setMentorData(response?.response || response?.data || response);
+            } catch (error) {
+                console.error('Error fetching mentor profile:', error);
+            }
+        };
+        fetchUserDetails();
+    }, []);
+    
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+      
+        const { currentPassword, newPassword, confirmNewPassword } = passwordData;
+      
+        if (!currentPassword || !newPassword || !confirmNewPassword) {
+          alert("Please fill all the fields.");
+          return;
+        }
+      
+        if (newPassword.length < 8) {
+          alert("New password must be at least 8 characters.");
+          return;
+        }
+      
+        if (newPassword !== confirmNewPassword) {
+          alert("New password and confirm password do not match.");
+          return;
+        }
+      
+        try {
+          await userService.updatePassword({ currentPassword, newPassword });
+          alert("Password updated successfully!");
+          setPasswordData({
+            currentPassword: "",
+            newPassword: "",
+            confirmNewPassword: ""
+          });
+        } catch (error) {
+          console.error("Password update error:", error);
+          alert("Failed to update password. Please try again.");
+        }
+      };
+      const handleProfileSave = async (updatedData) => {
+        try {
+            const formData = new FormData();
+            formData.append("address", updatedData.address);
+            formData.append("contactNo", updatedData.phone);
+            formData.append("emergencyContact", updatedData.emergencyContact);
+    
+            if (updatedData.profilePicture) {
+                formData.append("profilePicture", updatedData.profilePicture);
+            }
+    
+            await userService.updateProfile(formData); // You should have this endpoint in userService
+            alert("Profile updated successfully!");
+    
+            // Refresh mentor data after update
+            const refreshedData = await userService.getUserDetails();
+            setMentorData(refreshedData.response);
+    
+        } catch (error) {
+            console.error("Error updating profile:", error);
+            alert("Failed to update profile.");
+        }
+    };
+ 
+
+ 
+  if (!mentorData) {
+    return <div>Loading...</div>;
+  }
+ 
+
   return (
+
+    
     <DashboardLayout>
 
          <div className='grid grid-rows-10 h-full overflow-auto'>
@@ -73,24 +191,26 @@ function MentorProfile() {
                         </div>
                         <div className="row-span-6 h-auto">
                             <div className="border border-zinc-100 bg-white rounded-xl p-4 flex flex-col gap-y-5 ">
-                                <div className="Personal Details flex flex-col gap-5">
+                            <div className="Personal Details flex flex-col gap-5">
                                     <div className="flex justify-between">
-                                        <div className='text-xl font-semibold'>Personal Details</div>
+                                        <div className='font-semibold'>Personal Details</div>
+                                        <button onClick={handleEditClick}>
                                         <img src={Edit} alt="edit" />
+                                        </button>
                                     </div>
                                     <div className='flex flex-col gap-y-5'>
                                         <div className="w-full flex gap-5">
                                             <div className="w-1/2 flex gap-5">
                                                 <img className='w-10' src={Email} alt="email-icon" />
                                                 <div className="flex flex-col">
-                                                    <div className="font-semibold" >a@gmail.com</div>
+                                                    <div className="font-semibold" >{mentorData.email}</div>
                                                     <div className='text-sm'>Email</div>
                                                 </div>
                                             </div>
                                             <div className="w-1/2 flex gap-5">
                                                 <img className='w-10' src={DOB} alt="phone-icon" />
                                                 <div className="flex flex-col">
-                                                    <div className="font-semibold" >00/00/0000</div>
+                                                    <div className="font-semibold" >{mentorData.dateOfBirth}</div>
                                                     <div className='text-sm' >D.O.B</div>
                                                 </div>
                                             </div>
@@ -100,14 +220,14 @@ function MentorProfile() {
                                             <div className="w-1/2 flex gap-5">
                                                 <img className='w-10' src={Phone} alt="phone-icon" />
                                                 <div className="flex flex-col">
-                                                    <div className="font-semibold" >00000-00000</div>
+                                                    <div className="font-semibold" >{mentorData.contactNo}</div>
                                                     <div  className='text-sm'>Phone Number</div>
                                                 </div>
                                             </div>
                                             <div className="w-1/2 flex gap-5">
                                                 <img className='w-10' src={Emergency} alt="emergency-icon" />
                                                 <div className="flex flex-col">
-                                                    <div className="font-semibold" >00000-00000</div>
+                                                    <div className="font-semibold" >{mentorData?.emergencyContact || "-"}</div>
                                                     <div className='text-sm' >Emergency Contact</div>
                                                 </div>
                                             </div>
@@ -118,8 +238,8 @@ function MentorProfile() {
                                             <div className="w-1/2 flex gap-5">
                                                 <img className='w-10' src={Location} alt="location-icon" />
                                                 <div className="flex flex-col">
-                                                    <div className="font-semibold" >India</div>
-                                                    <div className='text-sm' >Location</div>
+                                                    <div className="font-semibold" >{mentorData.address}</div>
+                                                    <div className='text-sm' >Address</div>
                                                 </div>
                                             </div>
                                         </div>
@@ -127,7 +247,7 @@ function MentorProfile() {
                                         <div className="border border-zinc-100"></div>
                                     </div>
                                 </div>
-                                <div className="Password flex flex-col gap-y-6">
+                                <form onSubmit={handleSubmit} className="Password flex flex-col gap-y-6">
                                     <div className="title">
                                         <div className="font-semibold">Password</div>
                                         <div className="text-sm">Please enter your current password to change your password.</div>
@@ -138,7 +258,9 @@ function MentorProfile() {
                                             <input
                                             className='name-input border border-zinc-100  p-2 rounded text-sm'
                                             type='text'
-                                            name='Current Password'
+                                            name='currentPassword'
+                                            value={passwordData.currentPassword}
+                                            onChange={handleChange}
                                             placeholder='Enter current password'
                                             />
                                         </div>
@@ -149,11 +271,13 @@ function MentorProfile() {
                                                 <input
                                                 className='name-input border border-zinc-100  p-2 rounded text-sm w-full'
                                                 type='text'
-                                                name='new password'
+                                                name='newPassword'
+                                                value={passwordData.newPassword}
+                                                onChange={handleChange}
                                                 placeholder='Enter new password'
                                                 />
                                                 <div className='text-sm'>Your new password must be more than 8 characters.</div>
-                                            </div> 
+                                            </div>
                                         </div>
                                         <div className="border border-zinc-100"></div>
                                         <div className="gap-10 items-center grid grid-cols-3">
@@ -162,19 +286,36 @@ function MentorProfile() {
                                                 <input
                                                 className='name-input border border-zinc-100  p-2 rounded text-sm w-full '
                                                 type='text'
-                                                name='confirm password'
+                                                name='confirmNewPassword'
+                                                value={passwordData.confirmNewPassword}
+                                                onChange={handleChange}
                                                 placeholder='Re-Enter new password'
                                                 />
-                                            </div> 
+                                            </div>
                                         </div>
                                     </div>
                                     <div className="updatedetails flex flex-row-reverse gap-6">
-                                        <button className='flex justify-center bg-blue-600 py-3 rounded-xl  text-white px-4 font-semibold hover:bg-blue-700 text-sm'> Update Password</button>
-                                        <button className='flex justify-center bg-zinc-100 py-3 rounded-xl text-black px-4 font-semibold hover:bg-zinc-200 text-sm '> Cancel</button>
+                                        <button type="submit" className='flex justify-center bg-blue-600 py-3 rounded-xl  text-white px-4 font-semibold hover:bg-blue-700 text-sm'>
+                                             Update Password</button>
+ 
+                                        <button
+                                        type="button"
+                                        onClick={() => setPasswordData({
+                                            currentPassword: "",
+                                            newPassword: "",
+                                            confirmNewPassword:""
+ 
+                                        }   
+                                        )}
+                                        className='flex justify-center bg-zinc-100 py-3 rounded-xl text-black px-4 font-semibold hover:bg-zinc-200 text-sm '>
+                                        Cancel</button>
+ 
+                                             
                                     </div>
-                                </div>
+                                </form>
                             </div>
                         </div>
+ 
                     </div>
                         </div>
                         <div className="col-span-3 grid grid-rows-10 h-full gap-y-6">
@@ -211,23 +352,17 @@ function MentorProfile() {
                             </div>
 
                             <div className="row-span-6 border border-zinc-100 bg-white rounded-xl h-full p-4 flex flex-col gap-y-6">
-                            <div className="title flex justify-between">
-                                        <div className="text-xl font-semibold">Certificates</div>
-                                        <img className='w-8' src={AddButton} alt="addButton" />
-                            </div>
-                            <div className='h-full flex flex-col gap-y-4'>
-                                <div className="flex flex-col gap-y-5">
-                                    <div className="lst flex justify-between">
-                                        <div className="name text-md font-semibold">Certificate Name</div>
-                                        <img className='cursor-pointer ' src={DeleteButton} alt="Delete Button" />
-                                    </div>
-                                    <div className="border border-zinc-100"></div>
+                                <div className="title flex justify-between">
+                                    <div className="text-xl font-semibold">Student List</div>
                                 </div>
-                                <div className="lst flex justify-between">
-                                    <div className="name text-md font-semibold">Certificate Name</div>
-                                    <img className='cursor-pointer ' src={DeleteButton} alt="Delete Button" />
+
+                                <div className='h-full flex flex-col gap-y-4 overflow-auto'>
+                                   
+                                <StudentListCard items={StudentsList} />
+                                    
                                 </div>
                             </div>
+
 
 
                             </div>
@@ -235,7 +370,14 @@ function MentorProfile() {
                     </div>
                     
                 </div>
-            </div>
+                <EditProfileModal
+            isOpen={isEditModalOpen}
+            onClose={handleCloseModal}
+            onSave={handleProfileSave}
+            userData={mentorData}
+            />
+ 
+            
     </DashboardLayout>
   )
 }
