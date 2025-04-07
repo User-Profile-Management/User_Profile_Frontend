@@ -9,7 +9,6 @@ import Emergency from "../../assets/profile-emergency.svg";
 import Location from "../../assets/profile-location.svg";
 import userService from "../../service/userService";
 import EditProfileModal from "../../components/modals/EditProfileModal";
-
 import AlertModal from "../../components/modals/AlertModal";
 
 export default function AdminProfile() {

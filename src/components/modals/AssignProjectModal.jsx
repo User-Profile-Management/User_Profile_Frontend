@@ -1,10 +1,18 @@
 import React, { useState } from "react";
+import AlertModal from "./AlertModal";
+
 
 const AssignProjectModal = ({ isOpen, onClose, onAssign }) => {
     const [projectData, setProjectData] = useState({
         projectName: "",
         status: "",
     });
+    const [alert, setAlert] = useState({
+        isOpen: false,
+        type: "info",
+        title: "",
+        message: "",
+      });
 
     const handleChange = (e) => {
         const { name, value } = e.target;

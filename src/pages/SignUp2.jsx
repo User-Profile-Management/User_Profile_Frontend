@@ -17,7 +17,7 @@ function SignUp2() {
         dateOfBirth: initialData.dateOfBirth,
         email: "",
         password: "",
-        roleName: ""
+        
     });
 
     const [error, setError] = useState("");
@@ -129,7 +129,7 @@ function SignUp2() {
                                         onChange={handleChange}
                                         />
                                 </div>
-                                <div className="flex flex-col gap-y-1">
+                                {/* <div className="flex flex-col gap-y-1">
                                     <label>Role</label>
                                     <select
                                     className="role-input  border border-zinc-100 bg-gray-100 p-2 rounded text-sm"
@@ -142,7 +142,7 @@ function SignUp2() {
                                     <option value="MENTOR">MENTOR</option>
                                     <option value="ADMIN">ADMIN</option>
                                     </select>
-                                </div>
+                                </div> */}
                             </div>
 
 
