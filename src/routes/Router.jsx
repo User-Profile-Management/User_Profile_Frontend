@@ -8,9 +8,8 @@ import RequestApproval from "../pages/admin/RequestApproval";
 import AdminViewStudent from "../pages/admin/AdminViewStudent";
 import AdminViewMentor from "../pages/admin/AdminViewMentor";
 import MentorViewStudent from "../pages/mentor/MentorViewStudent";
-import ConfirmationModal from "../components/modals/ConfirmationModal";
+
 import AcceptApproval from "../pages/admin/AcceptApproval";
-import ForgotPassword from "../pages/ForgotPassword";
 
 import RoleBasedDashboard, {
   RoleBasedProfile,
@@ -22,7 +21,6 @@ function Router() {
       <Route path="/" element={<SignIn />} />
       <Route path="/signup" element={<SignUp1 />} />
       <Route path="/signup2" element={<SignUp2 />} />
-      <Route path="/forgot-password" element={<ForgotPassword />} />
 
       <Route element={<ProtectedRoute />}>
         <Route path="/dashboard" element={<RoleBasedDashboard />} />
@@ -40,8 +38,6 @@ function Router() {
         <Route path="/mentor-student-profile" element={<MentorViewStudent />} />
 
         {/* Student */}
-
-        <Route path="/confirmation" element={<ConfirmationModal />} />
       </Route>
     </Routes>
   );

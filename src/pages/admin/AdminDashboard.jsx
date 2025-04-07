@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-
 import DashboardLayout from '../../layout/DashboardLayout';
 import StatCard from '../../components/StatCard';
 import ListCard from '../../components/ListCard';
@@ -12,6 +10,8 @@ import AddStudentModal from '../../components/modals/AddStudentModal.jsx';
 import AddProjectModal from '../../components/modals/AddProjectModal.jsx';
 import AddMentorModal from '../../components/modals/AddMentorModal.jsx';
 import EditProjectModal from '../../components/modals/EditProjectModal.jsx';
+import AdminViewStudent from './AdminViewStudent.jsx';
+import { useNavigate } from 'react-router-dom';
 
 
 function AdminDashboard() {
@@ -28,10 +28,6 @@ function AdminDashboard() {
   const [ProjectsList, setProjectsList] = useState([]);
   const [selectedProject, setSelectedProject] = useState(null);
   const [modalType, setModalType] = useState(null);
-  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-  const [projectToDelete, setProjectToDeleteId] = useState(null);
-
-
 
   const handleAddClick = (title) => {
     if (title === "Student List") {
@@ -45,7 +41,6 @@ function AdminDashboard() {
     }
   };
 
- 
   useEffect(() => {
     const fetchCounts = async () => {
       try {
@@ -133,34 +128,21 @@ function AdminDashboard() {
     }
   };
 
-  const handleDeleteClick = (projectId) => {
+  const handleDeleteProject = async (projectId) => {
     if (!projectId) {
       console.error("Error: Project ID is undefined!");
       return;
     }
-    setProjectToDeleteId(projectId);
-    setDeleteModalOpen(true);
-  };
-  
 
-  const handleDeleteProject = async () => {
-    if (!projectToDeleteId) {
-      console.error("Error: Project ID is undefined!");
-      return;
-    }
-  
     try {
-      await projectService.deleteProject(projectToDeleteId);
-      setProjectsList((prev) => prev.filter((project) => project.projectId !== projectToDeleteId));
+      await projectService.deleteProject(projectId);
+      setProjectsList((prev) => prev.filter((project) => project.projectId !== projectId));
       setProjectsCount((prev) => prev - 1);
     } catch (error) {
       console.error("Error deleting project:", error);
-    } finally {
-      setDeleteModalOpen(false); 
-      setProjectToDeleteId(null); 
     }
   };
-  
+
   const handleEditProject = (project) => {
     console.log("[DEBUG] Selected project for editing:", project); 
     setSelectedProject(project);
@@ -174,9 +156,6 @@ function AdminDashboard() {
     setSelectedProject(null);
     handleProjectAdded(); 
   };
-
-
-  
 
   return (
     <DashboardLayout>

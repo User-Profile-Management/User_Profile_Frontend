@@ -5,6 +5,7 @@ const BASE_URL = "http://localhost:8080/api/users/certificates";
 const getToken = () => localStorage.getItem("token");
 
 const certificateService = {
+  // 1. Add certificate (PDF upload)
   addCertificate: async (certificateName, issuedBy, file) => {
     try {
       const formData = new FormData();
@@ -21,14 +22,12 @@ const certificateService = {
 
       return response.data;
     } catch (error) {
-      console.error(
-        "Error uploading certificate:",
-        error.response?.data || error
-      );
+      console.error("Error uploading certificate:", error.response?.data || error);
       throw error.response?.data || error;
     }
   },
 
+  // 2. Get certificates for the authenticated student
   getCertificatesList: async () => {
     try {
       const response = await axios.get(`${BASE_URL}/get`, {
@@ -36,13 +35,10 @@ const certificateService = {
           Authorization: `Bearer ${getToken()}`,
         },
       });
-
+  
       return response.data.response || [];
     } catch (error) {
-      console.error(
-        "Error fetching certificates:",
-        error.response?.data || error
-      );
+      console.error("Error fetching certificates:", error.response?.data || error);
       return [];
     }
   },
@@ -50,22 +46,16 @@ const certificateService = {
   // 3. Download certificate PDF
   downloadCertificate: async (certificateId) => {
     try {
-      const response = await axios.get(
-        `${BASE_URL}/${certificateId}/download`,
-        {
-          headers: {
-            Authorization: `Bearer ${getToken()}`,
-          },
-          responseType: "blob",
-        }
-      );
+      const response = await axios.get(`${BASE_URL}/${certificateId}/download`, {
+        headers: {
+          Authorization: `Bearer ${getToken()}`,
+        },
+        responseType: "blob", // Important for file download
+      });
 
-      return response.data;
+      return response.data; // Blob data
     } catch (error) {
-      console.error(
-        "Error downloading certificate:",
-        error.response?.data || error
-      );
+      console.error("Error downloading certificate:", error.response?.data || error);
       throw error;
     }
   },
@@ -81,13 +71,10 @@ const certificateService = {
 
       return response.data;
     } catch (error) {
-      console.error(
-        "Error deleting certificate:",
-        error.response?.data || error
-      );
+      console.error("Error deleting certificate:", error.response?.data || error);
       throw error;
     }
-  },
+  }
 };
 
 export default certificateService;

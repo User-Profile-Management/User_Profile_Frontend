@@ -8,7 +8,6 @@ import AddStudentModal from "../components/modals/AddStudentModal.jsx";
 import AddMentorModal from "../components/modals/AddMentorModal.jsx";
 import WarningModal from "../components/modals/WarningModal.jsx";
 import DeleteUserModal from "../components/modals/DeleteUserModal.jsx";
-import EditProjectModal from "../components/modals/EditProjectModal.jsx"; 
 
 
 
@@ -23,10 +22,6 @@ const Dashboard = () => {
 
     const [isDeleteUserModalOpen, setIsDeleteUserModalOpen] = useState(false);
     const [userToDelete, setUserToDelete] = useState(null);
-
-    
-    const [isEditProjectModalOpen, setIsEditProjectModalOpen] = useState(false);
-    const [projectToEdit, setProjectToEdit] = useState(null);
 
 
     const [isAddProjectModalOpen, setIsAddProjectModalOpen] = useState(false);
@@ -97,11 +92,6 @@ const Dashboard = () => {
         console.log("Updated Profile:", updatedProfile);
     };
 
-    
-
-
-   
-
     return (
         <div className="p-6">
             <h1 className="text-2xl font-bold mb-4">Dashboard</h1>
@@ -134,9 +124,6 @@ const Dashboard = () => {
             
                 Delete Project
             </button>
-        
-            
-            
 
 
 
@@ -160,8 +147,6 @@ const Dashboard = () => {
                 className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-green-600 mt-4">
                 Edit Profile
             </button>
-
-           
 
 
             
@@ -203,8 +188,6 @@ const Dashboard = () => {
                 onUpload={handleUpload} 
             />
 
-           
-
             <AssignProjectModal 
                 isOpen={isAssignModalOpen} 
                 onClose={() => setIsAssignModalOpen(false)} 
@@ -241,8 +224,6 @@ const Dashboard = () => {
                 onSave={handleSaveProfile} 
                 userData={profile} 
             />
-
-           
         </div>
     );
 };
