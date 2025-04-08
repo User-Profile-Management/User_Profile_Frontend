@@ -9,11 +9,18 @@ import Emergency from "../../assets/profile-emergency.svg";
 import Location from "../../assets/profile-location.svg";
 import userService from "../../service/userService";
 import EditProfileModal from "../../components/modals/EditProfileModal";
-import Swal from "sweetalert2";
+import AlertModal from "../../components/modals/AlertModal";
 
 export default function AdminProfile() {
   const [adminData, setAdminData] = useState(null);
   const [errors, setErrors] = useState({});
+  const [alert, setAlert] = useState({
+    isOpen: false,
+    type: "info",
+    title: "",
+    message: "",
+  });
+  
 
   const [passwordData, setPasswordData] = useState({
     currentPassword: "",
@@ -63,14 +70,13 @@ export default function AdminProfile() {
 
     try {
       await userService.updatePassword({ currentPassword, newPassword });
-      Swal.fire({
-        icon: "success",
+      setAlert({
+        isOpen: true,
+        type: "success",
         title: "Success",
-        text: "Password updated successfully!",
-        allowOutsideClick: false,
-        allowEscapeKey: false,
-        confirmButtonText: "OK",
+        message: "Password updated successfully!",
       });
+      
 
       setPasswordData({
         currentPassword: "",
@@ -80,14 +86,13 @@ export default function AdminProfile() {
       setErrors({});
     } catch (error) {
       console.error("Password update error:", error);
-      Swal.fire({
-        icon: "error",
+      setAlert({
+        isOpen: true,
+        type: "error",
         title: "Error",
-        text: "Failed to update password. Please try again.",
-        allowOutsideClick: false,
-        allowEscapeKey: false,
-        confirmButtonText: "OK",
+        message: "Failed to update password. Please try again.",
       });
+      
     }
   };
 
@@ -103,27 +108,27 @@ export default function AdminProfile() {
       }
 
       await userService.updateProfile(formData);
-      Swal.fire({
-        icon: "success",
+      setAlert({
+        isOpen: true,
+        type: "success",
         title: "Success",
-        text: "Password updated successfully!",
-        allowOutsideClick: false,
-        allowEscapeKey: false,
-        confirmButtonText: "OK",
+        message: "Profile updated successfully!",
       });
+      
+      
 
       const refreshedData = await userService.getUserDetails();
       setAdminData(refreshedData);
     } catch (error) {
       console.error("Error updating profile:", error);
-      Swal.fire({
-        icon: "error",
+      setAlert({
+        isOpen: true,
+        type: "error",
         title: "Error",
-        text: "Failed to update password. Please try again.",
-        allowOutsideClick: false,
-        allowEscapeKey: false,
-        confirmButtonText: "OK",
+        message: "Failed to update profile. Please try again.",
       });
+      
+      
     }
   };
 
@@ -143,7 +148,7 @@ export default function AdminProfile() {
               <div className="border border-zinc-100 bg-white rounded-xl p-4 h-full flex items-center justify-center">
                 <div className="flex flex-col items-center ">
                   <img
-                    className="w-32 h-32 rounded-full "
+                    className="w-32 h-32 rounded-2xl border border-zinc-100 p-2 object-contain "
                     src={
                       adminData.profilePicture
                         ? `data:image/png;base64,${adminData.profilePicture}`
@@ -358,6 +363,14 @@ export default function AdminProfile() {
         onSave={handleProfileSave}
         userData={adminData}
       />
+      <AlertModal
+  isOpen={alert.isOpen}
+  onClose={() => setAlert((prev) => ({ ...prev, isOpen: false }))}
+  type={alert.type}
+  title={alert.title}
+  message={alert.message}
+/>
+
     </DashboardLayout>
   );
 }

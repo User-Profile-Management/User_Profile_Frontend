@@ -11,14 +11,12 @@ import Location from '../../assets/profile-location.svg'
 import Tick from '../../assets/tick.svg'
 import AddButton from '../../assets/add-button.svg'
 import DeleteButton from '../../assets/delete.svg'
- 
 import userService from '../../service/userService'
 import projectService from '../../service/userprojectService';
 import certificateService from '../../service/certificateService';
 import userprojectService from '../../service/userprojectService'
 import EditProfileModal from '../../components/modals/EditProfileModal'
 function StudentProfile() {
- 
     const [studentData,setStudentData] = useState(null);
     const [projects, setProjects] = useState([]);
     const [certifications, setCertifications] = useState([]);
@@ -28,41 +26,49 @@ function StudentProfile() {
         confirmNewPassword:""
     });
     const completedCount = projects.filter(project => project.status === 'COMPLETED').length;
- 
     const handleChange= (e) => {
     setPasswordData({...passwordData,[e.target.name]: e.target.value});
     }
     const [isEditModalOpen,setIsEditModalOpen] = useState(false);
- 
     const handleEditClick = ()=>{
         setIsEditModalOpen(true);
     };
     const handleCloseModal = () =>{
         setIsEditModalOpen(false);
     };
- 
+
     useEffect(() => {
-  const fetchCertificates = async () => {
-    try {
-      const userCerts = await certificateService.getCertificatesList();
-      setCertifications(userCerts);
-    } catch (error) {
-      console.error("Error fetching certifications:", error);
-    }
-  };
+        const fetchCertificates = async () => {
+            try {
+                const userCerts = await certificateService.getCertificatesList();
+                setCertifications(userCerts);
+            } catch (error) {
+                console.error("Error fetching certifications:", error);
+            }
+        };
 
-  const fetchStudentDetails = async () => {
-    try {
-      const response = await userService.getStudentById(student?.userId);
-      setStudentData(response?.data || response);
-    } catch (error) {
-      console.error("Error fetching student profile:", error);
-    }
-  };
-
-  fetchStudentDetails();
-  fetchCertificates();
-}, [student]);
+        const fetchProjects = async () => {
+            try {
+                const userProjects = await projectService.getProjectsList();
+                setProjects(userProjects);
+            } catch (error) {
+                console.error("Error fetching projects:", error);
+            }
+        };
+        const fetchUserDetails = async () => {
+            try {
+                const response = await userService.getUserDetails(); 
+                
+                // Adjust this line depending on how your API returns data
+                setStudentData(response?.response || response?.data || response);
+            } catch (error) {
+                console.error('Error fetching mentor profile:', error);
+            }
+        };
+        fetchUserDetails();
+        fetchProjects();
+        fetchCertificates();
+    }, []);
     
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -120,7 +126,6 @@ function StudentProfile() {
             alert("Failed to update profile.");
         }
     };
- 
     useEffect(() => {
       const fetchProjects = async () => {
         if (studentData?.userId) {
@@ -139,20 +144,19 @@ function StudentProfile() {
     const uniqueMentors = [
       ...new Map(
         projects
-          .filter((p) => p.project?.mentor) // make sure mentor exists
+          .filter((p) => p.project?.mentor) 
           .map((p) => [p.project.mentor.userId, p.project.mentor])
       ).values(),
     ];
     
-    console.log("Unique mentors:", uniqueMentors);
- 
+    console.log("Unique mentors:", uniqueMentors); 
+
   if (!studentData) {
-    return <div>Loading...</div>;
+    return <div>Loading...</div>; 
   }
  
   return (
     <DashboardLayout>
- 
          <div className='grid grid-rows-10 h-full overflow-auto'>
                 <div className='flex items-center md:h-20'>
                     <div className="font-semibold">Profile</div>
@@ -163,64 +167,64 @@ function StudentProfile() {
                             <div className="grid grid-rows-10 h-full gap-y-6">
                         <div className="row-span-4">
                             <div className=" grid grid-cols-5 h-full gap-6">
-                                <div className="col-span-2">
+                                <div className=" col-span-5 md:col-span-2 ">
                                     <div className='border border-zinc-100 bg-white rounded-xl p-4 h-full flex items-center justify-center'>
                                         <div className="flex flex-col items-center ">
-                                        <img
-                                        className='w-32 h-32 rounded-2xl border border-zinc-100 p-2 object-contain'
-                                        src={studentData.profilePicture
-                                            ? `data:image/png;base64,${studentData.profilePicture}`
-                                            : ProfilePic}
-                                        onError={(e) => { e.target.src = ProfilePic; }}
-                                        alt="Profile Pic"
+                                        <img 
+                                        className='w-32 h-32 rounded-2xl border border-zinc-100 p-2 object-contain' 
+                                        src={studentData.profilePicture 
+                                            ? `data:image/png;base64,${studentData.profilePicture}` 
+                                            : ProfilePic} 
+                                        onError={(e) => { e.target.src = ProfilePic; }} 
+                                        alt="Profile Pic" 
                                         />
                                             <div className='font-semibold text-2xl text-center'>{studentData.fullName}</div>
                                             <div>{studentData.userId}</div>
                                         </div>
                                     </div>
                                 </div>
-                                <div className="col-span-3 w-full">
-                      <div className="grid grid-rows-8 border border-zinc-100 bg-white rounded-xl p-4 h-full flex-col ">
-                        <div className="font-semibold text-xl flex justify-center">
-                          Your Mentors
-                        </div>
-                        <div className="row-span-7 grid grid-rows-4 gap-y-5 overflow-auto">
-                          {uniqueMentors.length === 0 ? (
-                            <div className="text-center text-gray-500">
-                              No mentors found
-                            </div>
-                          ) : (
-                            uniqueMentors.map((mentor, index) => (
-                              <div
-                                key={index}
-                                className="flex flex-col gap-y-5"
-                              >
-                                <div className="w-1/2 flex gap-5">
-                                  <img
-                                    className="w-10"
-                                    src={ProfileSquare}
-                                    alt="mentor-icon"
-                                  />
-                                  <div className="flex flex-col">
-                                    <div className="font-semibold">
-                                      {mentor.fullName}
+                                <div className="hidden md:block col-span-5 md:col-span-3 w-full">
+                                    <div className="hidden md:grid grid-rows-8 border border-zinc-100 bg-white rounded-xl p-4 h-full flex-col ">
+                                        <div className="font-semibold text-xl flex justify-center">
+                                        Your Mentors
+                                        </div>
+                                        <div className="row-span-7 grid grid-rows-4 gap-y-5 overflow-auto">
+                                        {uniqueMentors.length === 0 ? (
+                                            <div className="text-center text-gray-500">
+                                            No mentors found
+                                            </div>
+                                        ) : (
+                                            uniqueMentors.map((mentor, index) => (
+                                            <div
+                                                key={index}
+                                                className="flex flex-col gap-y-5"
+                                            >
+                                                <div className="w-1/2 flex gap-5">
+                                                <img
+                                                    className="w-10"
+                                                    src={ProfileSquare}
+                                                    alt="mentor-icon"
+                                                />
+                                                <div className="flex flex-col">
+                                                    <div className="font-semibold">
+                                                    {mentor.fullName}
+                                                    </div>
+                                                    <div className="text-sm">
+                                                    {mentor.contactNo}
+                                                    </div>
+                                                </div>
+                                                </div>
+                                                <div className="border border-zinc-100"></div>
+                                            </div>
+                                            ))
+                                        )}
+                                        </div>
                                     </div>
-                                    <div className="text-sm">
-                                      {mentor.contactNo}
                                     </div>
-                                  </div>
-                                </div>
-                                <div className="border border-zinc-100"></div>
-                              </div>
-                            ))
-                          )}
-                        </div>
-                      </div>
-                    </div>
                             </div>
- 
- 
- 
+
+
+
                             
                         </div>
                         <div className="row-span-6 h-auto">
@@ -233,11 +237,11 @@ function StudentProfile() {
                                         </button>
                                     </div>
                                     <div className='flex flex-col gap-y-5'>
-                                        <div className="w-full flex gap-5">
+                                        <div className="w-full flex flex-col md:flex-row gap-5 ">
                                             <div className="w-1/2 flex gap-5">
                                                 <img className='w-10' src={Email} alt="email-icon" />
                                                 <div className="flex flex-col">
-                                                    <div className="font-semibold" >{studentData.email}</div>
+                                                    <div className="font-semibold " >{studentData.email}</div>
                                                     <div className='text-sm'>Email</div>
                                                 </div>
                                             </div>
@@ -249,7 +253,7 @@ function StudentProfile() {
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="w-full flex gap-5">
+                                        <div className="w-full flex flex-col md:flex-row gap-5 ">
                                             
                                             <div className="w-1/2 flex gap-5">
                                                 <img className='w-10' src={Phone} alt="phone-icon" />
@@ -290,7 +294,7 @@ function StudentProfile() {
                                         <div className=" gap-10 items-center grid grid-cols-3">
                                             <label className='text-sm font-semibold'>Current password</label>
                                             <input
-                                            className='name-input border border-zinc-100  p-2 rounded text-sm'
+                                            className='col-span-2 md:col-span-1 name-input border border-zinc-100  p-2 rounded text-sm'
                                             type='text'
                                             name='currentPassword'
                                             value={passwordData.currentPassword}
@@ -301,9 +305,9 @@ function StudentProfile() {
                                         <div className="border border-zinc-100"></div>
                                         <div className="gap-10 items-center grid grid-cols-3">
                                             <label className='text-sm font-semibold'>New password</label>
-                                            <div>
+                                            <div className='col-span-2 md:col-span-1'>
                                                 <input
-                                                className='name-input border border-zinc-100  p-2 rounded text-sm w-full'
+                                                className='  name-input border border-zinc-100  p-2 rounded text-sm w-full'
                                                 type='text'
                                                 name='newPassword'
                                                 value={passwordData.newPassword}
@@ -311,12 +315,12 @@ function StudentProfile() {
                                                 placeholder='Enter new password'
                                                 />
                                                 <div className='text-sm'>Your new password must be more than 8 characters.</div>
-                                            </div>
+                                            </div> 
                                         </div>
                                         <div className="border border-zinc-100"></div>
                                         <div className="gap-10 items-center grid grid-cols-3">
                                             <label className='text-sm font-semibold'>Confirm new password</label>
-                                            <div>
+                                            <div className='col-span-2 md:col-span-1'>
                                                 <input
                                                 className='name-input border border-zinc-100  p-2 rounded text-sm w-full '
                                                 type='text'
@@ -325,25 +329,23 @@ function StudentProfile() {
                                                 onChange={handleChange}
                                                 placeholder='Re-Enter new password'
                                                 />
-                                            </div>
+                                            </div> 
                                         </div>
                                     </div>
                                     <div className="updatedetails flex flex-row-reverse gap-6">
                                         <button type="submit" className='flex justify-center bg-blue-600 py-3 rounded-xl  text-white px-4 font-semibold hover:bg-blue-700 text-sm'>
                                              Update Password</button>
- 
-                                        <button
+
+                                        <button 
                                         type="button"
                                         onClick={() => setPasswordData({
                                             currentPassword: "",
                                             newPassword: "",
                                             confirmNewPassword:""
- 
                                         }   
                                         )}
                                         className='flex justify-center bg-zinc-100 py-3 rounded-xl text-black px-4 font-semibold hover:bg-zinc-200 text-sm '>
                                         Cancel</button>
- 
                                              
                                     </div>
                                 </form>
@@ -391,7 +393,6 @@ function StudentProfile() {
                                     </div>
                                     </div>
                             </div>
- 
                             <div className="row-span-6 border border-zinc-100 bg-white rounded-xl h-full p-4 flex flex-col gap-y-6">
                             <div className="title flex justify-between">
                                         <div className="text-xl font-semibold">Certificates</div>
@@ -412,8 +413,8 @@ function StudentProfile() {
                             )}
                                 
                             </div>
- 
- 
+
+
                             </div>
                         </div>
                     </div>
@@ -429,6 +430,5 @@ function StudentProfile() {
     </DashboardLayout>
   )
 }
- 
+
 export default StudentProfile
- 

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import userService from "../../service/userService";
+import AlertModal from "./AlertModal";
 
 const AddStudentModal = ({ isOpen, onClose }) => {
   const [studentData, setStudentData] = useState({
@@ -10,15 +11,19 @@ const AddStudentModal = ({ isOpen, onClose }) => {
     email: "",
     password: "",
   });
+  const [alert, setAlert] = useState({
+    isOpen: false,
+    type: "info",
+    title: "",
+    message: "",
+  });
 
   const [errorMessage, setErrorMessage] = useState("");
-  const [errors, setErrors] = useState({}); // Track individual field errors
+  const [errors, setErrors] = useState({});
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setStudentData({ ...studentData, [name]: value });
-
-    // Clear error when the user types
     setErrors({ ...errors, [name]: false });
   };
 
@@ -28,7 +33,6 @@ const AddStudentModal = ({ isOpen, onClose }) => {
     let newErrors = {};
     let hasError = false;
 
-    // Check for empty fields
     for (const key in studentData) {
       if (!studentData[key]) {
         newErrors[key] = true;
@@ -37,25 +41,53 @@ const AddStudentModal = ({ isOpen, onClose }) => {
     }
 
     if (hasError) {
-      setErrorMessage("Please fill in the required fields");
+      setErrorMessage("Please fill in all the fields");
       setErrors(newErrors);
       return;
     }
 
-    setErrorMessage(""); // Clear error message if all fields are filled
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(studentData.email)) {
+      setErrorMessage("Please enter a valid email address");
+      setErrors({ ...newErrors, email: true });
+      return;
+    }
+
+    if (studentData.password.length < 8) {
+      setErrorMessage("Password must be at least 8 characters long");
+      setErrors({ ...newErrors, password: true });
+      return;
+    }
+
+    const phoneRegex = /^\d{10}$/;
+    if (!phoneRegex.test(studentData.contactNo)) {
+      setErrorMessage("Please enter a valid 10-digit mobile number");
+      setErrors({ ...newErrors, contactNo: true });
+      return;
+    }
+
+    setErrorMessage("");
 
     const payload = { ...studentData, roleName: "STUDENT" };
-
-    console.log("Submitting student data:", payload);
 
     try {
       const response = await userService.signup(payload);
       console.log("Student registered successfully:", response);
-      alert("Student registered successfully!");
+      setAlert({
+        isOpen: true,
+        type: "success",
+        title: "Success",
+        message: "Student registered successfully",
+      });
       onClose();
     } catch (error) {
       console.error("Registration error:", error);
-      alert("Failed to register student. Please try again.");
+      setAlert({
+        isOpen: true,
+        type: "error",
+        title: "Error",
+        message: "Failed to register student. Please try again.",
+      });
     }
   };
 
@@ -82,7 +114,9 @@ const AddStudentModal = ({ isOpen, onClose }) => {
               value={studentData.fullName}
               onChange={handleChange}
               placeholder="Enter name"
-              className="w-2/3 p-2 border text-gray-300 rounded-md focus:ring-2 focus:ring-gray-200 focus:outline-none"
+              className={`w-2/3 p-2 border rounded-md focus:ring-2 focus:ring-gray-200 focus:outline-none ${
+                errors.fullName ? "border-red-500" : "text-gray-300"
+              }`}
             />
           </div>
 
@@ -93,7 +127,9 @@ const AddStudentModal = ({ isOpen, onClose }) => {
               name="dateOfBirth"
               value={studentData.dateOfBirth}
               onChange={handleChange}
-              className="w-2/3 p-2 border text-gray-300  rounded-md focus:ring-2 focus:ring-gray-200 focus:outline-none"
+              className={`w-2/3 p-2 border rounded-md focus:ring-2 focus:ring-gray-200 focus:outline-none ${
+                errors.dateOfBirth ? "border-red-500" : "text-gray-300"
+              }`}
             />
           </div>
 
@@ -105,7 +141,9 @@ const AddStudentModal = ({ isOpen, onClose }) => {
               value={studentData.contactNo}
               onChange={handleChange}
               placeholder="Enter mobile number"
-              className="w-2/3 p-2 border text-gray-300  rounded-md focus:ring-2 focus:ring-gray-200 focus:outline-none"
+              className={`w-2/3 p-2 border rounded-md focus:ring-2 focus:ring-gray-200 focus:outline-none ${
+                errors.contactNo ? "border-red-500" : "text-gray-300"
+              }`}
             />
           </div>
 
@@ -117,7 +155,9 @@ const AddStudentModal = ({ isOpen, onClose }) => {
               value={studentData.address}
               onChange={handleChange}
               placeholder="Enter address"
-              className="w-2/3 p-2 border text-gray-300  rounded-md focus:ring-2 focus:ring-gray-200 focus:outline-none"
+              className={`w-2/3 p-2 border rounded-md focus:ring-2 focus:ring-gray-200 focus:outline-none ${
+                errors.address ? "border-red-500" : "text-gray-300"
+              }`}
             />
           </div>
 
@@ -129,7 +169,9 @@ const AddStudentModal = ({ isOpen, onClose }) => {
               value={studentData.email}
               onChange={handleChange}
               placeholder="Enter email address"
-              className="w-2/3 p-2 border text-gray-300  rounded-md focus:ring-2 focus:ring-gray-200 focus:outline-none"
+              className={`w-2/3 p-2 border rounded-md focus:ring-2 focus:ring-gray-200 focus:outline-none ${
+                errors.email ? "border-red-500" : "text-gray-300"
+              }`}
             />
           </div>
 
@@ -141,7 +183,9 @@ const AddStudentModal = ({ isOpen, onClose }) => {
               value={studentData.password}
               onChange={handleChange}
               placeholder="Enter password"
-              className="w-2/3 p-2 border text-gray-300  rounded-md focus:ring-2 focus:ring-gray-200 focus:outline-none"
+              className={`w-2/3 p-2 border rounded-md focus:ring-2 focus:ring-gray-200 focus:outline-none ${
+                errors.password ? "border-red-500" : "text-gray-300"
+              }`}
             />
           </div>
 
@@ -162,6 +206,14 @@ const AddStudentModal = ({ isOpen, onClose }) => {
           </div>
         </form>
       </div>
+      <AlertModal
+        isOpen={alert.isOpen}
+        onClose={() => setAlert({ ...alert, isOpen: false })}
+        type={alert.type}
+        title={alert.title}
+        message={alert.message}
+        autoClose={false}
+      />
     </div>
   );
 };

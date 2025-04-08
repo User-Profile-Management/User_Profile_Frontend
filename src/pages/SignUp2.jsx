@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link ,useNavigate, useLocation} from "react-router-dom";
-
-import BackgroundImage from "/src/assets/frontimage.png";
+import LOGO from '../assets/LOGO Black.svg'
+import Symbol from "../assets/SignIn.svg";
 import userService from "../service/userService";
 
 
@@ -17,7 +17,7 @@ function SignUp2() {
         dateOfBirth: initialData.dateOfBirth,
         email: "",
         password: "",
-        roleName: ""
+        
     });
 
     const [error, setError] = useState("");
@@ -26,7 +26,6 @@ function SignUp2() {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-   
 
 
     const handleSubmit = async (e) => {
@@ -63,15 +62,14 @@ function SignUp2() {
     
     return (
         <div className='signup page bg-white h-screen p-10 grid grid-cols-2'>
-           <div
-                className="image bg-zinc-300 rounded-2xl bg-cover bg-center"
-                style={{ backgroundImage: `url(${BackgroundImage})`, backgroundSize: "cover", backgroundPosition: "center", backgroundRepeat: "no-repeat" }}
-                >
+           <div className="image bg-white rounded-2xl bg-center flex flex-col justify-center items-center gap-7">
+                <img className="w-3/4 h-3/4" src={Symbol} alt="" />
             </div>
             <div className="signup px-14 flex items-center justify-center ">
                 <div className='border-1 border-zinc-300 px-4 py-8 rounded-2xl min-w-lg'>
                     <div className="title mb-10">
-                        <div className="heading text-4xl">Hi</div>
+                        <img className="w-36 mb-6" src={LOGO} alt="LOGO" />
+                        <div className="heading text-4xl font-semibold">Hi</div>
                         <div className="subheading text-md text-zinc-400">Enter your details to register.</div>
                     </div>
                     <div className="signup form ">
@@ -129,7 +127,7 @@ function SignUp2() {
                                         onChange={handleChange}
                                         />
                                 </div>
-                                <div className="flex flex-col gap-y-1">
+                                {/* <div className="flex flex-col gap-y-1">
                                     <label>Role</label>
                                     <select
                                     className="role-input  border border-zinc-100 bg-gray-100 p-2 rounded text-sm"
@@ -142,14 +140,15 @@ function SignUp2() {
                                     <option value="MENTOR">MENTOR</option>
                                     <option value="ADMIN">ADMIN</option>
                                     </select>
-                                </div>
+                                </div> */}
                             </div>
 
 
 
-
+                        
                             <div className="grid grid-rows-1 gap-y-4">
-                            <button 
+                                
+                                <button 
                                 type="submit" 
                                 className="flex justify-center bg-blue-800 py-3 rounded-xl text-white font-semibold w-full"
                                 >
@@ -166,7 +165,7 @@ function SignUp2() {
                                     Sign In
                                     </Link>
                                 </div>
-                            </div> 
+                            </div>
 
                         </form>
                     </div>

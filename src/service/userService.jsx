@@ -9,45 +9,67 @@ const getToken = () => localStorage.getItem("token") || localStorage.getItem("au
 const userService = {
   signup: async (userData) => {
     try {
-        const response = await axios.post(`${BASE_URL}/register`, userData, {
-            headers: {
-                "Content-Type": "application/json",
-            },
-        });
-
-        return response.data; 
-    } catch (error) {
-        console.error("Signup error:", error.response?.data || error.message);
-        throw error; 
-    }
-},
-
-
-  getStudentsCount: async () => {
-    try {
-      const response = await axios.get(`${BASE_URL}/count?role=STUDENT&status=ACTIVE`, {
+      const response = await axios.post(`${BASE_URL}/register`, userData, {
         headers: {
-          Authorization: `Bearer ${getToken()}`,
           "Content-Type": "application/json",
         },
       });
-  
 
-      return response.data.response || 0; 
+      return response.data;
+    } catch (error) {
+      console.error("Signup error:", error.response?.data || error.message);
+      throw error;
+    }
+  },
+
+  getStudentsCount: async () => {
+    try {
+      const response = await axios.get(
+        `${BASE_URL}/count?role=STUDENT&status=ACTIVE`,
+        {
+          headers: {
+            Authorization: `Bearer ${getToken()}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      return response.data.response || 0;
     } catch (error) {
       console.error("Error fetching students count:", error);
       return 0;
     }
   },
+  acceptUser: async (userId, userData) => {
+    try {
+      const response = await axios.put(`${BASE_URL}/${userId}`, userData, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${getToken()}`,
+        },
+      });
+
+      return response.data;
+    } catch (error) {
+      console.error(
+        "Accept user error:",
+        error.response?.data || error.message
+      );
+      throw error;
+    }
+  },
 
   getMentorsCount: async () => {
     try {
-      const response = await axios.get(`${BASE_URL}/count?role=MENTOR&status=ACTIVE`, {
-        headers: {
-          Authorization: `Bearer ${getToken()}`,
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await axios.get(
+        `${BASE_URL}/count?role=MENTOR&status=ACTIVE`,
+        {
+          headers: {
+            Authorization: `Bearer ${getToken()}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
       return response.data.response || 0;
     } catch (error) {
       console.error("Error fetching mentors count:", error);
@@ -57,12 +79,15 @@ const userService = {
 
   getStudentsList: async () => {
     try {
-      const response = await axios.get(`${BASE_URL}?role=STUDENT&status=ACTIVE`, {
-        headers: {
-          Authorization: `Bearer ${getToken()}`,
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await axios.get(
+        `${BASE_URL}?role=STUDENT&status=ACTIVE`,
+        {
+          headers: {
+            Authorization: `Bearer ${getToken()}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
       return response.data.response.map((student) => ({
         name: student.fullName,
         userId: student.userId,
@@ -104,10 +129,8 @@ const userService = {
           "Content-Type": "application/json",
         },
       });
-  
+
       return response.data.response;
-  
-      
     } catch (error) {
       console.error("Error fetching user data:", error);
       return [];
@@ -115,55 +138,74 @@ const userService = {
   },
   updateProfile: async (profileData) => {
     try {
-    const formData = new FormData();
-    formData.append("name", profileData.name);
-    formData.append("email", profileData.email);
-    formData.append("address", profileData.address);
-    formData.append("phone", profileData.phone);
-    formData.append("emergencyContact", profileData.emergencyContact);
+      const formData = new FormData();
+      formData.append("name", profileData.name);
+      formData.append("email", profileData.email);
+      formData.append("address", profileData.address);
+      formData.append("phone", profileData.phone);
+      formData.append("emergencyContact", profileData.emergencyContact);
 
-    if (profileData.profilePicture) {
-      formData.append("profilePicture", profileData.profilePicture);
-    }
-      const response = await axios.put(`${BASE_URL}/profile`,profileData, {
-        
+      if (profileData.profilePicture) {
+        formData.append("profilePicture", profileData.profilePicture);
+      }
+      const response = await axios.put(`${BASE_URL}/profile`, profileData, {
         headers: {
           Authorization: `Bearer ${getToken()}`,
-          
         },
       });
       return response.data;
-     
     } catch (error) {
       console.error("Error updating data:", error);
       return [];
     }
   },
-  updatePassword: async(passwordData) => {
+  updatePassword: async (passwordData) => {
     try {
-      const response = await axios.put(`${BASE_URL}/update-password`, passwordData, {
-        headers: {
-          Authorization: `Bearer ${getToken()}`,
-          "Content-Type":"application/json",
-        },
-      });
+      const response = await axios.put(
+        `${BASE_URL}/update-password`,
+        passwordData,
+        {
+          headers: {
+            Authorization: `Bearer ${getToken()}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
       return response.data;
-    } catch (error){
-      console.error("Password updation error:",error.response?.data || error.message);
+    } catch (error) {
+      console.error(
+        "Password updation error:",
+        error.response?.data || error.message
+      );
       throw error;
     }
-
   },
-
-
-  getMentorsList: async () => {
+  getUserById: async (userId) => {
     try {
-      const response = await axios.get(`${BASE_URL}?role=MENTOR&status=ACTIVE`, {
+      const response = await axios.get(`${BASE_URL}/profile/${userId}`, {
         headers: {
           Authorization: `Bearer ${getToken()}`,
           "Content-Type": "application/json",
         },
       });
+      return response.data.response; // or adjust based on actual response shape
+    } catch (error) {
+      console.error("Error fetching user by ID:", error);
+      throw error;
+    }
+  },
+
+  getMentorsList: async () => {
+    try {
+      const response = await axios.get(
+        `${BASE_URL}?role=MENTOR&status=ACTIVE`,
+        {
+          headers: {
+            Authorization: `Bearer ${getToken()}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
       return response.data.response.map((mentor) => ({
         name: mentor.fullName,
         userId: mentor.userId,
@@ -187,6 +229,40 @@ const userService = {
     }
   },
 
+  getStudentProgress: async () => {
+    try {
+      const profile = await userService.getUserDetails();
+      console.log("Fetched user profile:", profile);
+  
+      const profileFieldsToCheck = [
+        "fullName",
+        "dateOfBirth",
+        "email",
+        "contactNo",
+        "address",
+        "profilePicture"
+      ];
+  
+      const filledFields = profileFieldsToCheck.filter(
+        (field) => profile[field] && profile[field].toString().trim() !== ""
+      ).length;
+  
+      const totalFields = profileFieldsToCheck.length;
+  
+      const profileCompletion =
+        totalFields > 0 ? Math.round((filledFields / totalFields) * 100) : 0;
+  
+      console.log(`Profile completeness: ${profileCompletion}%`);
+  
+      return profileCompletion;
+
+  } catch (error) {
+    console.error("Error calculating profile completion:", error);
+    throw error; 
+  }
+}
+  
 };
+
 console.log("Exporting userService:", userService);
 export default userService;

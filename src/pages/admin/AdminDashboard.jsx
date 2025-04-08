@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
 import DashboardLayout from '../../layout/DashboardLayout';
 import StatCard from '../../components/StatCard';
 import ListCard from '../../components/ListCard';
@@ -12,6 +11,9 @@ import AddStudentModal from '../../components/modals/AddStudentModal.jsx';
 import AddProjectModal from '../../components/modals/AddProjectModal.jsx';
 import AddMentorModal from '../../components/modals/AddMentorModal.jsx';
 import EditProjectModal from '../../components/modals/EditProjectModal.jsx';
+import AdminViewStudent from './AdminViewStudent.jsx';
+
+
 
 function AdminDashboard() {
   const navigate = useNavigate();
@@ -27,10 +29,12 @@ function AdminDashboard() {
   const [ProjectsList, setProjectsList] = useState([]);
   const [selectedProject, setSelectedProject] = useState(null);
   const [modalType, setModalType] = useState(null);
-  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-  const [projectToDelete, setProjectToDeleteId] = useState(null);
-
-
+  
+  const handleViewProfile = (student) => {
+    navigate(`/admin-student-profile/${student.userId}`);
+  };
+  
+  
 
   const handleAddClick = (title) => {
     if (title === "Student List") {
@@ -43,8 +47,8 @@ function AdminDashboard() {
       console.log("Error finding the modal");
     }
   };
-
  
+
   useEffect(() => {
     const fetchCounts = async () => {
       try {
@@ -132,34 +136,21 @@ function AdminDashboard() {
     }
   };
 
-  const handleDeleteClick = (projectId) => {
+  const handleDeleteProject = async (projectId) => {
     if (!projectId) {
       console.error("Error: Project ID is undefined!");
       return;
     }
-    setProjectToDeleteId(projectId);
-    setDeleteModalOpen(true);
-  };
-  
 
-  const handleDeleteProject = async () => {
-    if (!projectToDeleteId) {
-      console.error("Error: Project ID is undefined!");
-      return;
-    }
-  
     try {
-      await projectService.deleteProject(projectToDeleteId);
-      setProjectsList((prev) => prev.filter((project) => project.projectId !== projectToDeleteId));
+      await projectService.deleteProject(projectId);
+      setProjectsList((prev) => prev.filter((project) => project.projectId !== projectId));
       setProjectsCount((prev) => prev - 1);
     } catch (error) {
       console.error("Error deleting project:", error);
-    } finally {
-      setDeleteModalOpen(false); 
-      setProjectToDeleteId(null); 
     }
   };
-  
+
   const handleEditProject = (project) => {
     console.log("[DEBUG] Selected project for editing:", project); 
     setSelectedProject(project);
@@ -174,9 +165,6 @@ function AdminDashboard() {
     handleProjectAdded(); 
   };
 
-
-  
-
   return (
     <DashboardLayout>
       <div className="grid grid-rows-10 h-full">
@@ -188,7 +176,7 @@ function AdminDashboard() {
           <div className="grid grid-cols-3 gap-6 h-full">
             <div className="grid grid-rows-5 gap-6 ">
               <StatCard number={studentsCount} title="Total Students" color="bg-cyan-600" />
-              <ListCard title="Student List" items={StudentsList} showDelete={false} onAddClick={handleAddClick} onEdit={handleEditStudent} />
+              <ListCard title="Student List" items={StudentsList} showDelete={false} onAddClick={handleAddClick} onEdit={handleEditStudent} onItemClick={handleViewProfile}/>
             </div>
 
             <div className="grid grid-rows-5 gap-6 ">

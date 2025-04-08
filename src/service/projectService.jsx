@@ -4,7 +4,6 @@ const BASE_URL = "http://localhost:8080/api/projects";
 
 const getToken = () => localStorage.getItem("token") || localStorage.getItem("authToken");
 
-
 const projectService = {
   addProject: async (projectData) => {
     try {
@@ -20,7 +19,6 @@ const projectService = {
       return null;
     }
   },
-
   deleteProject: async (projectId) => {
     try {
       const token = getToken();
@@ -42,7 +40,6 @@ const projectService = {
       throw error;
     }
   },
-
   updateProject: async (projectId, projectData) => {
     try {
       const token = getToken();
@@ -95,25 +92,6 @@ const projectService = {
       }));
     } catch (error) {
       console.error("Error fetching projects list:", error.response?.data);
-      return [];
-    }
-  },
-
-  getProjectsListForUser: async (userId) => {
-    try {
-      const response = await axios.get(`${BASE_URL}/user/${userId}`, {
-        headers: {
-          Authorization: `Bearer ${getToken()}`,
-          "Content-Type": "application/json",
-        },
-      });
-
-      return response.data.response.map((project) => ({
-        projectId: project.projectId,
-        name: project.projectName,
-      }));
-    } catch (error) {
-      console.error(`Error fetching projects for user ${userId}:`, error.response?.data || error);
       return [];
     }
   },

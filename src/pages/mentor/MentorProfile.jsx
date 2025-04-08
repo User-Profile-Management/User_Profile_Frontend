@@ -14,9 +14,9 @@ import DeleteButton from '../../assets/delete.svg'
 import StudentListCard from '../../components/StudentListCard';
 import EditProfileModal from '../../components/modals/EditProfileModal.jsx';
 import userService from "../../service/userService.jsx";
-
+ 
 function MentorProfile() {
-
+ 
     const [mentorData,setMentorData] = useState(null);
     const [StudentsList, setStudentsList] = useState([]);
     const [passwordData,setPasswordData]= useState({
@@ -36,7 +36,7 @@ function MentorProfile() {
     const handleCloseModal = () =>{
         setIsEditModalOpen(false);
     };
-
+ 
     useEffect(() => {
         const fetchStudents = async () => {
           try {
@@ -109,7 +109,7 @@ function MentorProfile() {
                 formData.append("profilePicture", updatedData.profilePicture);
             }
     
-            await userService.updateProfile(formData); 
+            await userService.updateProfile(formData);
             alert("Profile updated successfully!");
     
            
@@ -122,18 +122,18 @@ function MentorProfile() {
         }
     };
  
-
+ 
  
   if (!mentorData) {
     return <div>Loading...</div>;
   }
  
-
+ 
   return (
-
+ 
     
     <DashboardLayout>
-
+ 
          <div className='grid grid-rows-10 h-full overflow-auto'>
                 <div className='flex items-center gap-4'>
                   <div className="font-semibold">Profile</div>
@@ -149,7 +149,7 @@ function MentorProfile() {
                                     <div className='border border-zinc-100 bg-white rounded-xl p-4 h-full flex items-center justify-center'>
                                         <div className="flex flex-col items-center ">
                                         <img className='w-32 h-32 rounded-full object-cover' src={mentorData.profilePicture || ProfilePic} alt="profilepic" />
-
+ 
                                             <div className='font-semibold text-2xl'>{mentorData.fullName}</div>
                                             <div>{mentorData.userId}</div>
                                         </div>
@@ -162,7 +162,7 @@ function MentorProfile() {
                                         </div>
                                         <div className='row-span-7 grid grid-rows-4 gap-y-5'>
                                             <div className="flex flex-col gap-y-5">
-                                                <div className="w-1/2 flex gap-5"> 
+                                                <div className="w-1/2 flex gap-5">
                                                     <img className='w-10' src={ProfileSquare} alt="phone-icon" />
                                                     <div className="flex flex-col">
                                                         <div className="font-semibold" >Name</div>
@@ -172,7 +172,7 @@ function MentorProfile() {
                                                 <div className="border border-zinc-100"></div>
                                             </div>
                                             <div className="flex flex-col gap-y-5">
-                                                <div className="w-1/2 flex gap-5"> 
+                                                <div className="w-1/2 flex gap-5">
                                                     <img className='w-10' src={ProfileSquare} alt="phone-icon" />
                                                     <div className="flex flex-col">
                                                         <div className="font-semibold" >Name</div>
@@ -185,9 +185,9 @@ function MentorProfile() {
                                     </div>
                                 </div>
                             </div>
-
-
-
+ 
+ 
+ 
                             
                         </div>
                         <div className="row-span-6 h-auto">
@@ -332,40 +332,40 @@ function MentorProfile() {
                                                     </div>
                                                     
                                                 </div>
-
+ 
                                                 <div className="flex border-b border-zinc-200 py-2 justify-between">
                                                     <div className="flex flex-col justify-between">
                                                         <div className="text-md font-semibold">Project Title</div>
                                                         <div className="text-sm">No of Students under this Project</div>
                                                     </div>
                                                 </div>
-
+ 
                                                 <div className="flex border-b border-zinc-200 py-2 justify-between">
                                                     <div className="flex flex-col justify-between">
                                                         <div className="text-md font-semibold">Project Title</div>
                                                         <div className="text-sm">No of Students under this Project</div>
                                                     </div>
                                                 </div>
-
+ 
                                             </div>
                                         </div>
                                     </div>
                             </div>
-
+ 
                             <div className="row-span-6 border border-zinc-100 bg-white rounded-xl h-full p-4 flex flex-col gap-y-6">
                                 <div className="title flex justify-between">
                                     <div className="text-xl font-semibold">Student List</div>
                                 </div>
-
+ 
                                 <div className='h-full flex flex-col gap-y-4 overflow-auto'>
                                    
                                 <StudentListCard items={StudentsList} />
                                     
                                 </div>
                             </div>
-
-
-
+ 
+ 
+ 
                             </div>
                         </div>
                     </div>
@@ -382,5 +382,6 @@ function MentorProfile() {
     </DashboardLayout>
   )
 }
-
+ 
 export default MentorProfile
+ 

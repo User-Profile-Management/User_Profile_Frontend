@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_BASE_URL = "http://localhost:8080/api"; 
+const API_BASE_URL = "http://localhost:8080/api"; // Change if needed
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -9,7 +9,7 @@ const api = axios.create({
   },
 });
 
-
+// Automatically attach token if available
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
   if (token) {
