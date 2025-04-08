@@ -1,4 +1,4 @@
-import React,{useEffect,useState} from 'react'
+import React, { useEffect, useState } from 'react';
 import DashboardLayout from '../../layout/DashboardLayout'
 import ProfilePic from '../../assets/profile pic.svg'
 import ProfileSquare from '../../assets/profile-square.svg'
@@ -11,36 +11,52 @@ import Location from '../../assets/profile-location.svg'
 import Tick from '../../assets/tick.svg'
 import AddButton from '../../assets/add-button.svg'
 import DeleteButton from '../../assets/delete.svg'
-
-import userService from '../../service/userService'
-import EditProfileModal from '../../components/modals/EditProfileModal'
-
+import StudentListCard from '../../components/StudentListCard';
+import EditProfileModal from '../../components/modals/EditProfileModal.jsx';
+import userService from "../../service/userService.jsx";
+ 
 function MentorProfile() {
-
+ 
     const [mentorData,setMentorData] = useState(null);
+    const [StudentsList, setStudentsList] = useState([]);
     const [passwordData,setPasswordData]= useState({
         currentPasword: "",
         newPasword: "",
         confirmNewPassword:""
     });
-
+ 
     const handleChange= (e) => {
     setPasswordData({...passwordData,[e.target.name]: e.target.value});
     }
     const [isEditModalOpen,setIsEditModalOpen] = useState(false);
+    
     const handleEditClick = ()=>{
         setIsEditModalOpen(true);
     };
     const handleCloseModal = () =>{
         setIsEditModalOpen(false);
     };
-
+ 
     useEffect(() => {
+        const fetchStudents = async () => {
+          try {
+            const students = await userService.getStudentsList();
+            setStudentsList(students);
+          } catch (error) {
+            console.error("Error fetching students:", error);
+          }
+        };
+    
+        fetchStudents();
+      }, []);
+ 
+    useEffect(() => {
+        
         const fetchUserDetails = async () => {
             try {
-                const response = await userService.getUserDetails(); 
-                console.log("Mentor data response:", response[0]);
-                // Adjust this line depending on how your API returns data
+                const response = await userService.getUserDetails();
+                
+                
                 setMentorData(response?.response || response?.data || response);
             } catch (error) {
                 console.error('Error fetching mentor profile:', error);
@@ -93,10 +109,10 @@ function MentorProfile() {
                 formData.append("profilePicture", updatedData.profilePicture);
             }
     
-            await userService.updateProfile(formData); // You should have this endpoint in userService
+            await userService.updateProfile(formData);
             alert("Profile updated successfully!");
     
-            // Refresh mentor data after update
+           
             const refreshedData = await userService.getUserDetails();
             setMentorData(refreshedData.response);
     
@@ -105,11 +121,19 @@ function MentorProfile() {
             alert("Failed to update profile.");
         }
     };
-    
-
+ 
+ 
+ 
+  if (!mentorData) {
+    return <div>Loading...</div>;
+  }
+ 
+ 
   return (
+ 
+    
     <DashboardLayout>
-
+ 
          <div className='grid grid-rows-10 h-full overflow-auto'>
                 <div className='flex items-center gap-4'>
                   <div className="font-semibold">Profile</div>
@@ -124,14 +148,8 @@ function MentorProfile() {
                                 <div className="col-span-2">
                                     <div className='border border-zinc-100 bg-white rounded-xl p-4 h-full flex items-center justify-center'>
                                         <div className="flex flex-col items-center ">
-                                        <img 
-                                        className='w-32 h-32 rounded-full' 
-                                        src={mentorData.profilePicture 
-                                            ? `data:image/png;base64,${mentorData.profilePicture}` 
-                                            : ProfilePic} 
-                                        onError={(e) => { e.target.src = ProfilePic; }} 
-                                        alt="Profile Pic" 
-                                        />
+                                        <img className='w-32 h-32 rounded-full object-cover' src={mentorData.profilePicture || ProfilePic} alt="profilepic" />
+ 
                                             <div className='font-semibold text-2xl'>{mentorData.fullName}</div>
                                             <div>{mentorData.userId}</div>
                                         </div>
@@ -144,7 +162,7 @@ function MentorProfile() {
                                         </div>
                                         <div className='row-span-7 grid grid-rows-4 gap-y-5'>
                                             <div className="flex flex-col gap-y-5">
-                                                <div className="w-1/2 flex gap-5"> 
+                                                <div className="w-1/2 flex gap-5">
                                                     <img className='w-10' src={ProfileSquare} alt="phone-icon" />
                                                     <div className="flex flex-col">
                                                         <div className="font-semibold" >Name</div>
@@ -154,7 +172,7 @@ function MentorProfile() {
                                                 <div className="border border-zinc-100"></div>
                                             </div>
                                             <div className="flex flex-col gap-y-5">
-                                                <div className="w-1/2 flex gap-5"> 
+                                                <div className="w-1/2 flex gap-5">
                                                     <img className='w-10' src={ProfileSquare} alt="phone-icon" />
                                                     <div className="flex flex-col">
                                                         <div className="font-semibold" >Name</div>
@@ -167,9 +185,9 @@ function MentorProfile() {
                                     </div>
                                 </div>
                             </div>
-
-
-
+ 
+ 
+ 
                             
                         </div>
                         <div className="row-span-6 h-auto">
@@ -260,7 +278,7 @@ function MentorProfile() {
                                                 placeholder='Enter new password'
                                                 />
                                                 <div className='text-sm'>Your new password must be more than 8 characters.</div>
-                                            </div> 
+                                            </div>
                                         </div>
                                         <div className="border border-zinc-100"></div>
                                         <div className="gap-10 items-center grid grid-cols-3">
@@ -274,30 +292,31 @@ function MentorProfile() {
                                                 onChange={handleChange}
                                                 placeholder='Re-Enter new password'
                                                 />
-                                            </div> 
+                                            </div>
                                         </div>
                                     </div>
                                     <div className="updatedetails flex flex-row-reverse gap-6">
                                         <button type="submit" className='flex justify-center bg-blue-600 py-3 rounded-xl  text-white px-4 font-semibold hover:bg-blue-700 text-sm'>
                                              Update Password</button>
-
-                                        <button 
+ 
+                                        <button
                                         type="button"
                                         onClick={() => setPasswordData({
                                             currentPassword: "",
                                             newPassword: "",
                                             confirmNewPassword:""
-
+ 
                                         }   
                                         )}
                                         className='flex justify-center bg-zinc-100 py-3 rounded-xl text-black px-4 font-semibold hover:bg-zinc-200 text-sm '>
                                         Cancel</button>
-
+ 
                                              
                                     </div>
                                 </form>
                             </div>
                         </div>
+ 
                     </div>
                         </div>
                         <div className="col-span-3 grid grid-rows-10 h-full gap-y-6">
@@ -313,60 +332,56 @@ function MentorProfile() {
                                                     </div>
                                                     
                                                 </div>
-
+ 
                                                 <div className="flex border-b border-zinc-200 py-2 justify-between">
                                                     <div className="flex flex-col justify-between">
                                                         <div className="text-md font-semibold">Project Title</div>
                                                         <div className="text-sm">No of Students under this Project</div>
                                                     </div>
                                                 </div>
-
+ 
                                                 <div className="flex border-b border-zinc-200 py-2 justify-between">
                                                     <div className="flex flex-col justify-between">
                                                         <div className="text-md font-semibold">Project Title</div>
                                                         <div className="text-sm">No of Students under this Project</div>
                                                     </div>
                                                 </div>
-
+ 
                                             </div>
                                         </div>
                                     </div>
                             </div>
-
+ 
                             <div className="row-span-6 border border-zinc-100 bg-white rounded-xl h-full p-4 flex flex-col gap-y-6">
-                            <div className="title flex justify-between">
-                                        <div className="text-xl font-semibold">Certificates</div>
-                                        <img className='w-8' src={AddButton} alt="addButton" />
-                            </div>
-                            <div className='h-full flex flex-col gap-y-4'>
-                                <div className="flex flex-col gap-y-5">
-                                    <div className="lst flex justify-between">
-                                        <div className="name text-md font-semibold">Certificate Name</div>
-                                        <img className='cursor-pointer ' src={DeleteButton} alt="Delete Button" />
-                                    </div>
-                                    <div className="border border-zinc-100"></div>
+                                <div className="title flex justify-between">
+                                    <div className="text-xl font-semibold">Student List</div>
                                 </div>
-                                <div className="lst flex justify-between">
-                                    <div className="name text-md font-semibold">Certificate Name</div>
-                                    <img className='cursor-pointer ' src={DeleteButton} alt="Delete Button" />
+ 
+                                <div className='h-full flex flex-col gap-y-4 overflow-auto'>
+                                   
+                                <StudentListCard items={StudentsList} />
+                                    
                                 </div>
                             </div>
-
-
+ 
+ 
+ 
                             </div>
                         </div>
                     </div>
                     
                 </div>
-            </div>
-            <EditProfileModal
+                <EditProfileModal
             isOpen={isEditModalOpen}
             onClose={handleCloseModal}
             onSave={handleProfileSave}
             userData={mentorData}
             />
+ 
+            
     </DashboardLayout>
   )
 }
-
+ 
 export default MentorProfile
+ 

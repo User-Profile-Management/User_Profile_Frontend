@@ -19,6 +19,7 @@ function StudentDashboard() {
     const [certifications, setCertifications] = useState([]);
     const [projects, setProjects] = useState([]);
     const [notifications, setNotifications] = useState([]);
+    const [userId, setUserId] = useState(null);
     const completedCountRef = useRef(0);
     const previousProjectCount = useRef(0);
     const previousBadgeCount = useRef(0);
@@ -35,6 +36,22 @@ function StudentDashboard() {
         { label: 'GOLD', src: GoldBadge, min: 3 },
         { label: 'SILVER', src: SilverBadge, min: 2 },   
     ];
+    
+    // Fetch user details when component mounts
+    useEffect(() => {
+        const fetchUserDetails = async () => {
+            try {
+                const userDetails = await userService.getUserDetails();
+                if (userDetails && userDetails.userId) {
+                    setUserId(userDetails.userId);
+                }
+            } catch (error) {
+                console.error("Error fetching user details:", error);
+            }
+        };
+        
+        fetchUserDetails();
+    }, []);
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -42,7 +59,7 @@ function StudentDashboard() {
         }, 10000); // refresh every 10 seconds
     
         return () => clearInterval(interval);
-    }, []);
+    }, [userId]);
 
     const fetchProgress = async () => {
         try {
@@ -51,84 +68,98 @@ function StudentDashboard() {
         } catch (error) {
           console.error("Error fetching progress:", error);
         }
-      };
+    };
     
-      useEffect(() => {
-        fetchProgress();
-      }, []);
-
     useEffect(() => {
-        const fetchCertificates = async () => {
-            try {
-                const userCerts = await certificateService.getCertificatesList();
-                setCertifications(userCerts);
-            } catch (error) {
-                console.error("Error fetching certifications:", error);
-            }
-        };
-
-        const fetchProjects = async () => {
-            try {
-                const userProjects = await projectService.getProjectsList();
-                setProjects(userProjects);
-            } catch (error) {
-                console.error("Error fetching projects:", error);
-            }
-        };
-    
-        const fetchData = async () => {
-            try {
-                const userProgress = await userService.getStudentProgress();
-                const userCerts = await certificateService.getCertificatesList();
-                const userProjects = await projectService.getProjectsList();
-    
-                setProgress(userProgress);
-                setCertifications(userCerts);
-                setProjects(userProjects);
-    
-                const completed = userProjects.filter(p => p.status === 'COMPLETED').length;
-    
-                // 🔔 Trigger notification if completed count increased
-                if (completed > completedCountRef.current) {
-                    const diff = completed - completedCountRef.current;
-                    const message = diff === 1 
-                        ? "🎉 Congrats! You completed a project!"
-                        : `🎉 You completed ${diff} new projects!`;
-    
-                    setNotifications(prev => [{ message }, ...prev]);
-                }
-    
-                completedCountRef.current = completed; // update stored count
-
-                if (projects.length > previousProjectCount.current) {
-                    const diff = projects.length - previousProjectCount.current;
-                    const message = diff === 1
-                        ? "📌 A new project has been assigned to you!"
-                        : `📌 ${diff} new projects have been assigned!`;
-                
-                    setNotifications(prev => [{ message }, ...prev]);
-                }
-                previousProjectCount.current = projects.length;
-
-                if (badges.length > previousBadgeCount.current) {
-                    const diff = badges.length - previousBadgeCount.current;
-                    const message = diff === 1
-                        ? "🏅 You earned a new badge!"
-                        : `🏅 You earned ${diff} new badges!`;
-                
-                    setNotifications(prev => [{ message }, ...prev]);
-                }
-                previousBadgeCount.current = badges.length;
-            } catch (error) {
-                console.error("Error fetching data:", error);
-            }
-        };
-        
-        fetchData();
-        fetchCertificates();
-        fetchProjects();
-
+        fetchProgress();
     }, []);
+
+    const fetchCertificates = async () => {
+        try {
+            // Only fetch certificates if userId is available
+            if (userId) {
+                const userCerts = await certificateService.getCertificatesListByUser(userId);
+                setCertifications(userCerts);
+            }
+        } catch (error) {
+            console.error("Error fetching certifications:", error);
+        }
+    };
+
+    const fetchProjects = async () => {
+        try {
+            const userProjects = await projectService.getProjectsList();
+            setProjects(userProjects);
+        } catch (error) {
+            console.error("Error fetching projects:", error);
+        }
+    };
+    
+    const fetchData = async () => {
+        try {
+            const userProgress = await userService.getStudentProgress();
+            setProgress(userProgress);
+            
+            // Only fetch certificates if userId is available
+            if (userId) {
+                const userCerts = await certificateService.getCertificatesListByUser(userId);
+                setCertifications(userCerts);
+            } else {
+                // Fallback to the general method if no userId
+                const userCerts = await certificateService.getCertificatesList();
+                setCertifications(userCerts);
+            }
+            
+            const userProjects = await projectService.getProjectsList();
+            setProjects(userProjects);
+
+            const completed = userProjects.filter(p => p.status === 'COMPLETED').length;
+
+            // 🔔 Trigger notification if completed count increased
+            if (completed > completedCountRef.current) {
+                const diff = completed - completedCountRef.current;
+                const message = diff === 1 
+                    ? "🎉 Congrats! You completed a project!"
+                    : `🎉 You completed ${diff} new projects!`;
+
+                setNotifications(prev => [{ message }, ...prev]);
+            }
+
+            completedCountRef.current = completed; // update stored count
+
+            if (userProjects.length > previousProjectCount.current) {
+                const diff = userProjects.length - previousProjectCount.current;
+                const message = diff === 1
+                    ? "📌 A new project has been assigned to you!"
+                    : `📌 ${diff} new projects have been assigned!`;
+            
+                setNotifications(prev => [{ message }, ...prev]);
+            }
+            previousProjectCount.current = userProjects.length;
+
+            // For badges notification
+            const badges = badgeLevels.filter(badge => completedCount >= badge.min);
+            if (badges.length > previousBadgeCount.current) {
+                const diff = badges.length - previousBadgeCount.current;
+                const message = diff === 1
+                    ? "🏅 You earned a new badge!"
+                    : `🏅 You earned ${diff} new badges!`;
+            
+                setNotifications(prev => [{ message }, ...prev]);
+            }
+            previousBadgeCount.current = badges.length;
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        }
+    };
+    
+    useEffect(() => {
+        if (userId) {
+            fetchData();
+            fetchCertificates();
+            fetchProjects();
+        }
+    }, [userId]);
 
     return (
         <DashboardLayout>
@@ -148,8 +179,8 @@ function StudentDashboard() {
                                     color="bg-sky-700" 
                                 />
                                 {/* Notifications */}
-                                <div className="col-span-2 row-span-2 border border-zinc-200 bg-white rounded-xl p-4 h-full hidden md:flex">
-                                    <div className="grid grid-rows-7">
+                                <div className="col-span-2 row-span-2 border border-zinc-200 bg-white rounded-xl p-4 h-full hidden md:flex ">
+                                    <div className="grid grid-rows-7 w-full">
                                         <div className="font-semibold text-xl">Notifications</div>
                                         <div className="row-span-6 overflow-y-scroll scrollbar-hide mt-4 max-h-48">
                                             {notifications.length > 0 ? (
@@ -204,7 +235,7 @@ function StudentDashboard() {
                                                     {certifications.length > 0 ? (
                                                         certifications.map((cert) => (
                                                         <div
-                                                            key={cert.certificateId}
+                                                            key={cert.userId || cert.certificateId}
                                                             className="flex border-b border-zinc-200 py-2 justify-between hover:cursor-pointer min-h-16"
                                                         >
                                                             <div className="flex flex-col justify-between">

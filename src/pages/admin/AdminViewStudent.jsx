@@ -53,6 +53,7 @@ function AdminViewStudent() {
     fetchProjects();
     fetchCertificates();
   }, []);
+  
   useEffect(() => {
     const fetchProjects = async () => {
       if (studentData?.userId) {

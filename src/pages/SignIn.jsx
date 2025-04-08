@@ -26,7 +26,7 @@ function SignIn() {
         const token = response.response.token;
 
         // ✅ Store token AFTER it's received
-        localStorage.setItem("getToken", token);
+        localStorage.setItem("token", token);
 
         const decodedToken = jwtDecode(token);
         console.log("[DEBUG] Decoded Token:", decodedToken);
@@ -54,15 +54,6 @@ function SignIn() {
     }
   };
 
-  // const handleGoogleSignIn = async () => {
-  //   try {
-  //     const result = await signInWithPopup(auth, provider);
-  //     console.log("User Info:", result.user);
-  //     navigate("/dashboard");
-  //   } catch (error) {
-  //     console.error("Google Sign-In Error:", error);
-  //   }
-  // };
 
   const handleGoogleSignIn = async () => {
     try {
@@ -90,7 +81,13 @@ function SignIn() {
                 <div className="title mb-10 ">
                     <img className="w-36 mb-6" src={LOGO} alt="LOGO" />
                     <div className="heading text-4xl font-semibold">Welcome Back</div>
-                    <div className="subheading text-md  text-zinc-400">Enter your credentials to access your account</div>
+                    <div className="subheading text-md mt-2">
+                      {error ? (
+                        <span className="text-red-600">{error}</span>
+                      ) : (
+                        <span className="text-zinc-400">Enter your credentials to access your account</span>
+                      )}
+                    </div>
                 </div>
                 <div className="credentials ">
                     <form onSubmit={handleSubmit}>
@@ -194,12 +191,6 @@ function SignIn() {
                     Sign up
                   </Link>
                 </div>
-
-                {error && (
-                  <div className="text-red-600 text-sm text-center mt-2">
-                    {error}
-                  </div>
-                )}
               </div>
             </form>
           </div>

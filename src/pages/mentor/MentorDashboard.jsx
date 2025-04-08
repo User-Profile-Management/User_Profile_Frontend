@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useRecoilState } from "recoil";
 import userService from "../../service/userService";
 import { studentsListState } from "../../state/recoilState";
@@ -6,12 +7,16 @@ import DashboardLayout from '../../layout/DashboardLayout.jsx';
 import Profile from "../../assets/profile-ListCard.svg";
 import SearchIcon from "../../assets/search.png";
 import FilterIcon from "../../assets/filter.svg";
+import { useSetRecoilState } from 'recoil';
+import { selectedStudentState } from '../../state/recoilState';
 
 function MentorDashboard() {
     const [students, setStudents] = useRecoilState(studentsListState);
     const [searchQuery, setSearchQuery] = useState('');
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const setSelectedStudent = useSetRecoilState(selectedStudentState);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchStudents = async () => {
@@ -42,7 +47,7 @@ function MentorDashboard() {
     return (
         <DashboardLayout>
             <div className="grid grid-rows-10 h-full">
-                <div className='flex items-center'>Home</div>
+                <div className='flex items-center' >Home</div>
                 <div className="row-span-9 h-full">
                     <div className="grid grid-rows-11 h-full">
                         <div className='flex justify-between items-center p-4'>
@@ -86,7 +91,7 @@ function MentorDashboard() {
                                     <div key={student.userId} className="grid grid-cols-6 gap-4 items-center bg-white p-3 px-10 border-b border-gray-200 hover:bg-gray-50">
                                         <div>{index + 1}</div>
                                         <div className="flex items-center gap-2">
-                                            <img src={student.image} alt="Profile" className="w-8 h-8 rounded-full" />
+                                            <img src={student.image} alt="Profile" className="w-9 h-9 rounded-lg border border-zinc-100 p-1 object-contain" />
                                             <span>{student.name}</span>
                                         </div>
                                         <div className='text-center'>{student.userId}</div>
@@ -100,7 +105,13 @@ function MentorDashboard() {
                                             </div>
                                         </div>
                                         <div className='flex justify-center'>
-                                            <button className="bg-gray-200 hover:bg-gray-300 text-gray-700 px-3 py-1 rounded-md">
+                                            <button
+                                                onClick={() => {
+                                                    setSelectedStudent(student);
+                                                    navigate(`/mentor-student-profile/${student.userId}`); // <-- student.id or student.userId, depending on your structure
+                                                }}                                                
+                                                className="bg-gray-200 hover:bg-gray-300 text-gray-700 px-3 py-1 rounded-md"
+                                                >
                                                 View More
                                             </button>
                                         </div>

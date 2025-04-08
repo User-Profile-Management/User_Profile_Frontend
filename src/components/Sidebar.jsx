@@ -64,9 +64,8 @@ const Sidebar = () => {
             <div 
                 className={`p-3 cursor-pointer flex flex-row items-center gap-3 rounded-xl m-3 ${
                     activePath === "/dashboard" ||
-                    activePath === "/dashboard" ||
-                    activePath === "/dashboard" ||
-                    activePath === "/dashboard"
+                    activePath.startsWith("/mentor-student-profile/") ||
+                    activePath.startsWith("/admin-student-profile/")
                         ? "bg-blue-100 font-semibold"
                         : ""
                 }`}
@@ -79,9 +78,6 @@ const Sidebar = () => {
             {/* Profile */}
             <div 
                 className={`p-3 cursor-pointer flex flex-row items-center gap-3 rounded-xl m-3 ${
-                    activePath === "/profile" ||
-                    activePath === "/profile" ||
-                    activePath === "/profile" ||
                     activePath === "/profile"
                         ? "bg-blue-100 font-semibold"
                         : ""
@@ -96,7 +92,8 @@ const Sidebar = () => {
             {userRole === "ADMIN" && (
                 <div 
                     className={`p-3 cursor-pointer flex flex-row items-center gap-3 rounded-xl m-3 ${
-                        activePath === "/admin-approval"
+                        activePath === "/admin-approval" ||
+                        activePath.startsWith("/admin-accept/")
                             ? "bg-blue-100 font-semibold"
                             : ""
                     }`}
@@ -117,10 +114,10 @@ const Sidebar = () => {
 
     
             {/* Logout */}
-            <div className="p-3 text-gray-500 cursor-pointer flex items-center gap-3 m-3 hover:bg-red-200 rounded-xl">
+            <div className="p-3 text-gray-500 cursor-pointer flex items-center gap-3 m-3 hover:bg-red-200 rounded-xl" onClick={handleLogout}>
                 <img className="w-7 h-7" src={Logout} alt="Logout" />
                 <div>
-                    <button onClick={handleLogout} className="text-red-600 font-semibold p-2 rounded">
+                    <button className="text-red-600 font-semibold p-2 rounded">
                         Logout
                     </button>
                 </div>

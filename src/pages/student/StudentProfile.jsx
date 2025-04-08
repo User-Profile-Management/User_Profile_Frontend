@@ -190,43 +190,43 @@ function StudentProfile() {
                                     </div>
                                 </div>
                                 <div className="hidden md:block col-span-5 md:col-span-3 w-full">
-                      <div className="hidden md:grid grid-rows-8 border border-zinc-100 bg-white rounded-xl p-4 h-full flex-col ">
-                        <div className="font-semibold text-xl flex justify-center">
-                          Your Mentors
-                        </div>
-                        <div className="row-span-7 grid grid-rows-4 gap-y-5 overflow-auto">
-                          {uniqueMentors.length === 0 ? (
-                            <div className="text-center text-gray-500">
-                              No mentors found
-                            </div>
-                          ) : (
-                            uniqueMentors.map((mentor, index) => (
-                              <div
-                                key={index}
-                                className="flex flex-col gap-y-5"
-                              >
-                                <div className="w-1/2 flex gap-5">
-                                  <img
-                                    className="w-10"
-                                    src={ProfileSquare}
-                                    alt="mentor-icon"
-                                  />
-                                  <div className="flex flex-col">
-                                    <div className="font-semibold">
-                                      {mentor.fullName}
+                                    <div className="hidden md:grid grid-rows-8 border border-zinc-100 bg-white rounded-xl p-4 h-full flex-col ">
+                                        <div className="font-semibold text-xl flex justify-center">
+                                        Your Mentors
+                                        </div>
+                                        <div className="row-span-7 grid grid-rows-4 gap-y-5 overflow-auto">
+                                        {uniqueMentors.length === 0 ? (
+                                            <div className="text-center text-gray-500">
+                                            No mentors found
+                                            </div>
+                                        ) : (
+                                            uniqueMentors.map((mentor, index) => (
+                                            <div
+                                                key={index}
+                                                className="flex flex-col gap-y-5"
+                                            >
+                                                <div className="w-1/2 flex gap-5">
+                                                <img
+                                                    className="w-10"
+                                                    src={ProfileSquare}
+                                                    alt="mentor-icon"
+                                                />
+                                                <div className="flex flex-col">
+                                                    <div className="font-semibold">
+                                                    {mentor.fullName}
+                                                    </div>
+                                                    <div className="text-sm">
+                                                    {mentor.contactNo}
+                                                    </div>
+                                                </div>
+                                                </div>
+                                                <div className="border border-zinc-100"></div>
+                                            </div>
+                                            ))
+                                        )}
+                                        </div>
                                     </div>
-                                    <div className="text-sm">
-                                      {mentor.contactNo}
                                     </div>
-                                  </div>
-                                </div>
-                                <div className="border border-zinc-100"></div>
-                              </div>
-                            ))
-                          )}
-                        </div>
-                      </div>
-                    </div>
                             </div>
 
 

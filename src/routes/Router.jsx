@@ -37,7 +37,7 @@ function Router() {
 
         {/* Mentor */}
 
-        <Route path="/mentor-student-profile" element={<MentorViewStudent />} />
+        <Route path="/mentor-student-profile/:userId" element={<MentorViewStudent />} />
 
         {/* Student */}
       </Route>

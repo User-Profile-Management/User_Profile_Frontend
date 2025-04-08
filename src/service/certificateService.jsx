@@ -31,6 +31,20 @@ const certificateService = {
   },
 
   // 2. Get certificates for the authenticated student
+  getCertificatesListByUser: async (studentId) => {
+    try {
+      const response = await axios.get(`http://localhost:8080/api/users/certificates/get/${studentId}`);
+      return response.data.response || [];
+    } catch (error) {
+      console.error(
+        "Error fetching certificates:",
+        error.response?.data || error
+      );
+      return [];
+    }
+  },
+
+
   getCertificatesList: async () => {
     try {
       const response = await axios.get(`${BASE_URL}/get`, {
@@ -38,7 +52,7 @@ const certificateService = {
           Authorization: `Bearer ${getToken()}`,
         },
       });
-
+  
       return response.data.response || [];
     } catch (error) {
       console.error(
