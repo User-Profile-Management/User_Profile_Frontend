@@ -8,10 +8,17 @@ import Phone from "../../assets/profile-phone.svg";
 import DOB from "../../assets/profile-dob.svg";
 import Emergency from "../../assets/profile-emergency.svg";
 import Location from "../../assets/profile-location.svg";
+import AlertModal from "../../components/modals/AlertModal";
 
 export default function AcceptApproval() {
   const { userId } = useParams();
   const [userData, setUserData] = useState(null);
+  const [alert, setAlert] = useState({
+    isOpen: false,
+    type: "info",
+    title: "",
+    message: "",
+  });
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -56,7 +63,31 @@ export default function AcceptApproval() {
             </button>
             <button
               className="bg-blue-600 py-2 px-4 rounded-xl text-white font-semibold hover:bg-blue-700 text-sm"
-              onClick={() => console.log("Accept clicked")}
+              onClick={async () => {
+                try {
+                  const payload = {
+                    status: "ACTIVE",
+
+                    role: userData.role, // string like "STUDENT" or "MENTOR"
+                  };
+
+                  await userService.acceptUser(userId, payload);
+                  setAlert({
+                    isOpen: true,
+                    type: "success",
+                    title: "Success",
+                    message: "User updated successfully",
+                  });
+                } catch (error) {
+                  console.error("Failed to accept user:", error);
+                  setAlert({
+                    isOpen: true,
+                    type: "error",
+                    title: "Error",
+                    message: "Error accepting user.",
+                  });
+                }
+              }}
             >
               Accept
             </button>
@@ -141,15 +172,17 @@ export default function AcceptApproval() {
             </select>
           </div>
           <div className="flex justify-end">
-            <button
-              className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded text-sm"
-              onClick={() => console.log("Role to update:", userData.role)}
-            >
-              Save Role
-            </button>
+          
           </div>
         </div>
       </div>
+      <AlertModal
+        isOpen={alert.isOpen}
+        onClose={() => setAlert((prev) => ({ ...prev, isOpen: false }))}
+        type={alert.type}
+        title={alert.title}
+        message={alert.message}
+      />
     </DashboardLayout>
   );
 }

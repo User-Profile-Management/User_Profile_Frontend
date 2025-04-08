@@ -149,7 +149,7 @@ function StudentProfile() {
     const uniqueMentors = [
       ...new Map(
         projects
-          .filter((p) => p.project?.mentor) // make sure mentor exists
+          .filter((p) => p.project?.mentor) 
           .map((p) => [p.project.mentor.userId, p.project.mentor])
       ).values(),
     ];
@@ -189,7 +189,7 @@ function StudentProfile() {
                                         </div>
                                     </div>
                                 </div>
-                                <div className=" col-span-5 md:col-span-3 w-full">
+                                <div className="hidden md:block col-span-5 md:col-span-3 w-full">
                       <div className="hidden md:grid grid-rows-8 border border-zinc-100 bg-white rounded-xl p-4 h-full flex-col ">
                         <div className="font-semibold text-xl flex justify-center">
                           Your Mentors

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import DashboardLayout from '../../layout/DashboardLayout';
 import StatCard from '../../components/StatCard';
 import ListCard from '../../components/ListCard';
@@ -11,7 +12,7 @@ import AddProjectModal from '../../components/modals/AddProjectModal.jsx';
 import AddMentorModal from '../../components/modals/AddMentorModal.jsx';
 import EditProjectModal from '../../components/modals/EditProjectModal.jsx';
 import AdminViewStudent from './AdminViewStudent.jsx';
-import { useNavigate } from 'react-router-dom';
+
 
 
 function AdminDashboard() {
@@ -28,6 +29,12 @@ function AdminDashboard() {
   const [ProjectsList, setProjectsList] = useState([]);
   const [selectedProject, setSelectedProject] = useState(null);
   const [modalType, setModalType] = useState(null);
+  
+  const handleViewProfile = (student) => {
+    navigate(`/admin-student-profile/${student.userId}`);
+  };
+  
+  
 
   const handleAddClick = (title) => {
     if (title === "Student List") {
@@ -40,6 +47,7 @@ function AdminDashboard() {
       console.log("Error finding the modal");
     }
   };
+ 
 
   useEffect(() => {
     const fetchCounts = async () => {
@@ -168,7 +176,7 @@ function AdminDashboard() {
           <div className="grid grid-cols-3 gap-6 h-full">
             <div className="grid grid-rows-5 gap-6 ">
               <StatCard number={studentsCount} title="Total Students" color="bg-cyan-600" />
-              <ListCard title="Student List" items={StudentsList} showDelete={false} onAddClick={handleAddClick} onEdit={handleEditStudent} />
+              <ListCard title="Student List" items={StudentsList} showDelete={false} onAddClick={handleAddClick} onEdit={handleEditStudent} onItemClick={handleViewProfile}/>
             </div>
 
             <div className="grid grid-rows-5 gap-6 ">

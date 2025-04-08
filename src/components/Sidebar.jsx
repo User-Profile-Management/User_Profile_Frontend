@@ -33,22 +33,22 @@ const Sidebar = () => {
     const handleHomeClick = () => {
         let targetPath = "/dashboard"; 
         if (userRole === "ADMIN") {
-            targetPath = "/admin-dashboard";
+            targetPath = "/dashboard";
         } else if (userRole === "MENTOR") {
-            targetPath = "/mentor-dashboard";
+            targetPath = "/dashboard";
         } else if (userRole === "STUDENT") {
-            targetPath = "/student-dashboard";
+            targetPath = "/dashboard";
         }
         navigate(targetPath);
     };
 
     const handleProfileClick = () => {
         if (userRole === "ADMIN") {
-            navigate("/admin-profile");
+            navigate("/profile");
         } else if (userRole === "MENTOR") {
-            navigate("/mentor-profile");
+            navigate("/profile");
         } else if (userRole === "STUDENT") {
-            navigate("/student-profile");
+            navigate("/profile");
         } else {
             navigate("/profile");
         }
@@ -63,9 +63,9 @@ const Sidebar = () => {
             {/* Home */}
             <div 
                 className={`p-3 cursor-pointer flex flex-row items-center gap-3 rounded-xl m-3 ${
-                    activePath === "/admin-dashboard" ||
-                    activePath === "/mentor-dashboard" ||
-                    activePath === "/student-dashboard" ||
+                    activePath === "/dashboard" ||
+                    activePath === "/dashboard" ||
+                    activePath === "/dashboard" ||
                     activePath === "/dashboard"
                         ? "bg-blue-100 font-semibold"
                         : ""
@@ -79,9 +79,9 @@ const Sidebar = () => {
             {/* Profile */}
             <div 
                 className={`p-3 cursor-pointer flex flex-row items-center gap-3 rounded-xl m-3 ${
-                    activePath === "/admin-profile" ||
-                    activePath === "/mentor-profile" ||
-                    activePath === "/student-profile" ||
+                    activePath === "/profile" ||
+                    activePath === "/profile" ||
+                    activePath === "/profile" ||
                     activePath === "/profile"
                         ? "bg-blue-100 font-semibold"
                         : ""

@@ -36,9 +36,9 @@ const Header = ({ toggleSidebar }) => {
 
   const handleProfileClick = () => {
     if (userRole === "ADMIN") {
-      navigate("/admin-profile");
+      navigate("/profile");
     } else if (userRole === "MENTOR") {
-      navigate("/mentor-profile");
+      navigate("/profile");
     } else if (userRole === "STUDENT") {
       navigate("/student-profile");
     } else {
