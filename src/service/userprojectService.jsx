@@ -2,7 +2,8 @@ import axios from "axios";
 
 const BASE_URL = "http://localhost:8080/api/user-projects";
 
-const getToken = () => localStorage.getItem("token");
+const getToken = () => localStorage.getItem("token") || localStorage.getItem("authToken");
+
 
 const userprojectService = {
     getProjectsList: async (userId) => {

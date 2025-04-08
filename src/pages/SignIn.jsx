@@ -1,5 +1,6 @@
 
-import React, { useState } from "react";
+import React, { useState ,useEffect} from "react";
+import ErrorModal from "../components/modals/ErrorModal.jsx";
 import { Link, useNavigate } from 'react-router-dom';
 import {jwtDecode} from "jwt-decode";
 import { auth, provider, signInWithPopup } from "../firebaseConfig";
@@ -14,8 +15,13 @@ function SignIn() {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
-  
+  const [showErrorModal, setShowErrorModal] = useState(false);  
   const navigate = useNavigate();
+
+  useEffect(() => {
+    console.log("Modal visibility state changed:", showErrorModal);
+  }, [showErrorModal]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();  
     setError("");       
@@ -53,16 +59,11 @@ function SignIn() {
   };
   
   
-
   const handleGoogleSignIn = async () => {
     try {
       const result = await signInWithPopup(auth, provider);
-      
-      const idToken = await result.user.getIdToken(); 
+      const idToken = await result.user.getIdToken();
       const userEmail = result.user.email;
-      
-      console.log("[DEBUG] Google Firebase ID Token:", idToken);
-      console.log("[DEBUG] Google User Email:", userEmail);
   
       const backendResponse = await fetch("http://localhost:8080/api/auth/google-login", {
         method: "POST",
@@ -70,61 +71,37 @@ function SignIn() {
           "Content-Type": "application/json",
           "X-Google-ID-Token": idToken,
         },
-        body: JSON.stringify({ email: userEmail }), 
+        body: JSON.stringify({ email: userEmail }),
       });
   
-      let data;
-  
-      try {
-        data = await backendResponse.json();
-      } catch (jsonError) {
-        const text = await backendResponse.text();
-        console.error("Non-JSON response:", text);
-        setError("Login failed. Please try again later.");
-        return;
-      }
+      const data = await backendResponse.json();
   
       if (!backendResponse.ok) {
-        console.error("Backend responded with error:", data);
-        setError(data?.message || "Login failed. Please try again.");
-        return;
+        if (backendResponse.status === 401) {
+          console.log("User not found in the database, showing error modal");
+          setError("User does not exist in the database.");
+          setShowErrorModal(true);  // Trigger the modal to show
+          return;
+        }
+        throw new Error(data?.message || "Google login failed");
       }
   
       const token = data?.response?.token;
+      if (!token) throw new Error("No token received");
   
-      if (token) {
-        const decodedToken = jwtDecode(token);
-        localStorage.setItem("authToken", token);
+      localStorage.setItem("authToken", token);
+      
+      const decodedToken = jwtDecode(token);
+      console.log("Google auth decoded token:", decodedToken);
   
-        const userRole = decodedToken.roles?.[0];
-        console.log("[DEBUG] User Role:", userRole);
-  
-        if (userRole === "ADMIN") {
-          console.log("[DEBUG] Navigating to /dashboard...");
-          navigate("/dashboard");
-          console.log("[DEBUG] Navigation triggered");
-        } else if (userRole === "MENTOR") {
-          console.log("Redirecting to /mentor-dashboard");
-          navigate("/dashboard");
-        } else if (userRole === "STUDENT") {
-          console.log("Redirecting to /student-dashboard");
-          navigate("/dashboard");
-        } else {
-          console.error("Unauthorized role:", userRole);
-          setError("Unauthorized role");
-        }
-      } else {
-        console.error("[ERROR] Token missing from backend response:", data);
-        setError("Backend did not return a valid token.");
-      }
-  
+      navigate("/dashboard");
+      
     } catch (error) {
       console.error("Google Sign-In Error:", error);
-      setError("Google Sign-In failed. Try again.");
+      setError(error.message || "Google login failed");
+      setShowErrorModal(true);  // Ensure this triggers the modal properly
     }
   };
-  
-  
   
   return (
     <div className='signinpage bg-white h-screen p-10 grid grid-cols-2'>
@@ -229,7 +206,17 @@ function SignIn() {
                 </div>
             </div>
         </div>
-    </div>
+        
+
+       
+    {showErrorModal && (
+      <ErrorModal
+        isOpen={showErrorModal}  // Pass the correct state to the modal
+        onClose={() => setShowErrorModal(false)}  // Ensure modal closes when "OK" is clicked
+      />
+    )}
+  </div>
+    
   )
 }
 

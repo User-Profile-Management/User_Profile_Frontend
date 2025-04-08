@@ -3,7 +3,8 @@ import Profile from "../assets/profile.svg";
 
 const BASE_URL = "http://localhost:8080/api/users";
 
-const getToken = () => localStorage.getItem("token");
+const getToken = () => localStorage.getItem("token") || localStorage.getItem("authToken");
+
 
 const userService = {
   signup: async (userData) => {
@@ -175,6 +176,17 @@ const userService = {
       return [];
     }
   },
+  
+  getStudentById: async (userId) => {
+    try {
+      const response = await axios.get(`${BASE_URL}/user/profile/${userId}`);
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching student profile by ID:", error);
+      throw error;
+    }
+  },
+
 };
 console.log("Exporting userService:", userService);
 export default userService;

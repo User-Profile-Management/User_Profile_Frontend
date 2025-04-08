@@ -56,7 +56,7 @@ function MentorProfile() {
             try {
                 const response = await userService.getUserDetails();
                 
-                // Adjust this line depending on how your API returns data
+                
                 setMentorData(response?.response || response?.data || response);
             } catch (error) {
                 console.error('Error fetching mentor profile:', error);
@@ -109,10 +109,10 @@ function MentorProfile() {
                 formData.append("profilePicture", updatedData.profilePicture);
             }
     
-            await userService.updateProfile(formData); // You should have this endpoint in userService
+            await userService.updateProfile(formData); 
             alert("Profile updated successfully!");
     
-            // Refresh mentor data after update
+           
             const refreshedData = await userService.getUserDetails();
             setMentorData(refreshedData.response);
     
@@ -148,9 +148,10 @@ function MentorProfile() {
                                 <div className="col-span-2">
                                     <div className='border border-zinc-100 bg-white rounded-xl p-4 h-full flex items-center justify-center'>
                                         <div className="flex flex-col items-center ">
-                                            <img className='w-32 h-32' src={ProfilePic} alt="prifilepic" />
-                                            <div className='font-semibold text-2xl'>NAME</div>
-                                            <div>EMPLOYEE ID</div>
+                                        <img className='w-32 h-32 rounded-full object-cover' src={mentorData.profilePicture || ProfilePic} alt="profilepic" />
+
+                                            <div className='font-semibold text-2xl'>{mentorData.fullName}</div>
+                                            <div>{mentorData.userId}</div>
                                         </div>
                                     </div>
                                 </div>

@@ -5,7 +5,8 @@ import Profile from "../assets/profile.svg";
 import Approval from "../assets/approve.svg";
 import Logout from "../assets/logout.svg";
 import authService from "../service/authService";
-import { jwtDecode } from "jwt-decode";
+import { jwtDecode } from "jwt-decode"; 
+
 
 const Sidebar = () => {
   const navigate = useNavigate();
@@ -14,11 +15,14 @@ const Sidebar = () => {
   const [userRole, setUserRole] = useState("");
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const getToken = () => localStorage.getItem("token") || localStorage.getItem("authToken");
+
+    const token = getToken(); 
+
     if (token) {
       try {
         const decodedToken = jwtDecode(token);
-        setUserRole(decodedToken.roles?.[0] || "");
+        setUserRole(decodedToken.roles?.[0] || ""); 
       } catch (error) {
         console.error("Error decoding token:", error);
       }
@@ -59,12 +63,7 @@ const Sidebar = () => {
       {/* Profile */}
       <div
         className={`p-3 cursor-pointer flex flex-row items-center gap-3 rounded-xl m-3 ${
-          activePath === "/profile" ||
-          activePath === "/profile" ||
-          activePath === "/profile" ||
-          activePath === "/profile"
-            ? "bg-blue-100 font-semibold"
-            : ""
+          activePath === "/profile" ? "bg-blue-100 font-semibold" : ""
         }`}
         onClick={handleProfileClick}
       >
