@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { Link,useNavigate } from "react-router-dom";
-import BackgroundImage from "/src/assets/frontimage.png";
+import LOGO from '../assets/LOGO Black.svg'
+import Symbol from "../assets/SignIn.svg";
 
 function SignUp1() {
     const[formData,setFormData] = useState({
@@ -25,14 +26,13 @@ function SignUp1() {
 
     return (
         <div className='signuppage bg-white h-screen p-10 grid grid-cols-2'>
-           <div
-                className="image bg-zinc-300 rounded-2xl bg-cover bg-center"
-                style={{ backgroundImage: `url(${BackgroundImage})`, backgroundSize: "cover", backgroundPosition: "center", backgroundRepeat: "no-repeat" }}
-                >
+            <div className="image bg-white rounded-2xl bg-center flex flex-col justify-center items-center gap-7">
+                <img className="w-3/4 h-3/4" src={Symbol} alt="" />
             </div>
             <div className="signup px-14 flex items-center justify-center ">
                 <div className='border-1 border-zinc-300 px-4 py-8 rounded-2xl min-w-lg'>
                     <div className="title mb-10">
+                        <img className="w-36 mb-6" src={LOGO} alt="LOGO" />
                         <div className="heading text-4xl font-semibold">Hi</div>
                         <div className="subheading text-md text-zinc-400">Enter your details to register.</div>
                     </div>
@@ -86,8 +86,8 @@ function SignUp1() {
                             </div>
                             <div  className='grid grid-rows-1 gap-y-4'>
                             {/* <Link to="/signup2" className="text-blue-600 hover:underline"> */}
-                                <div className="signupbutton flex justify-center bg-blue-800 py-3 rounded-xl text-white cursor-pointer">
-                                    <button  type="button" onClick={handleNext} className='font-semibold'>
+                                <div className="signupbutton flex justify-center bg-blue-800 py-3 rounded-xl text-white hover:cursor-pointer" onClick={handleNext}>
+                                    <button  type="button" className='font-semibold hover:cursor-pointer'>
                                         Next
                                     </button>
                                 </div>

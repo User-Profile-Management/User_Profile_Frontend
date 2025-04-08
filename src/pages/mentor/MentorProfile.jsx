@@ -107,10 +107,6 @@ function MentorProfile() {
     };
     
 
-  if (!mentorData) {
-    return <div>Loading...</div>; 
-  }
-
   return (
     <DashboardLayout>
 

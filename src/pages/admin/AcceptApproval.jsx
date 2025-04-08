@@ -32,15 +32,6 @@ export default function AcceptApproval() {
     }
   }, [userId]);
 
-  if (!userData) {
-    return (
-      <DashboardLayout>
-        <div className="flex items-center justify-center h-full text-gray-500">
-          Loading user details...
-        </div>
-      </DashboardLayout>
-    );
-  }
 
   return (
     <DashboardLayout>

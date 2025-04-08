@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link ,useNavigate, useLocation} from "react-router-dom";
-
-import BackgroundImage from "/src/assets/frontimage.png";
+import LOGO from '../assets/LOGO Black.svg'
+import Symbol from "../assets/SignIn.svg";
 import userService from "../service/userService";
 
 
@@ -25,6 +25,7 @@ function SignUp2() {
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
+
 
 
     const handleSubmit = async (e) => {
@@ -61,15 +62,14 @@ function SignUp2() {
     
     return (
         <div className='signup page bg-white h-screen p-10 grid grid-cols-2'>
-           <div
-                className="image bg-zinc-300 rounded-2xl bg-cover bg-center"
-                style={{ backgroundImage: `url(${BackgroundImage})`, backgroundSize: "cover", backgroundPosition: "center", backgroundRepeat: "no-repeat" }}
-                >
+           <div className="image bg-white rounded-2xl bg-center flex flex-col justify-center items-center gap-7">
+                <img className="w-3/4 h-3/4" src={Symbol} alt="" />
             </div>
             <div className="signup px-14 flex items-center justify-center ">
                 <div className='border-1 border-zinc-300 px-4 py-8 rounded-2xl min-w-lg'>
                     <div className="title mb-10">
-                        <div className="heading text-4xl">Hi</div>
+                        <img className="w-36 mb-6" src={LOGO} alt="LOGO" />
+                        <div className="heading text-4xl font-semibold">Hi</div>
                         <div className="subheading text-md text-zinc-400">Enter your details to register.</div>
                     </div>
                     <div className="signup form ">

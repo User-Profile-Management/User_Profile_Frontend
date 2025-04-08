@@ -154,8 +154,7 @@ function StudentProfile() {
       ).values(),
     ];
     
-    console.log("Unique mentors:", uniqueMentors); // ✅ log the unique mentors
-    
+    console.log("Unique mentors:", uniqueMentors); 
 
   if (!studentData) {
     return <div>Loading...</div>; 
@@ -165,16 +164,16 @@ function StudentProfile() {
     <DashboardLayout>
 
          <div className='grid grid-rows-10 h-full overflow-auto'>
-                <div className='flex items-center'>
+                <div className='flex items-center md:h-20'>
                     <div className="font-semibold">Profile</div>
                 </div>
                 <div className="row-span-9 overflow-y-auto scrollbar-hide h-full">
                     <div className="w-full grid grid-cols-10 gap-5">
-                        <div className="col-span-7">
+                        <div className="col-span-10 md:col-span-7">
                             <div className="grid grid-rows-10 h-full gap-y-6">
                         <div className="row-span-4">
                             <div className=" grid grid-cols-5 h-full gap-6">
-                                <div className="col-span-2">
+                                <div className=" col-span-5 md:col-span-2 ">
                                     <div className='border border-zinc-100 bg-white rounded-xl p-4 h-full flex items-center justify-center'>
                                         <div className="flex flex-col items-center ">
                                         <img 
@@ -185,13 +184,13 @@ function StudentProfile() {
                                         onError={(e) => { e.target.src = ProfilePic; }} 
                                         alt="Profile Pic" 
                                         />
-                                            <div className='font-semibold text-2xl'>{studentData.fullName}</div>
+                                            <div className='font-semibold text-2xl text-center'>{studentData.fullName}</div>
                                             <div>{studentData.userId}</div>
                                         </div>
                                     </div>
                                 </div>
-                                <div className="col-span-3 w-full">
-                      <div className="grid grid-rows-8 border border-zinc-100 bg-white rounded-xl p-4 h-full flex-col ">
+                                <div className=" col-span-5 md:col-span-3 w-full">
+                      <div className="hidden md:grid grid-rows-8 border border-zinc-100 bg-white rounded-xl p-4 h-full flex-col ">
                         <div className="font-semibold text-xl flex justify-center">
                           Your Mentors
                         </div>
@@ -244,11 +243,11 @@ function StudentProfile() {
                                         </button>
                                     </div>
                                     <div className='flex flex-col gap-y-5'>
-                                        <div className="w-full flex gap-5">
+                                        <div className="w-full flex flex-col md:flex-row gap-5 ">
                                             <div className="w-1/2 flex gap-5">
                                                 <img className='w-10' src={Email} alt="email-icon" />
                                                 <div className="flex flex-col">
-                                                    <div className="font-semibold" >{studentData.email}</div>
+                                                    <div className="font-semibold " >{studentData.email}</div>
                                                     <div className='text-sm'>Email</div>
                                                 </div>
                                             </div>
@@ -260,7 +259,7 @@ function StudentProfile() {
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="w-full flex gap-5">
+                                        <div className="w-full flex flex-col md:flex-row gap-5 ">
                                             
                                             <div className="w-1/2 flex gap-5">
                                                 <img className='w-10' src={Phone} alt="phone-icon" />
@@ -301,7 +300,7 @@ function StudentProfile() {
                                         <div className=" gap-10 items-center grid grid-cols-3">
                                             <label className='text-sm font-semibold'>Current password</label>
                                             <input
-                                            className='name-input border border-zinc-100  p-2 rounded text-sm'
+                                            className='col-span-2 md:col-span-1 name-input border border-zinc-100  p-2 rounded text-sm'
                                             type='text'
                                             name='currentPassword'
                                             value={passwordData.currentPassword}
@@ -312,9 +311,9 @@ function StudentProfile() {
                                         <div className="border border-zinc-100"></div>
                                         <div className="gap-10 items-center grid grid-cols-3">
                                             <label className='text-sm font-semibold'>New password</label>
-                                            <div>
+                                            <div className='col-span-2 md:col-span-1'>
                                                 <input
-                                                className='name-input border border-zinc-100  p-2 rounded text-sm w-full'
+                                                className='  name-input border border-zinc-100  p-2 rounded text-sm w-full'
                                                 type='text'
                                                 name='newPassword'
                                                 value={passwordData.newPassword}
@@ -327,7 +326,7 @@ function StudentProfile() {
                                         <div className="border border-zinc-100"></div>
                                         <div className="gap-10 items-center grid grid-cols-3">
                                             <label className='text-sm font-semibold'>Confirm new password</label>
-                                            <div>
+                                            <div className='col-span-2 md:col-span-1'>
                                                 <input
                                                 className='name-input border border-zinc-100  p-2 rounded text-sm w-full '
                                                 type='text'
@@ -362,7 +361,7 @@ function StudentProfile() {
                         </div>
                     </div>
                         </div>
-                        <div className="col-span-3 grid grid-rows-10 h-full gap-y-6">
+                        <div className=" col-span-10 md:col-span-3 grid grid-rows-10 h-full gap-y-6 ">
                             <div className="row-span-4 ">
                                 <div className='flex flex-col border border-zinc-100 bg-white rounded-xl p-4 gap-5 justify-between h-full'>
                                     <div className='grid grid-rows-5 gap-6 h-full'>

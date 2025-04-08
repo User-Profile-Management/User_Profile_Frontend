@@ -5,7 +5,8 @@ import {jwtDecode} from "jwt-decode";
 import { auth, provider, signInWithPopup } from "../firebaseConfig";
 import GoogleLogo from "../assets/google.png";
 import authService from "../service/authService";
-import BackgroundImage from "/src/assets/frontimage.png";
+import Symbol from "../assets/SignIn.svg";
+import LOGO from '../assets/LOGO Black.svg'
 
 
 
@@ -65,16 +66,15 @@ const handleGoogleSignIn = async () => {
   };
 
   return (
-    <div className='signinpage bg-white h-screen p-10 grid grid-cols-2'>
-       <div
-  className="image bg-zinc-300 rounded-2xl bg-cover bg-center"
-  style={{ backgroundImage: `url(${BackgroundImage})`, backgroundSize: "cover", backgroundPosition: "center", backgroundRepeat: "no-repeat" }}
->
-</div>
+    <div className='signinpage bg-white h-screen p-10 grid grid-cols-2 '>
+        <div className="image bg-white rounded-2xl bg-center flex flex-col justify-center items-center gap-7">
+          <img className="w-3/4 h-3/4" src={Symbol} alt="" />
+        </div>
 
         <div className="signin px-14 flex items-center justify-center">
             <div className='border-1 border-zinc-300 px-4 py-8 rounded-2xl min-w-lg'>
-                <div className="title mb-10">
+                <div className="title mb-10 ">
+                    <img className="w-36 mb-6" src={LOGO} alt="LOGO" />
                     <div className="heading text-4xl font-semibold">Welcome Back</div>
                     <div className="subheading text-md  text-zinc-400">Enter your credentials to access your account</div>
                 </div>

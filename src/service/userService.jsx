@@ -189,41 +189,38 @@ const userService = {
       return [];
     }
   },
-
   getStudentProgress: async () => {
     try {
       const profile = await userService.getUserDetails();
       console.log("Fetched user profile:", profile);
-      
-      // Define which fields to consider for completeness
+  
       const profileFieldsToCheck = [
         "fullName",
         "dateOfBirth",
         "email",
         "contactNo",
         "address",
-        "profilePicture" // optional: exclude if not required
+        "profilePicture"
       ];
-      
-      // Count how many are filled
+  
       const filledFields = profileFieldsToCheck.filter(
         field => profile[field] && profile[field].toString().trim() !== ""
       ).length;
-      
-      const totalFields = profileFieldsToCheck.length;
-      
-      const profileCompletion = totalFields > 0 
-        ? Math.round((filledFields / totalFields) * 100)
-        : 0;
-      
-      console.log(`Profile completeness: ${profileCompletion}%`);
-      
-      setProgress(profileCompletion);
   
-    } catch (error) {
-      console.error("Error fetching progress:", error);
-    }
-  },
+      const totalFields = profileFieldsToCheck.length;
+  
+      const profileCompletion =
+        totalFields > 0 ? Math.round((filledFields / totalFields) * 100) : 0;
+  
+      console.log(`Profile completeness: ${profileCompletion}%`);
+  
+      return profileCompletion;
+
+  } catch (error) {
+    console.error("Error calculating profile completion:", error);
+    throw error; 
+  }
+}
   
 };
 

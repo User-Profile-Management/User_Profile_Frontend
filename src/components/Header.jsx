@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import userService from "../service/userService";
-import ProfileSquare from "../assets/profile-square.svg"; 
+import ProfileSquare from "../assets/profile-square.svg";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
+import { Menu } from "lucide-react"; // or any icon you prefer
+import LOGO from '../assets/LOGO.svg';
 
-const Header = () => {
+const Header = ({ toggleSidebar }) => {
   const [studentData, setStudentData] = useState(null);
   const [userRole, setUserRole] = useState("");
   const navigate = useNavigate();
@@ -22,8 +24,7 @@ const Header = () => {
 
     const fetchUserDetails = async () => {
       try {
-        const response = await userService.getUserDetails(); 
-        console.log("Student data response:", response[0]);
+        const response = await userService.getUserDetails();
         setStudentData(response?.response || response?.data || response);
       } catch (error) {
         console.error("Error fetching user profile:", error);
@@ -46,11 +47,21 @@ const Header = () => {
   };
 
   return (
-    <div className="justify-between items-center p-4 border-b border-zinc-200 grid grid-cols-7">
-      <div className="text-lg font-bold cursor-pointer" onClick={() => navigate("/")}>LOGO</div>
-      <div className="col-span-5"></div>
-      <div 
-        className="p-3 cursor-pointer flex flex-row items-center gap-3 border-l border-zinc-200"
+    <div className="justify-between items-center p-4 border-b border-zinc-200 grid grid-cols-6 ">
+      {/* Hamburger - visible on small/medium screens */}
+      <div className="flex items-center gap-4">
+        <div className="block xl:hidden cursor-pointer" onClick={toggleSidebar}>
+          <Menu className="w-6 h-6" />
+        </div>
+        <img src={LOGO} alt="LOGO" />
+        {/* <div className="text-lg font-bold cursor-pointer">LOGO</div> */}
+      </div>
+
+      <div className="col-span-4 md:col-span-3"></div>
+
+      {/* Profile */}
+      <div
+        className="p-3 cursor-pointer flex flex-row items-center justify-end gap-3 w-full border-zinc-200 md:col-span-2"
         onClick={handleProfileClick}
       >
         <img
@@ -60,10 +71,14 @@ const Header = () => {
               ? `data:image/png;base64,${studentData.profilePicture}`
               : ProfileSquare
           }
-          onError={(e) => { e.target.src = ProfileSquare; }}
+          onError={(e) => {
+            e.target.src = ProfileSquare;
+          }}
           alt="Profile Pic"
         />
-        <div className="text-md">{studentData?.fullName || "User"}</div>
+        <div className="text-md font-semibold hidden md:flex ">
+          {studentData?.fullName || "User"}
+        </div>
       </div>
     </div>
   );

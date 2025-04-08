@@ -44,16 +44,20 @@ function StudentDashboard() {
         return () => clearInterval(interval);
     }, []);
 
-    useEffect(() => {
-        const fetchProgress = async () => {
-            try {
-                const userProgress = await userService.getStudentProgress();
-                setProgress(userProgress);
-            } catch (error) {
-                console.error("Error fetching progress:", error);
-            }
-        };
+    const fetchProgress = async () => {
+        try {
+          const userProgress = await userService.getStudentProgress(); // API call
+          setProgress(userProgress.progress); // Assuming it's a number like 75
+        } catch (error) {
+          console.error("Error fetching progress:", error);
+        }
+      };
+    
+      useEffect(() => {
+        fetchProgress();
+      }, []);
 
+    useEffect(() => {
         const fetchCertificates = async () => {
             try {
                 const userCerts = await certificateService.getCertificatesList();
@@ -119,10 +123,8 @@ function StudentDashboard() {
                 console.error("Error fetching data:", error);
             }
         };
-    
-
+        
         fetchData();
-        fetchProgress();
         fetchCertificates();
         fetchProjects();
 
@@ -130,15 +132,15 @@ function StudentDashboard() {
 
     return (
         <DashboardLayout>
-            <div className='grid grid-rows-10 h-full'>
+            <div className='grid grid-rows-9 h-full'>
                 <div>
                     <div className="text-2xl font-semibold">Home</div>
                     <div className='text-zinc-500'>Student Dashboard</div>
                 </div>
-                <div className="row-span-9">
+                <div className=" row-span-5 md:row-span-8 ">
                     <div className='grid grid-rows-5 gap-y-6 h-full'>
                         <div className="row-span-2">
-                            <div className="grid grid-cols-4 h-full gap-6">
+                            <div className="grid grid-cols-2 h-full gap-6 md:grid-cols-4">
                                 <StatCard number={performanceScore} title="Overall Performance" color="bg-sky-900" />
                                 <StatCard 
                                     number={projects.filter(project => project.status !== 'COMPLETED').length} 
@@ -146,7 +148,7 @@ function StudentDashboard() {
                                     color="bg-sky-700" 
                                 />
                                 {/* Notifications */}
-                                <div className="col-span-2 row-span-2 border border-zinc-200 bg-white rounded-xl p-4 h-full">
+                                <div className="col-span-2 row-span-2 border border-zinc-200 bg-white rounded-xl p-4 h-full hidden md:flex">
                                     <div className="grid grid-rows-7">
                                         <div className="font-semibold text-xl">Notifications</div>
                                         <div className="row-span-6 overflow-y-scroll scrollbar-hide mt-4 max-h-48">
@@ -168,16 +170,16 @@ function StudentDashboard() {
                         <div className="row-span-3">
                             <div className="grid grid-cols-4 h-full gap-6">
                                 {/* Left section */}
-                                <div className="col-span-3">
+                                <div className="col-span-4 md:col-span-3">
                                     <div className="grid grid-rows-5 h-full gap-y-6">
                                         {/* Progress */}
-                                        <div className="row-span-2 border border-zinc-200 bg-white rounded-xl p-4 h-full flex items-center">
+                                        <div className="lg:row-span-2 border border-zinc-200 bg-white rounded-xl p-4 h-full flex items-center">
                                             <div className="flex justify-between w-full">
                                                 <div className='flex gap-6 items-center'>
                                                     <CircularProgress percentage={progress || 0} />
                                                     <div className='flex flex-col'>
                                                         <div className='text-2xl font-semibold'>You're so close!</div>
-                                                        <div className='text-lg'>Finish up for the best experience.</div>
+                                                        <div className='text-lg '>Finish up for the best experience.</div>
                                                     </div>
                                                 </div>
                                                 <div className="flex items-center">
@@ -189,10 +191,10 @@ function StudentDashboard() {
                                         </div>
 
                                         {/* Certifications & Badges */}
-                                        <div className="row-span-3">
-                                            <div className="grid grid-cols-2 gap-6">
+                                        <div className=" row-span-4 lg:[row-span-3 h-full]">
+                                            <div className="grid grid-cols-2 gap-6 h-full md:h-full xl:max-h-60">
                                                 {/* Certifications */}
-                                                <div className="border border-zinc-200 bg-white rounded-xl p-4 max-h-60">
+                                                <div className="border border-zinc-200 bg-white rounded-xl p-4 md:h-full xl:max-h-60">
                                                 <div className="flex flex-col h-full">
                                                     {/* Title */}
                                                     <div className="font-semibold text-xl mb-2">Your Certifications</div>
@@ -222,9 +224,9 @@ function StudentDashboard() {
                                                 </div>
 
                                                 {/* Badges */}
-                                                <div className="grid grid-rows-7 border border-zinc-200 bg-white rounded-xl p-4">
+                                                <div className=" grid grid-rows-7 border border-zinc-200 bg-white rounded-xl p-4">
                                                     <div className="font-semibold text-xl">Your Badges</div>
-                                                    <div className="flex row-span-6 items-center justify-center gap-4">
+                                                    <div className="flex-col flex row-span-6 items-center justify-center gap-4  md:flex-row">
                                                         {badgeLevels.map((badge, i) => {
                                                             const isUnlocked = completedCount >= badge.min;
                                                             return (
@@ -248,9 +250,9 @@ function StudentDashboard() {
                                 </div>
 
                                 {/* Projects Summary */}
-                                <div className='flex flex-col border border-zinc-200 bg-white rounded-xl p-4 gap-5 justify-between'>
+                                <div className='col-span-4 lg:[flex flex-col border border-zinc-200 bg-white rounded-xl p-4 gap-5 justify-between ] md:col-span-1 '>
                                     <div className='grid grid-rows-5 gap-6 h-full'>
-                                        <div className='text-5xl font-bold text-center'>
+                                        <div className='text-6xl font-bold text-center flex items-end justify-center'>
                                             {completedCount}
                                         </div>
                                         <div className='flex flex-col'>

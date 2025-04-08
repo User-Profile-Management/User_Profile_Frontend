@@ -55,7 +55,10 @@ const Sidebar = () => {
     };
 
     return (
-        <div className="p-4 border-r-1 border-zinc-200 grid grid-rows-10 min-w-64">
+        <div className="
+        
+        xl:p-4 xl:border-r-1 xl:border-zinc-200 xl:grid xl:grid-rows-10 xl:min-w-64
+        sm:flex flex-col w-full ">
             
             {/* Home */}
             <div 
