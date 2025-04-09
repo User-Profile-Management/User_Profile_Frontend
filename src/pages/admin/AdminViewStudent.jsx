@@ -65,7 +65,7 @@ function AdminViewStudent() {
         isOpen: true,
         type: "error",
         title: "Error",
-        message: "FError deleting the user. Please try again.",
+        message: "Error deleting the user. Please try again.",
       });
     }
   };

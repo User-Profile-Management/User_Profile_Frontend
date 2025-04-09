@@ -2,7 +2,8 @@ import axios from "axios";
 
 const BASE_URL = "http://localhost:8080/api/projects";
 
-const getToken = () => localStorage.getItem("token") || localStorage.getItem("authToken");
+const getToken = () =>
+  localStorage.getItem("token") || localStorage.getItem("authToken");
 
 const projectService = {
   addProject: async (projectData) => {
@@ -19,6 +20,33 @@ const projectService = {
       return null;
     }
   },
+  getProjectsByMentorUserId: async (mentorUserId) => {
+    try {
+      const response = await axios.get(
+        `${BASE_URL}/user/${mentorUserId}/projects`,
+        {
+          headers: {
+            Authorization: `Bearer ${getToken()}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      return response.data.response;
+    } catch (error) {
+      console.error("Failed to fetch projects for mentor", error);
+      throw error;
+    }
+  },
+  getProjectById: async (projectId) => {
+    const response = await axios.get(`${BASE_URL}/${projectId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+    return response.data;
+  },
+
   deleteProject: async (projectId) => {
     try {
       const token = getToken();
@@ -63,12 +91,16 @@ const projectService = {
         return;
       }
 
-      const response = await axios.put(`${BASE_URL}/${projectId}`, projectData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await axios.put(
+        `${BASE_URL}/${projectId}`,
+        projectData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       return response.data;
     } catch (error) {

@@ -9,9 +9,12 @@ import DOB from "../../assets/profile-dob.svg";
 import Emergency from "../../assets/profile-emergency.svg";
 import Location from "../../assets/profile-location.svg";
 import AlertModal from "../../components/modals/AlertModal";
+import { useNavigate } from "react-router-dom";
 
 export default function AcceptApproval() {
   const { userId } = useParams();
+  const navigate = useNavigate();
+
   const [userData, setUserData] = useState(null);
   const [alert, setAlert] = useState({
     isOpen: false,
@@ -199,7 +202,10 @@ export default function AcceptApproval() {
       </div>
       <AlertModal
         isOpen={alert.isOpen}
-        onClose={() => setAlert((prev) => ({ ...prev, isOpen: false }))}
+        onClose={() => {
+          setAlert((prev) => ({ ...prev, isOpen: false }));
+          navigate("/admin-approval");
+        }}
         type={alert.type}
         title={alert.title}
         message={alert.message}

@@ -1,8 +1,16 @@
 import React, { useState } from "react";
 import userService from "../../service/userService";
 import AlertModal from "./AlertModal";
+import { useNavigate } from "react-router-dom";
 
 const AddStudentModal = ({ isOpen, onClose }) => {
+  const navigate = useNavigate();
+  const handleAlertClose = () => {
+    setAlert((prev) => ({ ...prev, isOpen: false }));
+    onClose(); // close the AddStudentModal
+    navigate("/dashboard");
+  };
+  
   const [studentData, setStudentData] = useState({
     fullName: "",
     dateOfBirth: "",
@@ -79,7 +87,6 @@ const AddStudentModal = ({ isOpen, onClose }) => {
         title: "Success",
         message: "Student registered successfully",
       });
-      onClose();
     } catch (error) {
       console.error("Registration error:", error);
       setAlert({
@@ -208,7 +215,7 @@ const AddStudentModal = ({ isOpen, onClose }) => {
       </div>
       <AlertModal
         isOpen={alert.isOpen}
-        onClose={() => setAlert({ ...alert, isOpen: false })}
+        onClose={handleAlertClose}
         type={alert.type}
         title={alert.title}
         message={alert.message}

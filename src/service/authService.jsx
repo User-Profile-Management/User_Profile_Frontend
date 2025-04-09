@@ -28,10 +28,11 @@ const authService = {
 },
 
   isAuthenticated: () => {
-    return !!localStorage.getItem("getToken");
+    return !!localStorage.getItem("token");
   },
 
-  getToken: () => localStorage.getItem("getToken"),
+  getToken: () => localStorage.getItem("token"), // ✅ correct key
+
 };
 
 export default authService;
