@@ -115,7 +115,7 @@ const AddStudentModal = ({ isOpen, onClose }) => {
               onChange={handleChange}
               placeholder="Enter name"
               className={`w-2/3 p-2 border rounded-md focus:ring-2 focus:ring-gray-200 focus:outline-none ${
-                errors.fullName ? "border-red-500" : "text-gray-300"
+                errors.fullName ? "border-red-500" : "text-gray-500"
               }`}
             />
           </div>
@@ -128,7 +128,7 @@ const AddStudentModal = ({ isOpen, onClose }) => {
               value={studentData.dateOfBirth}
               onChange={handleChange}
               className={`w-2/3 p-2 border rounded-md focus:ring-2 focus:ring-gray-200 focus:outline-none ${
-                errors.dateOfBirth ? "border-red-500" : "text-gray-300"
+                errors.dateOfBirth ? "border-red-500" : "text-gray-500"
               }`}
             />
           </div>
@@ -142,7 +142,7 @@ const AddStudentModal = ({ isOpen, onClose }) => {
               onChange={handleChange}
               placeholder="Enter mobile number"
               className={`w-2/3 p-2 border rounded-md focus:ring-2 focus:ring-gray-200 focus:outline-none ${
-                errors.contactNo ? "border-red-500" : "text-gray-300"
+                errors.contactNo ? "border-red-500" : "text-gray-500"
               }`}
             />
           </div>
@@ -156,7 +156,7 @@ const AddStudentModal = ({ isOpen, onClose }) => {
               onChange={handleChange}
               placeholder="Enter address"
               className={`w-2/3 p-2 border rounded-md focus:ring-2 focus:ring-gray-200 focus:outline-none ${
-                errors.address ? "border-red-500" : "text-gray-300"
+                errors.address ? "border-red-500" : "text-gray-500"
               }`}
             />
           </div>
@@ -170,7 +170,7 @@ const AddStudentModal = ({ isOpen, onClose }) => {
               onChange={handleChange}
               placeholder="Enter email address"
               className={`w-2/3 p-2 border rounded-md focus:ring-2 focus:ring-gray-200 focus:outline-none ${
-                errors.email ? "border-red-500" : "text-gray-300"
+                errors.email ? "border-red-500" : "text-gray-500"
               }`}
             />
           </div>
@@ -184,7 +184,7 @@ const AddStudentModal = ({ isOpen, onClose }) => {
               onChange={handleChange}
               placeholder="Enter password"
               className={`w-2/3 p-2 border rounded-md focus:ring-2 focus:ring-gray-200 focus:outline-none ${
-                errors.password ? "border-red-500" : "text-gray-300"
+                errors.password ? "border-red-500" : "text-gray-500"
               }`}
             />
           </div>
