@@ -33,7 +33,7 @@ const DashboardLayout = ({ children }) => {
         {/* Overlay (only on mobile/tablet when sidebar is open) */}
         {sidebarVisible && (
           <div
-            className="fixed inset-0 bg-opacity-50 backdrop-brightness-50 backdrop-blur-xs bg-opacity-30 z-40 xl:hidden"
+            className="fixed inset-0 bg-opacity-50 backdrop-brightness-50 backdrop-blur-xs bg-opacity-30 xl:hidden"
             onClick={toggleSidebar}
           />
         )}

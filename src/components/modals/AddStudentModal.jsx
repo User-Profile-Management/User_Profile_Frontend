@@ -94,7 +94,7 @@ const AddStudentModal = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-opacity-50 backdrop-brightness-50 flex items-center justify-center">
+    <div className="fixed inset-0 bg-opacity-50 backdrop-brightness-50 z-50 flex items-center justify-center">
       <div className="bg-white p-6 rounded-lg w-full max-w-[600px]">
         <h2 className="text-xl font-semibold">Add a Student</h2>
         <p
