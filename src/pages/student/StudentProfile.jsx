@@ -59,7 +59,7 @@ function StudentProfile() {
             try {
                 const response = await userService.getUserDetails(); 
                 
-                // Adjust this line depending on how your API returns data
+                
                 setStudentData(response?.response || response?.data || response);
             } catch (error) {
                 console.error('Error fetching mentor profile:', error);
@@ -114,10 +114,10 @@ function StudentProfile() {
                 formData.append("profilePicture", updatedData.profilePicture);
             }
     
-            await userService.updateProfile(formData); // You should have this endpoint in userService
+            await userService.updateProfile(formData); 
             alert("Profile updated successfully!");
     
-            // Refresh mentor data after update
+            
             const refreshedData = await userService.getUserDetails();
             setStudentData(refreshedData.response);
     
@@ -131,7 +131,7 @@ function StudentProfile() {
         if (studentData?.userId) {
           try {
             const projectList = await userprojectService.getProjectsList(studentData.userId);
-            console.log("Fetched projects:", projectList); // ✅ log the fetched projects
+            console.log("Fetched projects:", projectList);
             setProjects(projectList);
           } catch (error) {
             console.log("Error fetching projects:", error);

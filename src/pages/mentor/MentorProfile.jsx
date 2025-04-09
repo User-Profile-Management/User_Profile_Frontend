@@ -14,11 +14,14 @@ import DeleteButton from '../../assets/delete.svg'
 import StudentListCard from '../../components/StudentListCard';
 import EditProfileModal from '../../components/modals/EditProfileModal.jsx';
 import userService from "../../service/userService.jsx";
- 
+import AlertModal from "../../components/modals/AlertModal";
+
 function MentorProfile() {
  
     const [mentorData,setMentorData] = useState(null);
     const [StudentsList, setStudentsList] = useState([]);
+    const [errors, setErrors] = useState({});
+
     const [passwordData,setPasswordData]= useState({
         currentPasword: "",
         newPasword: "",
@@ -248,72 +251,121 @@ function MentorProfile() {
                                         <div className="border border-zinc-100"></div>
                                     </div>
                                 </div>
-                                <form onSubmit={handleSubmit} className="Password flex flex-col gap-y-6">
-                                    <div className="title">
-                                        <div className="font-semibold">Password</div>
-                                        <div className="text-sm">Please enter your current password to change your password.</div>
-                                    </div>
-                                    <div className="form flex flex-col gap-y-4">
-                                        <div className=" gap-10 items-center grid grid-cols-3">
-                                            <label className='text-sm font-semibold'>Current password</label>
-                                            <input
-                                            className='name-input border border-zinc-100  p-2 rounded text-sm'
-                                            type='text'
-                                            name='currentPassword'
-                                            value={passwordData.currentPassword}
-                                            onChange={handleChange}
-                                            placeholder='Enter current password'
-                                            />
-                                        </div>
-                                        <div className="border border-zinc-100"></div>
-                                        <div className="gap-10 items-center grid grid-cols-3">
-                                            <label className='text-sm font-semibold'>New password</label>
-                                            <div>
-                                                <input
-                                                className='name-input border border-zinc-100  p-2 rounded text-sm w-full'
-                                                type='text'
-                                                name='newPassword'
-                                                value={passwordData.newPassword}
-                                                onChange={handleChange}
-                                                placeholder='Enter new password'
-                                                />
-                                                <div className='text-sm'>Your new password must be more than 8 characters.</div>
-                                            </div>
-                                        </div>
-                                        <div className="border border-zinc-100"></div>
-                                        <div className="gap-10 items-center grid grid-cols-3">
-                                            <label className='text-sm font-semibold'>Confirm new password</label>
-                                            <div>
-                                                <input
-                                                className='name-input border border-zinc-100  p-2 rounded text-sm w-full '
-                                                type='text'
-                                                name='confirmNewPassword'
-                                                value={passwordData.confirmNewPassword}
-                                                onChange={handleChange}
-                                                placeholder='Re-Enter new password'
-                                                />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="updatedetails flex flex-row-reverse gap-6">
-                                        <button type="submit" className='flex justify-center bg-blue-600 py-3 rounded-xl  text-white px-4 font-semibold hover:bg-blue-700 text-sm'>
-                                             Update Password</button>
- 
-                                        <button
-                                        type="button"
-                                        onClick={() => setPasswordData({
-                                            currentPassword: "",
-                                            newPassword: "",
-                                            confirmNewPassword:""
- 
-                                        }   
-                                        )}
-                                        className='flex justify-center bg-zinc-100 py-3 rounded-xl text-black px-4 font-semibold hover:bg-zinc-200 text-sm '>
-                                        Cancel</button>
- 
-                                             
-                                    </div>
-                                </form>
+                                <form
+                  onSubmit={handleSubmit}
+                  className="Password flex flex-col gap-y-6"
+                >
+                  <div className="title">
+                    <div className="font-semibold">Password</div>
+                    <div className="text-sm">
+                      Please enter your current password to change your
+                      password.
+                    </div>
+                  </div>
+                  {/* Current Password */}
+                  <div className="gap-10 items-center grid grid-cols-3">
+                    <label className="text-sm font-semibold">
+                      Current password
+                    </label>
+                    <div className="w-full">
+                      <input
+                        className={`border p-2 rounded text-sm w-full ${
+                          errors.currentPassword
+                            ? "border-red-500"
+                            : "border-zinc-100"
+                        }`}
+                        type="password"
+                        name="currentPassword"
+                        value={passwordData.currentPassword}
+                        onChange={handleChange}
+                        placeholder="Enter current password"
+                      />
+                      {errors.currentPassword && (
+                        <div className="text-red-500 text-xs mt-1">
+                          Current password is required.
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                  <div className="border border-zinc-100"></div>
+
+                  {/* New Password */}
+                  <div className="gap-10 items-center grid grid-cols-3">
+                    <label className="text-sm font-semibold">
+                      New password
+                    </label>
+                    <div className="w-full">
+                      <input
+                        className={`border p-2 rounded text-sm w-full ${
+                          errors.newPassword
+                            ? "border-red-500"
+                            : "border-zinc-100"
+                        }`}
+                        type="text"
+                        name="newPassword"
+                        value={passwordData.newPassword}
+                        onChange={handleChange}
+                        placeholder="Enter new password"
+                      />
+                      {errors.newPassword && (
+                        <div className="text-red-500 text-xs mt-1">
+                          New password must be at least 8 characters.
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                  <div className="border border-zinc-100"></div>
+
+                  {/* Confirm New Password */}
+                  <div className="gap-10 items-center grid grid-cols-3">
+                    <label className="text-sm font-semibold">
+                      Confirm new password
+                    </label>
+                    <div className="w-full">
+                      <input
+                        className={`border p-2 rounded text-sm w-full ${
+                          errors.confirmNewPassword
+                            ? "border-red-500"
+                            : "border-zinc-100"
+                        }`}
+                        type="text"
+                        name="confirmNewPassword"
+                        value={passwordData.confirmNewPassword}
+                        onChange={handleChange}
+                        placeholder="Re-Enter new password"
+                      />
+                      {errors.confirmNewPassword && (
+                        <div className="text-red-500 text-xs mt-1">
+                          Passwords do not match.
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="updatedetails flex flex-row-reverse gap-6">
+                    <button
+                      type="submit"
+                      className="flex justify-center bg-blue-600 py-3 rounded-xl  text-white px-4 font-semibold hover:bg-blue-700 text-sm"
+                    >
+                      Update Password
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setPasswordData({
+                          currentPassword: "",
+                          newPassword: "",
+                          confirmNewPassword: "",
+                        });
+                        setErrors({});
+                      }}
+                      className="flex justify-center bg-zinc-100 py-3 rounded-xl text-black px-4 font-semibold hover:bg-zinc-200 text-sm "
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </form>
                             </div>
                         </div>
  
