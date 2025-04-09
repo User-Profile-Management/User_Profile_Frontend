@@ -12,12 +12,14 @@ import { useParams } from "react-router-dom";
 import projectService from "../../service/projectService.jsx";
 import userprojectService from "../../service/userprojectService.jsx";
 import EditProfileModal from "../../components/modals/EditProfileModal";
+import StudentListCard from "../../components/StudentListCard.jsx";
 
 function AdminViewMentor() {
   const [mentorData, setMentorData] = useState(null);
   const [studentsList, setStudentsList] = useState([]);
   const [mentorProjects, setMentorProjects] = useState([]);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [StudentsLists, setStudentsLists] = useState([]);
 
   const { userId } = useParams();
   const [loading, setLoading] = useState(true);
@@ -93,6 +95,20 @@ function AdminViewMentor() {
 
     if (userId) fetchStudentsUnderMentor();
   }, [userId]);
+  useEffect(() => {
+    const fetchStudents = async () => {
+      try {
+        const students = await userService.getStudentsList();
+        console.log("Fetched All Students:", students);
+        setStudentsLists(students); // ✅ set the correct state
+      } catch (error) {
+        console.error("Error fetching all students:", error);
+      }
+    };
+  
+    fetchStudents();
+  }, []);
+   //gives full students list
 
 
 
@@ -244,7 +260,7 @@ function AdminViewMentor() {
                             className="w-10"
                             src={Emergency}
                             alt="emergency-icon"
-                          />
+                          /> 
                           <div className="flex flex-col">
                             <div className="font-semibold">
                               {mentorData.emergencyContact}
@@ -274,29 +290,17 @@ function AdminViewMentor() {
                 </div>
                 <div>
                   <div className="row-span-3 border border-zinc-100 bg-white rounded-xl p-4 flex flex-col gap-y-6 h-full">
-                    <div className="title flex justify-center">
-                      <div className="text-xl font-semibold">Student List</div>
-                    </div>
-                    <div className="h-full flex flex-col gap-y-4 overflow-y-auto">
-                      {studentsList.map((student, index) => (
-                        <div key={index} className="flex flex-col gap-y-2">
-                          <div className="flex gap-5">
-                            <img
-                              className="w-10"
-                              src={ProfileSquare}
-                              alt="profile-icon"
-                            />
-                            <div className="flex flex-col">
-                              <div className="font-semibold">
-                                {student.fullName}
-                              </div>
-                              <div className="text-sm">{student.userId}</div>
-                            </div>
-                          </div>
-                          <div className="border border-zinc-100"></div>
-                        </div>
-                      ))}
-                    </div>
+                  <div className="row-span-6 border border-zinc-100 bg-white rounded-xl h-full p-4 flex flex-col gap-y-6">
+                <div className="title flex justify-between">
+                  <div className="text-xl font-semibold">Student List</div>
+                </div>
+
+                <div className="h-full flex flex-col gap-y-4 overflow-auto">
+                  
+                  <StudentListCard items={StudentsLists} />
+                </div>
+                
+              </div>
                   </div>
                 </div>
               </div>
