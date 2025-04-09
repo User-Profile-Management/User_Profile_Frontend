@@ -40,6 +40,21 @@ const projectService = {
       throw error;
     }
   },
+  getAllProjects: async () => {
+    try {
+      const response = await axios.get(`${BASE_URL}`, {
+        headers: {
+          Authorization: `Bearer ${getToken()}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      return response.data.response; // Adjust this depending on your API response structure
+    } catch (error) {
+      console.error("Error fetching projects:", error);
+      return [];
+    }
+  },
   updateProject: async (projectId, projectData) => {
     try {
       const token = getToken();

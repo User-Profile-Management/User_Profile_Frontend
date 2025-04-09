@@ -26,7 +26,7 @@ function SignIn() {
         const token = response.response.token;
 
         // ✅ Store token AFTER it's received
-        localStorage.setItem("getToken", token);
+        localStorage.setItem("token", token);
 
         const decodedToken = jwtDecode(token);
         console.log("[DEBUG] Decoded Token:", decodedToken);

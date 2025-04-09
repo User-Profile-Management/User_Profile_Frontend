@@ -99,6 +99,19 @@ const userService = {
       return [];
     }
   },
+  deleteUser: async (userId) => {
+    try {
+      const response = await axios.delete(`http://localhost:8080/api/users/${userId}`, {
+        headers: {
+          Authorization: `Bearer ${getToken()}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Error deleting user:", error.response?.data || error);
+      throw error.response?.data || error;
+    }
+  },
 
   getApprovalList: async () => {
     try {
