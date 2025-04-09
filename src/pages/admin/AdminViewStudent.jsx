@@ -10,74 +10,134 @@ import Location from "../../assets/profile-location.svg";
 import AddButton from "../../assets/add-button.svg";
 import CloudDownload from "../../assets/cloud.svg";
 import userService from "../../service/userService";
-import projectService from "../../service/projectService";
+import Tick from "../../assets/tick.svg";
+import userprojectService from "../../service/userprojectService";
 import certificateService from "../../service/certificateService";
 import EditProfileModal from "../../components/modals/EditProfileModal";
+import AlertModal from "../../components/modals/AlertModal";
+import { useParams } from "react-router-dom";
 
 function AdminViewStudent() {
   const [studentData, setStudentData] = useState(null);
   const [projects, setProjects] = useState([]);
+  const [certificates, setCertificates] = useState([]);
+  const [mentors, setMentors] = useState([]);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const { userId } = useParams();
+  const [loading, setLoading] = useState(true);
+  const [alert, setAlert] = useState({
+      isOpen: false,
+      type: "info",
+      title: "",
+      message: "",
+    });
 
-  const [certifications, setCertifications] = useState([]);
+  useEffect(() => {
+    const fetchUserDetails = async () => {
+      try {
+        const response = await userService.getUserById(userId);
+        setStudentData(response?.response || response?.data || response);
+        console.log("Fetched student data:", response);
+      } catch (error) {
+        console.error("Error fetching student profile:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUserDetails();
+  }, [userId]);
+
+  const handleDeleteUser= async () => {
+    try {
+      const response = await userService.deleteUser(userId); // Delete user via the userService
+      console.log("Student deleted successfully", response);
+      setAlert({
+        isOpen: true,
+        type: "success",
+        title: "Success",
+        message: "User deleted successfully",
+      });
+      // Optionally, redirect to another page after deleting
+    } catch (error) {
+      console.error("Error deleting student:", error);
+      setAlert({
+        isOpen: true,
+        type: "error",
+        title: "Error",
+        message: "FError deleting the user. Please try again.",
+      });
+    }
+  };
+
+
 
   useEffect(() => {
     const fetchCertificates = async () => {
       try {
-        const userCerts = await certificateService.getCertificatesList();
-        setCertifications(userCerts);
-      } catch (error) {
-        console.error("Error fetching certifications:", error);
+        const res = await certificateService.getCertificatesList(userId);
+        setCertificates(res); // Already filtered by studentId on backend
+      } catch (err) {
+        console.error("Error fetching certificates:", err);
       }
     };
 
-    const fetchProjects = async () => {
-      try {
-        const userProjects = await projectService.getProjectsList();
-        setProjects(userProjects);
-      } catch (error) {
-        console.error("Error fetching projects:", error);
-      }
-    };
-    const fetchUserDetails = async () => {
-      try {
-        const response = await userService.getUserDetails();
+    if (userId) {
+      fetchCertificates();
+    }
+  }, [userId]);
 
-        // Adjust this line depending on how your API returns data
-        setStudentData(response?.response || response?.data || response);
-      } catch (error) {
-        console.error("Error fetching mentor profile:", error);
-      }
-    };
-    fetchUserDetails();
-    fetchProjects();
-    fetchCertificates();
-  }, []);
-  
+  const handleDownload = async (certificateId, certificateName) => {
+    try {
+      const blob = await certificateService.downloadCertificate(certificateId);
+      const url = window.URL.createObjectURL(new Blob([blob]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", `${certificateName}.pdf`);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    } catch (err) {
+      console.error("Download failed", err);
+    }
+  };
+
   useEffect(() => {
-    const fetchProjects = async () => {
-      if (studentData?.userId) {
-        try {
-          const projectList = await userprojectService.getProjectsList(
-            studentData.userId
-          );
-          console.log("Fetched projects:", projectList); // ✅ log the fetched projects
-          setProjects(projectList);
-        } catch (error) {
-          console.log("Error fetching projects:", error);
-        }
+    if (!studentData || !studentData.userId) {
+      console.log("Waiting for student data...");
+      return;
+    }
+
+    const fetchStudentProjects = async () => {
+      try {
+        const res = await userprojectService.getProjectsByStudentId(
+          studentData.userId
+        );
+        setProjects(res?.response || []);
+        console.log("student project list:", res);
+
+        // Extract mentors from projects and set the unique mentor list
+        const mentorList = [];
+        res?.response.forEach((project) => {
+          if (
+            project.mentor &&
+            !mentorList.some((m) => m.userId === project.mentor.userId)
+          ) {
+            mentorList.push(project.mentor);
+          }
+        });
+        setMentors(mentorList); // Set the unique mentor list
+      } catch (error) {
+        console.error("Failed to fetch student projects:", error);
       }
     };
-    fetchProjects();
+
+    fetchStudentProjects();
   }, [studentData]);
 
-  const uniqueMentors = [
-    ...new Map(
-      projects
-        .filter((p) => p.project?.mentor)
-        .map((p) => [p.project.mentor.userId, p.project.mentor])
-    ).values(),
-  ];
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <DashboardLayout>
@@ -91,11 +151,11 @@ function AdminViewStudent() {
             <div className="font-semibold">Student Profile</div>
           </div>
           <div className="updatedetails flex flex-row-reverse gap-6">
-            <button className="flex justify-center border border-red-600 py-3 rounded-xl text-red-600 px-4 font-semibold hover:bg-red-600 hover:text-white text-sm ">
-              Delete Student
+            <button onClick={handleDeleteUser} className="flex justify-center border border-red-600 py-3 rounded-xl text-red-600 px-4 font-semibold hover:bg-red-600 hover:text-white text-sm ">
+              Delete User
             </button>
             <button
-              className="flex justify-center bg-blue-600 py-3 rounded-xl  text-white px-4 font-semibold hover:bg-blue-700 text-sm"
+              className="flex justify-center bg-blue-600 py-3 rounded-xl text-white px-4 font-semibold hover:bg-blue-700 text-sm"
               onClick={() => setIsEditModalOpen(true)}
             >
               Edit profile
@@ -121,7 +181,6 @@ function AdminViewStudent() {
                       }}
                       alt="Profile Pic"
                     />
-
                     <div className="font-semibold text-2xl">
                       {studentData?.fullName}
                     </div>
@@ -135,12 +194,12 @@ function AdminViewStudent() {
                       Your Mentors
                     </div>
                     <div className="row-span-7 grid grid-rows-4 gap-y-5 overflow-auto">
-                      {uniqueMentors.length === 0 ? (
+                      {mentors.length === 0 ? (
                         <div className="text-center text-gray-500">
                           No mentors found
                         </div>
                       ) : (
-                        uniqueMentors.map((mentor, index) => (
+                        mentors.map((mentor, index) => (
                           <div key={index} className="flex flex-col gap-y-5">
                             <div className="w-1/2 flex gap-5">
                               <img
@@ -150,11 +209,9 @@ function AdminViewStudent() {
                               />
                               <div className="flex flex-col">
                                 <div className="font-semibold">
-                                  {mentor?.fullName}
+                                  {mentor.fullName}
                                 </div>
-                                <div className="text-sm">
-                                  {mentor?.contactNo}
-                                </div>
+                                <div className="text-sm">{mentor.email}</div>
                               </div>
                             </div>
                             <div className="border border-zinc-100"></div>
@@ -164,16 +221,17 @@ function AdminViewStudent() {
                     </div>
                   </div>
                 </div>
+
                 {/* Ongoing Projects List */}
                 <div className="">
                   <div className="flex flex-col border border-zinc-100 bg-white rounded-xl p-4 h-full ">
                     <div className="grid grid-rows-5 gap-y-6 h-full">
                       <div className="font-semibold text-xl flex justify-between">
                         <div>Ongoing Projects List</div>
-                        <img src={AddButton} alt="AddButton" />
+                        
                       </div>
                       <div className="row-span-4">
-                        {projects.length > 0 ? (
+                        {projects && projects.length > 0 ? (
                           projects.map((project, index) => (
                             <div
                               key={index}
@@ -181,11 +239,10 @@ function AdminViewStudent() {
                             >
                               <div className="flex flex-col justify-between">
                                 <div className="text-md font-medium">
-                                  {project.project?.projectName}
+                                  {project.projectName}
                                 </div>
                                 <div className="text-sm">
-                                  Mentor:{" "}
-                                  {project.project?.mentor?.fullName || "N/A"}
+                                  Mentor: {project.mentor?.fullName || "N/A"}
                                 </div>
                               </div>
                               <div className="flex flex-col items-end">
@@ -296,50 +353,43 @@ function AdminViewStudent() {
                   </div>
                 </div>
                 <div className="">
+                 
                   <div className="row-span-3 border border-zinc-100 bg-white rounded-xl p-4 flex flex-col gap-y-6 h-full">
                     <div className="title flex justify-center">
                       <div className="text-xl font-semibold">Certificates</div>
                     </div>
-                    <div className="h-full flex flex-col gap-y-4">
-                      <div className="flex flex-col gap-y-5">
-                        <div className="lst flex justify-between">
-                          <div className="name text-md font-semibold">
-                            Certificate Name
-                          </div>
-                          <img
-                            className="cursor-pointer "
-                            src={CloudDownload}
-                            alt="Delete Button"
-                          />
+
+                    <div className="h-full flex flex-col gap-y-4 overflow-y-auto">
+                      {certificates.length === 0 ? (
+                        <div className="text-center text-sm text-gray-400">
+                          No certificates uploaded yet.
                         </div>
-                        <div className="border border-zinc-100"></div>
-                      </div>
-                      <div className="flex flex-col gap-y-5">
-                        <div className="lst flex justify-between">
-                          <div className="name text-md font-semibold">
-                            Certificate Name
+                      ) : (
+                        certificates.map((cert) => (
+                          <div
+                            key={cert.certificateId}
+                            className="flex flex-col gap-y-5"
+                          >
+                            <div className="flex justify-between items-center">
+                              <div className="text-md font-semibold">
+                                {cert.certificateName}
+                              </div>
+                              <img
+                                className="cursor-pointer w-6 h-6"
+                                src={CloudDownload}
+                                alt="Download Icon"
+                                onClick={() =>
+                                  handleDownload(
+                                    cert.certificateId,
+                                    cert.certificateName
+                                  )
+                                }
+                              />
+                            </div>
+                            <div className="border border-zinc-100"></div>
                           </div>
-                          <img
-                            className="cursor-pointer "
-                            src={CloudDownload}
-                            alt="Delete Button"
-                          />
-                        </div>
-                        <div className="border border-zinc-100"></div>
-                      </div>
-                      <div className="flex flex-col gap-y-5">
-                        <div className="lst flex justify-between">
-                          <div className="name text-md font-semibold">
-                            Certificate Name
-                          </div>
-                          <img
-                            className="cursor-pointer "
-                            src={CloudDownload}
-                            alt="Delete Button"
-                          />
-                        </div>
-                        <div className="border border-zinc-100"></div>
-                      </div>
+                        ))
+                      )}
                     </div>
                   </div>
                 </div>
@@ -354,7 +404,7 @@ function AdminViewStudent() {
           onClose={() => setIsEditModalOpen(false)}
           userData={studentData}
           onSave={async () => {
-            await fetchUserDetails(); // Refresh data after saving
+            await fetchUserDetails();
             setIsEditModalOpen(false);
           }}
         />

@@ -9,7 +9,7 @@ import MentorProfile from "./mentor/MentorProfile";
 import StudentProfile from "./student/StudentProfile";
 
 const RoleBasedDashboard = () => {
-  const token = localStorage.getItem("getToken");
+  const token = localStorage.getItem("authToken") || localStorage.getItem("token");
 
   if (!token) return <Navigate to="/" />;
 
@@ -32,8 +32,9 @@ const RoleBasedDashboard = () => {
     return <Navigate to="/" />;
   }
 };
+
 const RoleBasedProfile = () => {
-  const token = localStorage.getItem("getToken");
+  const token = localStorage.getItem("authToken") || localStorage.getItem("token");
   if (!token) return <div>Unauthorized</div>;
 
   const decoded = jwtDecode(token);

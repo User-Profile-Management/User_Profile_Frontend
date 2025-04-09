@@ -19,12 +19,10 @@ export const studentsListState = atom({
   key: "studentsListState",
   default: [],
 });
- 
 export const selectedStudentState = atom({
   key: "selectedStudentState",
   default: null,
 });
- 
 export const mentorsListState = atom({
   key: "mentorsListState",
   default: [],

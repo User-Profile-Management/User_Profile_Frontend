@@ -32,7 +32,7 @@ function Router() {
         <Route path="/admin-approval" element={<RequestApproval />} />
         <Route path="/admin-student-profile/:userId" element={<AdminViewStudent />} />
 
-        <Route path="/admin-mentor-profile" element={<AdminViewMentor />} />
+        <Route path="/admin-mentor-profile/:userId" element={<AdminViewMentor />} />
         <Route path="/admin-accept/:userId" element={<AcceptApproval />} />
 
         {/* Mentor */}
@@ -40,6 +40,8 @@ function Router() {
         <Route path="/mentor-student-profile/:userId" element={<MentorViewStudent />} />
 
         {/* Student */}
+
+        
       </Route>
     </Routes>
   );

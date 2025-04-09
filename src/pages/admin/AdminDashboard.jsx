@@ -33,6 +33,9 @@ function AdminDashboard() {
   const handleViewProfile = (student) => {
     navigate(`/admin-student-profile/${student.userId}`);
   };
+  const handleViewMentorProfile = (mentor) => {
+    navigate(`/admin-mentor-profile/${mentor.userId}`);
+};
   
   
 
@@ -159,6 +162,10 @@ function AdminDashboard() {
     console.log("[DEBUG] Selected student for editing:", student); 
     navigate("/admin-student-profile", { state: { student } });
   };
+  const handleEditMentor = (mentor) => {
+    console.log("[DEBUG] Selected mentor for editing:", mentor); 
+    navigate("/admin-mentor-profile", { state: { mentor } });
+  };
 
   const handleCloseEditModal = () => {
     setSelectedProject(null);
@@ -181,7 +188,7 @@ function AdminDashboard() {
 
             <div className="grid grid-rows-5 gap-6 ">
               <StatCard number={mentorsCount} title="Total Mentors" color="bg-cyan-700" />
-              <ListCard title="Mentor List" items={MentorsList} showDelete={false} onAddClick={handleAddClick} />
+              <ListCard title="Mentor List" items={MentorsList} showDelete={false} onAddClick={handleAddClick} onEdit={handleEditMentor} onItemClick={handleViewMentorProfile} />
             </div>
 
             <div className="grid grid-rows-5 gap-6 ">

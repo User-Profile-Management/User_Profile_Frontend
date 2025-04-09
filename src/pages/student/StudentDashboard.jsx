@@ -37,7 +37,7 @@ function StudentDashboard() {
         { label: 'SILVER', src: SilverBadge, min: 2 },   
     ];
     
-    // Fetch user details when component mounts
+    
     useEffect(() => {
         const fetchUserDetails = async () => {
             try {
@@ -56,15 +56,15 @@ function StudentDashboard() {
     useEffect(() => {
         const interval = setInterval(() => {
             fetchData();
-        }, 10000); // refresh every 10 seconds
+        }, 10000); 
     
         return () => clearInterval(interval);
     }, [userId]);
 
     const fetchProgress = async () => {
         try {
-          const userProgress = await userService.getStudentProgress(); // API call
-          setProgress(userProgress.progress); // Assuming it's a number like 75
+          const userProgress = await userService.getStudentProgress(); 
+          setProgress(userProgress.progress); 
         } catch (error) {
           console.error("Error fetching progress:", error);
         }
@@ -76,7 +76,7 @@ function StudentDashboard() {
 
     const fetchCertificates = async () => {
         try {
-            // Only fetch certificates if userId is available
+            
             if (userId) {
                 const userCerts = await certificateService.getCertificatesListByUser(userId);
                 setCertifications(userCerts);
@@ -100,12 +100,12 @@ function StudentDashboard() {
             const userProgress = await userService.getStudentProgress();
             setProgress(userProgress);
             
-            // Only fetch certificates if userId is available
+            
             if (userId) {
                 const userCerts = await certificateService.getCertificatesListByUser(userId);
                 setCertifications(userCerts);
             } else {
-                // Fallback to the general method if no userId
+                
                 const userCerts = await certificateService.getCertificatesList();
                 setCertifications(userCerts);
             }
@@ -115,7 +115,7 @@ function StudentDashboard() {
 
             const completed = userProjects.filter(p => p.status === 'COMPLETED').length;
 
-            // 🔔 Trigger notification if completed count increased
+            
             if (completed > completedCountRef.current) {
                 const diff = completed - completedCountRef.current;
                 const message = diff === 1 
@@ -125,7 +125,7 @@ function StudentDashboard() {
                 setNotifications(prev => [{ message }, ...prev]);
             }
 
-            completedCountRef.current = completed; // update stored count
+            completedCountRef.current = completed; 
 
             if (userProjects.length > previousProjectCount.current) {
                 const diff = userProjects.length - previousProjectCount.current;
@@ -137,7 +137,7 @@ function StudentDashboard() {
             }
             previousProjectCount.current = userProjects.length;
 
-            // For badges notification
+            
             const badges = badgeLevels.filter(badge => completedCount >= badge.min);
             if (badges.length > previousBadgeCount.current) {
                 const diff = badges.length - previousBadgeCount.current;
@@ -214,7 +214,7 @@ function StudentDashboard() {
                                                     </div>
                                                 </div>
                                                 <div className="flex items-center">
-                                                    <Link to='/student-profile' className="px-4 py-2 bg-sky-700 font-semibold text-white rounded-lg hover:bg-sky-900 transition">
+                                                    <Link to='/profile' className="px-4 py-2 bg-sky-700 font-semibold text-white rounded-lg hover:bg-sky-900 transition">
                                                         Update Profile
                                                     </Link>
                                                 </div>

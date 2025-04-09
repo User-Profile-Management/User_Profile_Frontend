@@ -1,6 +1,8 @@
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { jwtDecode } from "jwt-decode";
+
+import React, { useState ,useEffect} from "react";
+import ErrorModal from "../components/modals/ErrorModal.jsx";
+import { Link, useNavigate } from 'react-router-dom';
+import {jwtDecode} from "jwt-decode";
 import { auth, provider, signInWithPopup } from "../firebaseConfig";
 import GoogleLogo from "../assets/google.png";
 import authService from "../service/authService";
@@ -12,8 +14,12 @@ function SignIn() {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
-
+  const [showErrorModal, setShowErrorModal] = useState(false);  
   const navigate = useNavigate();
+
+  useEffect(() => {
+    console.log("Modal visibility state changed:", showErrorModal);
+  }, [showErrorModal]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -53,18 +59,49 @@ function SignIn() {
       setError("Invalid credentials. Please try again.");
     }
   };
-
-
+  
+  
   const handleGoogleSignIn = async () => {
     try {
       const result = await signInWithPopup(auth, provider);
       const idToken = await result.user.getIdToken();
+      const userEmail = result.user.email;
   
-      const response = await authService.googleLogin(idToken); // pass token to backend
-      console.log("Backend Google Login Response:", response);
+      const backendResponse = await fetch("http://localhost:8080/api/auth/google-login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Google-ID-Token": idToken,
+        },
+        body: JSON.stringify({ email: userEmail }),
+      });
+  
+      const data = await backendResponse.json();
+  
+      if (!backendResponse.ok) {
+        if (backendResponse.status === 401) {
+          console.log("User not found in the database, showing error modal");
+          setError("User does not exist in the database.");
+          setShowErrorModal(true);  // Trigger the modal to show
+          return;
+        }
+        throw new Error(data?.message || "Google login failed");
+      }
+  
+      const token = data?.response?.token;
+      if (!token) throw new Error("No token received");
+  
+      localStorage.setItem("authToken", token);
+      
+      const decodedToken = jwtDecode(token);
+      console.log("Google auth decoded token:", decodedToken);
+  
       navigate("/dashboard");
+      
     } catch (error) {
-      console.error("Google Sign-In Error:", error.message);
+      console.error("Google Sign-In Error:", error);
+      setError(error.message || "Google login failed");
+      setShowErrorModal(true);  // Ensure this triggers the modal properly
     }
   };
   
@@ -195,8 +232,20 @@ function SignIn() {
             </form>
           </div>
         </div>
+        
+
+       
+    {showErrorModal && (
+      <ErrorModal
+        isOpen={showErrorModal}  // Pass the correct state to the modal
+        onClose={() => setShowErrorModal(false)}  // Ensure modal closes when "OK" is clicked
+      />
+    )}
+  </div>
+    
+  
       </div>
-    </div>
+   
   );
 }
 

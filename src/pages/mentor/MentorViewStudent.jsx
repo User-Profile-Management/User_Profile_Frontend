@@ -12,9 +12,11 @@ import Location from '../../assets/profile-location.svg';
 import AddButton from '../../assets/add-button.svg';
 import CloudDownload from '../../assets/cloud.svg';
 
-import userService from "../../service/userService";
+import userService from '../../service/userService'
+import projectService from '../../service/userprojectService';
 import certificateService from '../../service/certificateService';
-import userprojectService from '../../service/userprojectService';
+import userprojectService from '../../service/userprojectService'
+import EditProfileModal from '../../components/modals/EditProfileModal'
 
 function MentorViewStudent() {
     const { userId } = useParams();

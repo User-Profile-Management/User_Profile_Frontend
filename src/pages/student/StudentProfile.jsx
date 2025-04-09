@@ -11,14 +11,12 @@ import Location from '../../assets/profile-location.svg'
 import Tick from '../../assets/tick.svg'
 import AddButton from '../../assets/add-button.svg'
 import DeleteButton from '../../assets/delete.svg'
-
 import userService from '../../service/userService'
 import projectService from '../../service/userprojectService';
 import certificateService from '../../service/certificateService';
 import userprojectService from '../../service/userprojectService'
 import EditProfileModal from '../../components/modals/EditProfileModal'
 function StudentProfile() {
-
     const [studentData,setStudentData] = useState(null);
     const [projects, setProjects] = useState([]);
     const [certifications, setCertifications] = useState([]);
@@ -28,12 +26,10 @@ function StudentProfile() {
         confirmNewPassword:""
     });
     const completedCount = projects.filter(project => project.status === 'COMPLETED').length;
-
     const handleChange= (e) => {
     setPasswordData({...passwordData,[e.target.name]: e.target.value});
     }
     const [isEditModalOpen,setIsEditModalOpen] = useState(false);
-
     const handleEditClick = ()=>{
         setIsEditModalOpen(true);
     };
@@ -63,7 +59,7 @@ function StudentProfile() {
             try {
                 const response = await userService.getUserDetails(); 
                 
-                // Adjust this line depending on how your API returns data
+                
                 setStudentData(response?.response || response?.data || response);
             } catch (error) {
                 console.error('Error fetching mentor profile:', error);
@@ -118,10 +114,10 @@ function StudentProfile() {
                 formData.append("profilePicture", updatedData.profilePicture);
             }
     
-            await userService.updateProfile(formData); // You should have this endpoint in userService
+            await userService.updateProfile(formData); 
             alert("Profile updated successfully!");
     
-            // Refresh mentor data after update
+            
             const refreshedData = await userService.getUserDetails();
             setStudentData(refreshedData.response);
     
@@ -130,13 +126,12 @@ function StudentProfile() {
             alert("Failed to update profile.");
         }
     };
-
     useEffect(() => {
       const fetchProjects = async () => {
         if (studentData?.userId) {
           try {
             const projectList = await userprojectService.getProjectsList(studentData.userId);
-            console.log("Fetched projects:", projectList); // ✅ log the fetched projects
+            console.log("Fetched projects:", projectList);
             setProjects(projectList);
           } catch (error) {
             console.log("Error fetching projects:", error);
@@ -159,10 +154,9 @@ function StudentProfile() {
   if (!studentData) {
     return <div>Loading...</div>; 
   }
-
+ 
   return (
     <DashboardLayout>
-
          <div className='grid grid-rows-10 h-full overflow-auto'>
                 <div className='flex items-center md:h-20'>
                     <div className="font-semibold">Profile</div>
@@ -348,12 +342,10 @@ function StudentProfile() {
                                             currentPassword: "",
                                             newPassword: "",
                                             confirmNewPassword:""
-
                                         }   
                                         )}
                                         className='flex justify-center bg-zinc-100 py-3 rounded-xl text-black px-4 font-semibold hover:bg-zinc-200 text-sm '>
                                         Cancel</button>
-
                                              
                                     </div>
                                 </form>
@@ -401,7 +393,6 @@ function StudentProfile() {
                                     </div>
                                     </div>
                             </div>
-
                             <div className="row-span-6 border border-zinc-100 bg-white rounded-xl h-full p-4 flex flex-col gap-y-6">
                             <div className="title flex justify-between">
                                         <div className="text-xl font-semibold">Certificates</div>

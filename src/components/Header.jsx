@@ -40,7 +40,7 @@ const Header = ({ toggleSidebar }) => {
     } else if (userRole === "MENTOR") {
       navigate("/profile");
     } else if (userRole === "STUDENT") {
-      navigate("/student-profile");
+      navigate("/profile");
     } else {
       navigate("/profile");
     }

@@ -2,7 +2,7 @@ import axios from "axios";
 
 const BASE_URL = "http://localhost:8080/api/projects";
 
-const getToken = () => localStorage.getItem("token");
+const getToken = () => localStorage.getItem("token") || localStorage.getItem("authToken");
 
 const projectService = {
   addProject: async (projectData) => {
@@ -40,6 +40,21 @@ const projectService = {
       throw error;
     }
   },
+  getAllProjects: async () => {
+    try {
+      const response = await axios.get(`${BASE_URL}`, {
+        headers: {
+          Authorization: `Bearer ${getToken()}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      return response.data.response; // Adjust this depending on your API response structure
+    } catch (error) {
+      console.error("Error fetching projects:", error);
+      return [];
+    }
+  },
   updateProject: async (projectId, projectData) => {
     try {
       const token = getToken();
@@ -48,16 +63,12 @@ const projectService = {
         return;
       }
 
-      const response = await axios.put(
-        `${BASE_URL}/${projectId}`,
-        projectData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const response = await axios.put(`${BASE_URL}/${projectId}`, projectData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
 
       return response.data;
     } catch (error) {

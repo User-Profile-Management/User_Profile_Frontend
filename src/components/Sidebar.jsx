@@ -5,7 +5,8 @@ import Profile from "../assets/profile.svg";
 import Approval from "../assets/approve.svg";
 import Logout from "../assets/logout.svg";
 import authService from "../service/authService";
-import { jwtDecode } from "jwt-decode";
+import { jwtDecode } from "jwt-decode"; 
+
 
 const Sidebar = () => {
     const navigate = useNavigate();
@@ -13,17 +14,20 @@ const Sidebar = () => {
     const activePath = location.pathname;
     const [userRole, setUserRole] = useState("");
 
-    useEffect(() => {
-        const token = localStorage.getItem("token");  
-        if (token) {
-            try {
-                const decodedToken = jwtDecode(token);
-                setUserRole(decodedToken.roles?.[0] || "");  
-            } catch (error) {
-                console.error("Error decoding token:", error);
-            }
-        }
-    }, []);
+  useEffect(() => {
+    const getToken = () => localStorage.getItem("token") || localStorage.getItem("authToken");
+
+    const token = getToken(); 
+
+    if (token) {
+      try {
+        const decodedToken = jwtDecode(token);
+        setUserRole(decodedToken.roles?.[0] || ""); 
+      } catch (error) {
+        console.error("Error decoding token:", error);
+      }
+    }
+  }, []);
 
     const handleLogout = () => {
         authService.logout();
@@ -75,18 +79,16 @@ const Sidebar = () => {
                 <div className="text-md">Home</div>
             </div>
 
-            {/* Profile */}
-            <div 
-                className={`p-3 cursor-pointer flex flex-row items-center gap-3 rounded-xl m-3 ${
-                    activePath === "/profile"
-                        ? "bg-blue-100 font-semibold"
-                        : ""
-                }`}
-                onClick={handleProfileClick}
-            >
-                <img className="w-7 h-7" src={Profile} alt="Profile" />
-                <div>Profile</div>
-            </div>
+      {/* Profile */}
+      <div
+        className={`p-3 cursor-pointer flex flex-row items-center gap-3 rounded-xl m-3 ${
+          activePath === "/profile" ? "bg-blue-100 font-semibold" : ""
+        }`}
+        onClick={handleProfileClick}
+      >
+        <img className="w-7 h-7" src={Profile} alt="Profile" />
+        <div>Profile</div>
+      </div>
 
             {/* Requests for Approval - Only for ADMIN */}
             {userRole === "ADMIN" && (
