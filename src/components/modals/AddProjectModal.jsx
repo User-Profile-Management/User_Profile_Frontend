@@ -80,7 +80,7 @@ const AddProjectModal = ({ isOpen, onClose, onAdd }) => {
   return (
     <>
       {isOpen && (
-        <div className="fixed inset-0 bg-opacity-50 backdrop-brightness-50 flex items-center justify-center z-50">
+        <div className="fixed inset-0 bg-opacity-50 backdrop-brightness-50 z-50 flex items-center justify-center">
           <div className="bg-white p-6 rounded-lg w-full max-w-[700px] shadow-lg">
             <h2 className="text-xl font-semibold text-left">Add Project</h2>
             <p className="text-sm text-gray-500 text-left mb-4">

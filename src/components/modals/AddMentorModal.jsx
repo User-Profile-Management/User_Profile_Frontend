@@ -48,13 +48,12 @@ const AddMentorModal = ({ isOpen, onClose }) => {
 
   if (!isOpen) return null;
 
-  return (
-    <div className="fixed inset-0  bg-opacity-50 backdrop-brightness-50 flex items-center justify-center z-50">
-      <div className="bg-white p-6 rounded-lg w-full max-w-[600px]">
-        <h2 className="text-xl font-semibold">Add a Mentor</h2>
-        <p className="text-sm text-gray-500 mb-4">
-          Enter the details of the mentor
-        </p>
+    return (
+        <div className="fixed inset-0  bg-opacity-50 z-50 backdrop-brightness-50 flex items-center justify-center">
+            <div className="bg-white p-6 rounded-lg w-full max-w-[600px]">
+                
+                <h2 className="text-xl font-semibold">Add a Mentor</h2>
+                <p className="text-sm text-gray-500 mb-4">Enter the details of the mentor</p>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="flex items-center">

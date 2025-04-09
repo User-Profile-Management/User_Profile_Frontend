@@ -73,7 +73,7 @@ function MentorViewStudent() {
                 const projectList = await userprojectService.getProjectsList(
                 userData.userId
                 );
-                console.log("Fetched projects:", projectList); // ✅ log the fetched projects
+                console.log("Fetched projects:", projectList); 
                 setProjects(projectList);
             } catch (error) {
                 console.log("Error fetching projects:", error);
@@ -89,6 +89,14 @@ function MentorViewStudent() {
                 .filter((p) => p.project?.mentor) 
                 .map((p) => [p.project.mentor.userId, p.project.mentor])
             ).values(),
+        ];
+
+        const uniqueProjects = [
+          ...new Map(
+            projects
+              .filter((p) => p.project?.mentor)
+              .map((p) => [p.project.mentor.userId, p])
+          ).values(),
         ];
 
   return (
@@ -133,17 +141,20 @@ function MentorViewStudent() {
                 </div>
 
                 {/* Mentor List */}
-<div>
+                <div>
                   <div className="grid grid-rows-4 border border-zinc-100 bg-white rounded-xl p-4 h-full flex-col gap-y-3">
                     <div className='font-semibold text-xl flex justify-center'>Mentors List</div>
                     <div className='row-span-3 grid grid-rows-3 gap-y-3'>
-                      {[...Array(3)].map((_, idx) => (
-                        <div key={idx} className="flex flex-col gap-y-2">
+                    {uniqueMentors.map((mentor, index) => (
+                        <div key={index} className="flex flex-col gap-y-2">
                           <div className="flex gap-5">
-                            <img className='w-10' src={ProfileSquare} alt="mentor-icon" />
-                            <div className="flex flex-col">
-                              <div className="font-semibold">Name</div>
-                              <div className='text-sm'>Phone Number</div>
+                              <img className='w-10' 
+                                src={mentor.profilePicture 
+                                ? `data:image/png;base64,${mentor.profilePicture}` 
+                                : ProfilePic} alt="mentor-icon" />
+                              <div className="flex flex-col">
+                              <div className="font-semibold">{mentor.fullName}</div>
+                              <div className='text-sm'>{mentor.contactNo}</div>
                             </div>
                           </div>
                           <div className="border border-zinc-100"></div>
@@ -162,17 +173,19 @@ function MentorViewStudent() {
                         <img src={AddButton} alt="Add Button" />
                       </div>
                       <div className='row-span-4'>
-                        {[{ title: "Project Title", mentor: "Mentor", progress: 90 },
-                          { title: "Project Title", mentor: "Mentor", progress: 70 }].map((project, idx) => (
-                          <div key={idx} className="flex border-b border-zinc-200 py-2 justify-between">
+                        {uniqueProjects.map((p, index) => (
+                          <div key={index} className="flex border-b border-zinc-200 py-2 justify-between">
                             <div className="flex flex-col justify-between">
-                              <div className="text-md font-semibold">{project.title}</div>
-                              <div className="text-sm">{project.mentor}</div>
+                              <div className="text-md font-semibold">{p.project.projectName}</div>
+                              <div className="text-sm">Mentor: {p.project.mentor.fullName}</div>
                             </div>
-                            <div>
-                              <span className="text-sm font-bold">{project.progress}%</span>
-                              <div className="w-full bg-gray-200 rounded-full h-2">
-                                <div className="bg-blue-600 h-2 rounded-full" style={{ width: `${project.progress}%` }}></div>
+                            <div className="flex flex-col items-end">
+                              <span className="text-sm font-bold">{p.project.progress}%</span>
+                              <div className="w-6 bg-gray-200 rounded-full h-2">
+                                <div
+                                  className="bg-blue-600 h-2 rounded-full"
+                                  style={{ width: `${p.project.progress}%` }}
+                                ></div>
                               </div>
                             </div>
                           </div>

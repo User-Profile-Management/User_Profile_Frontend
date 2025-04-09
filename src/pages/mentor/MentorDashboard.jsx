@@ -73,12 +73,11 @@ function MentorDashboard() {
                                 </div> */}
                             </div>
                         </div>
-                        <div className='grid grid-cols-6 items-center px-10 bg-zinc-100 justify-between'>
+                        <div className='grid grid-cols-5 items-center px-10 bg-zinc-100 justify-between'>
                             <div>Sl No</div>
                             <div>Name</div>
                             <div className='text-center'>Admission No</div>
                             <div className='text-center'>Projects Enrolled</div>
-                            <div className='text-center'>Overall Performance</div>
                             <div className='text-center'>Action</div>
                         </div>
 
@@ -89,7 +88,7 @@ function MentorDashboard() {
                                 <div className="text-center p-4 text-red-500">{error}</div>
                             ) : filteredStudents.length > 0 ? (
                                 filteredStudents.map((student, index) => (
-                                    <div key={student.userId} className="grid grid-cols-6 gap-4 items-center bg-white p-3 px-10 border-b border-gray-200 hover:bg-gray-50">
+                                    <div key={student.userId} className="grid grid-cols-5 gap-4 items-center bg-white p-3 px-10 border-b border-gray-200 hover:bg-gray-50">
                                         <div>{index + 1}</div>
                                         <div className="flex items-center gap-2">
                                             <img src={student.image} alt="Profile" className="w-9 h-9 rounded-lg border border-zinc-100 p-1 object-contain" />
@@ -97,14 +96,6 @@ function MentorDashboard() {
                                         </div>
                                         <div className='text-center'>{student.userId}</div>
                                         <div className='text-center'>{student.projects || 0}</div>
-                                        <div className="text-center">
-                                            <span className="px-14 text-sm text-gray-600">{student.performance || 0}%</span>
-                                            <div className='px-14'>
-                                                <div className="w-full bg-gray-200 rounded-full h-2">
-                                                    <div className="bg-blue-600 h-2 rounded-full" style={{ width: `${student.performance || 0}%` }}></div>
-                                                </div>
-                                            </div>
-                                        </div>
                                         <div className='flex justify-center'>
                                             <button
                                                 onClick={() => {
