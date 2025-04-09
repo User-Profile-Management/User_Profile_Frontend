@@ -39,7 +39,6 @@ export default function AcceptApproval() {
     }
   }, [userId]);
 
-
   return (
     <DashboardLayout>
       <div className="flex flex-col gap-6 h-full overflow-auto scrollbar-hide">
@@ -57,10 +56,34 @@ export default function AcceptApproval() {
           <div className="flex gap-4">
             <button
               className="border border-red-600 py-2 px-4 rounded-xl text-red-600 font-semibold hover:bg-red-600 hover:text-white text-sm"
-              onClick={() => console.log("Decline clicked")}
+              onClick={async () => {
+                try {
+                  const payload = {
+                    status: "REJECTED",
+                    role: userData.role, // Keep role consistent
+                  };
+
+                  await userService.acceptUser(userId, payload); // Reuse same API call
+                  setAlert({
+                    isOpen: true,
+                    type: "success",
+                    title: "Success",
+                    message: "User rejected successfully",
+                  });
+                } catch (error) {
+                  console.error("Failed to reject user:", error);
+                  setAlert({
+                    isOpen: true,
+                    type: "error",
+                    title: "Error",
+                    message: "Error rejecting user.",
+                  });
+                }
+              }}
             >
               Decline
             </button>
+
             <button
               className="bg-blue-600 py-2 px-4 rounded-xl text-white font-semibold hover:bg-blue-700 text-sm"
               onClick={async () => {
@@ -171,9 +194,7 @@ export default function AcceptApproval() {
               <option value="ADMIN">ADMIN</option>
             </select>
           </div>
-          <div className="flex justify-end">
-          
-          </div>
+          <div className="flex justify-end"></div>
         </div>
       </div>
       <AlertModal
