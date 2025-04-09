@@ -228,15 +228,15 @@ function MentorProfile() {
                                 <div className="flex justify-between items-center">
                                   <div className="flex gap-4 items-center">
                                     <img
-                                      className="w-10 h-10 object-cover rounded"
+                                      className="w-10 h-10 object-obtain rounded"
                                       src={student.profilePicture || ProfilePic}
                                       alt="ProfilePic"
                                     />
                                     <div>
-                                      <div className="font-semibold">
+                                      <div className="font-semibold text-lg">
                                         {student.fullName}
                                       </div>
-                                      <div className="font-semibold">
+                                      <div className="">
                                         {student.userId}
                                       </div>
                                     </div>

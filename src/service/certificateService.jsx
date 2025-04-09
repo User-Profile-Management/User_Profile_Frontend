@@ -29,9 +29,9 @@ const certificateService = {
   },
 
   // 2. Get certificates for the authenticated student
-  getCertificatesListByUser: async (studentId) => {
+  getCertificatesListByUser: async (userId) => {
     try {
-      const response = await axios.get(`http://localhost:8080/api/users/certificates/get/${studentId}`);
+      const response = await axios.get(`http://localhost:8080/api/users/certificates/get/${userId}`);
       return response.data.response || [];
     } catch (error) {
       console.error(
