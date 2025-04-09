@@ -227,7 +227,7 @@ function AdminViewStudent() {
                   <div className="flex flex-col border border-zinc-100 bg-white rounded-xl p-4 h-full ">
                     <div className="grid grid-rows-5 gap-y-6 h-full">
                       <div className="font-semibold text-xl flex justify-between">
-                        <div>Ongoing Projects List</div>
+                        <div>Projects List</div>
                         
                       </div>
                       <div className="row-span-4">
@@ -250,9 +250,7 @@ function AdminViewStudent() {
                                   <img src={Tick} alt="Completed Project" />
                                 ) : (
                                   <>
-                                    <span className="text-sm text-gray-600">
-                                      {project.progress || 0}%
-                                    </span>
+                                   
                                     <div className="w-full bg-gray-200 rounded-full h-2">
                                       <div
                                         className="bg-blue-600 h-2 rounded-full"
