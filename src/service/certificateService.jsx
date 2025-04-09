@@ -2,7 +2,8 @@ import axios from "axios";
 
 const BASE_URL = "http://localhost:8080/api/users/certificates";
 
-const getToken = () => localStorage.getItem("token");
+const getToken = () => localStorage.getItem("token") || localStorage.getItem("authToken");
+
 
 const certificateService = {
   // 1. Add certificate (PDF upload)
@@ -22,16 +23,13 @@ const certificateService = {
 
       return response.data;
     } catch (error) {
-      console.error(
-        "Error uploading certificate:",
-        error.response?.data || error
-      );
+      console.error("Error uploading certificate:", error.response?.data || error);
       throw error.response?.data || error;
     }
   },
 
   // 2. Get certificates for the authenticated student
-  getCertificatesList: async (studentId) => {
+  getCertificatesListByUser: async (studentId) => {
     try {
       const response = await axios.get(`http://localhost:8080/api/users/certificates/get/${studentId}`);
       return response.data.response || [];
@@ -44,7 +42,8 @@ const certificateService = {
     }
   },
 
-  // 3. Download certificate PDF
+ 
+
   downloadCertificate: async (certificateId) => {
     try {
       const response = await axios.get(
@@ -59,15 +58,11 @@ const certificateService = {
 
       return response.data; // Blob data
     } catch (error) {
-      console.error(
-        "Error downloading certificate:",
-        error.response?.data || error
-      );
+      console.error("Error downloading certificate:", error.response?.data || error);
       throw error;
     }
   },
 
-  // 4. Delete certificate
   deleteCertificate: async (certificateId) => {
     try {
       const response = await axios.delete(`${BASE_URL}/${certificateId}`, {
@@ -78,10 +73,7 @@ const certificateService = {
 
       return response.data;
     } catch (error) {
-      console.error(
-        "Error deleting certificate:",
-        error.response?.data || error
-      );
+      console.error("Error deleting certificate:", error.response?.data || error);
       throw error;
     }
   },

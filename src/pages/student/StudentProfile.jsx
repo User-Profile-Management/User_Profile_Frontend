@@ -11,14 +11,12 @@ import Location from '../../assets/profile-location.svg'
 import Tick from '../../assets/tick.svg'
 import AddButton from '../../assets/add-button.svg'
 import DeleteButton from '../../assets/delete.svg'
-
 import userService from '../../service/userService'
 import projectService from '../../service/userprojectService';
 import certificateService from '../../service/certificateService';
 import userprojectService from '../../service/userprojectService'
 import EditProfileModal from '../../components/modals/EditProfileModal'
 function StudentProfile() {
-
     const [studentData,setStudentData] = useState(null);
     const [projects, setProjects] = useState([]);
     const [certifications, setCertifications] = useState([]);
@@ -28,12 +26,10 @@ function StudentProfile() {
         confirmNewPassword:""
     });
     const completedCount = projects.filter(project => project.status === 'COMPLETED').length;
-
     const handleChange= (e) => {
     setPasswordData({...passwordData,[e.target.name]: e.target.value});
     }
     const [isEditModalOpen,setIsEditModalOpen] = useState(false);
-
     const handleEditClick = ()=>{
         setIsEditModalOpen(true);
     };
@@ -130,7 +126,6 @@ function StudentProfile() {
             alert("Failed to update profile.");
         }
     };
-
     useEffect(() => {
       const fetchProjects = async () => {
         if (studentData?.userId) {
@@ -159,10 +154,9 @@ function StudentProfile() {
   if (!studentData) {
     return <div>Loading...</div>; 
   }
-
+ 
   return (
     <DashboardLayout>
-
          <div className='grid grid-rows-10 h-full overflow-auto'>
                 <div className='flex items-center md:h-20'>
                     <div className="font-semibold">Profile</div>
@@ -190,43 +184,43 @@ function StudentProfile() {
                                     </div>
                                 </div>
                                 <div className="hidden md:block col-span-5 md:col-span-3 w-full">
-                      <div className="hidden md:grid grid-rows-8 border border-zinc-100 bg-white rounded-xl p-4 h-full flex-col ">
-                        <div className="font-semibold text-xl flex justify-center">
-                          Your Mentors
-                        </div>
-                        <div className="row-span-7 grid grid-rows-4 gap-y-5 overflow-auto">
-                          {uniqueMentors.length === 0 ? (
-                            <div className="text-center text-gray-500">
-                              No mentors found
-                            </div>
-                          ) : (
-                            uniqueMentors.map((mentor, index) => (
-                              <div
-                                key={index}
-                                className="flex flex-col gap-y-5"
-                              >
-                                <div className="w-1/2 flex gap-5">
-                                  <img
-                                    className="w-10"
-                                    src={ProfileSquare}
-                                    alt="mentor-icon"
-                                  />
-                                  <div className="flex flex-col">
-                                    <div className="font-semibold">
-                                      {mentor.fullName}
+                                    <div className="hidden md:grid grid-rows-8 border border-zinc-100 bg-white rounded-xl p-4 h-full flex-col ">
+                                        <div className="font-semibold text-xl flex justify-center">
+                                        Your Mentors
+                                        </div>
+                                        <div className="row-span-7 grid grid-rows-4 gap-y-5 overflow-auto">
+                                        {uniqueMentors.length === 0 ? (
+                                            <div className="text-center text-gray-500">
+                                            No mentors found
+                                            </div>
+                                        ) : (
+                                            uniqueMentors.map((mentor, index) => (
+                                            <div
+                                                key={index}
+                                                className="flex flex-col gap-y-5"
+                                            >
+                                                <div className="w-1/2 flex gap-5">
+                                                <img
+                                                    className="w-10"
+                                                    src={ProfileSquare}
+                                                    alt="mentor-icon"
+                                                />
+                                                <div className="flex flex-col">
+                                                    <div className="font-semibold">
+                                                    {mentor.fullName}
+                                                    </div>
+                                                    <div className="text-sm">
+                                                    {mentor.contactNo}
+                                                    </div>
+                                                </div>
+                                                </div>
+                                                <div className="border border-zinc-100"></div>
+                                            </div>
+                                            ))
+                                        )}
+                                        </div>
                                     </div>
-                                    <div className="text-sm">
-                                      {mentor.contactNo}
                                     </div>
-                                  </div>
-                                </div>
-                                <div className="border border-zinc-100"></div>
-                              </div>
-                            ))
-                          )}
-                        </div>
-                      </div>
-                    </div>
                             </div>
 
 
@@ -348,12 +342,10 @@ function StudentProfile() {
                                             currentPassword: "",
                                             newPassword: "",
                                             confirmNewPassword:""
-
                                         }   
                                         )}
                                         className='flex justify-center bg-zinc-100 py-3 rounded-xl text-black px-4 font-semibold hover:bg-zinc-200 text-sm '>
                                         Cancel</button>
-
                                              
                                     </div>
                                 </form>
@@ -401,7 +393,6 @@ function StudentProfile() {
                                     </div>
                                     </div>
                             </div>
-
                             <div className="row-span-6 border border-zinc-100 bg-white rounded-xl h-full p-4 flex flex-col gap-y-6">
                             <div className="title flex justify-between">
                                         <div className="text-xl font-semibold">Certificates</div>

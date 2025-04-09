@@ -2,7 +2,7 @@ import axios from "axios";
 
 const BASE_URL = "http://localhost:8080/api/projects";
 
-const getToken = () => localStorage.getItem("token");
+const getToken = () => localStorage.getItem("token") || localStorage.getItem("authToken");
 
 const projectService = {
   addProject: async (projectData) => {
@@ -63,16 +63,12 @@ const projectService = {
         return;
       }
 
-      const response = await axios.put(
-        `${BASE_URL}/${projectId}`,
-        projectData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const response = await axios.put(`${BASE_URL}/${projectId}`, projectData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
 
       return response.data;
     } catch (error) {
