@@ -21,7 +21,7 @@ const DashboardLayout = ({ children }) => {
         {/* Sidebar */}
         <div
           className={`
-            fixed top-0 left-0 h-full z-50 bg-white w-2/3 max-w-xs
+            fixed top-0 left-0 h-full z-22 bg-white w-2/3 max-w-xs
             transform transition-transform duration-300 ease-in-out
             ${sidebarVisible ? "translate-x-0" : "-translate-x-full"}
             xl:relative xl:translate-x-0 xl:flex

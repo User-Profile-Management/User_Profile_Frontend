@@ -201,7 +201,7 @@ const userService = {
           "Content-Type": "application/json",
         },
       });
-      return response.data.response; // or adjust based on actual response shape
+      return response.data.response; 
     } catch (error) {
       console.error("Error fetching user by ID:", error);
       throw error;

@@ -43,7 +43,7 @@ const AddMentorModal = ({ isOpen, onClose }) => {
     if (!isOpen) return null;
 
     return (
-        <div className="fixed inset-0  bg-opacity-50 backdrop-brightness-50 flex items-center justify-center">
+        <div className="fixed inset-0  z-50 bg-opacity-50 backdrop-brightness-50 flex items-center justify-center">
             <div className="bg-white p-6 rounded-lg w-full max-w-[600px]">
                 
                 <h2 className="text-xl font-semibold">Add a Mentor</h2>
@@ -59,7 +59,7 @@ const AddMentorModal = ({ isOpen, onClose }) => {
                             value={mentorData.fullName} 
                             onChange={handleChange}
                             placeholder="Enter name"
-                            className="w-2/3 p-2 border rounded-md text-gray-300 focus:ring-2 focus:ring-gray-200 focus:outline-none"
+                            className="w-2/3 p-2 border rounded-md text-gray-500 focus:ring-2 focus:ring-gray-200 focus:outline-none"
                         />
                     </div>
 
@@ -70,7 +70,7 @@ const AddMentorModal = ({ isOpen, onClose }) => {
                             name="dateOfBirth" 
                             value={mentorData.dateOfBirth} 
                             onChange={handleChange}
-                            className="w-2/3 p-2 border rounded-md text-gray-300 focus:ring-2 focus:ring-gray-200 focus:outline-none"
+                            className="w-2/3 p-2 border rounded-md text-gray-500 focus:ring-2 focus:ring-gray-200 focus:outline-none"
                         />
                     </div>
 
@@ -82,7 +82,7 @@ const AddMentorModal = ({ isOpen, onClose }) => {
                             value={mentorData.contactNo} 
                             onChange={handleChange}
                             placeholder="Enter mobile number"
-                            className="w-2/3 p-2 border rounded-md text-gray-300 focus:ring-2 focus:ring-gray-200 focus:outline-none"
+                            className="w-2/3 p-2 border rounded-md text-gray-500 focus:ring-2 focus:ring-gray-200 focus:outline-none"
                         />
                     </div>
 
@@ -94,7 +94,7 @@ const AddMentorModal = ({ isOpen, onClose }) => {
                             value={mentorData.address} 
                             onChange={handleChange}
                             placeholder="Enter address"
-                            className="w-2/3 p-2 border rounded-md text-gray-300 focus:ring-2 focus:ring-gray-200 focus:outline-none"
+                            className="w-2/3 p-2 border rounded-md text-gray-500 focus:ring-2 focus:ring-gray-200 focus:outline-none"
                         />
                     </div>
 
@@ -106,7 +106,7 @@ const AddMentorModal = ({ isOpen, onClose }) => {
                             value={mentorData.email} 
                             onChange={handleChange}
                             placeholder="Enter email address"
-                            className="w-2/3 p-2 border rounded-md text-gray-300 focus:ring-2 focus:ring-gray-200 focus:outline-none"
+                            className="w-2/3 p-2 border rounded-md text-gray-500 focus:ring-2 focus:ring-gray-200 focus:outline-none"
                         />
                     </div>
 
@@ -118,7 +118,7 @@ const AddMentorModal = ({ isOpen, onClose }) => {
                             value={mentorData.password} 
                             onChange={handleChange}
                             placeholder="Enter password"
-                            className="w-2/3 p-2 border text-gray-300 rounded-md focus:ring-2 focus:ring-gray-200 focus:outline-none"
+                            className="w-2/3 p-2 border text-gray-500 rounded-md focus:ring-2 focus:ring-gray-200 focus:outline-none"
                         />
                     </div>
 
